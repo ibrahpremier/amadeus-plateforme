@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('numero_passport')->nullable();
+            $table->string('ville_depart');
+            $table->string('ville_destination');
+            $table->string('date_depart');
+            $table->string('date_retour');
+            $table->foreignId('charge_de_mission_id')->constrained('users');
+            $table->string('status');
             $table->timestamps();
         });
     }

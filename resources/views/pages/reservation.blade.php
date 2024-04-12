@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-10 offset-md-1">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
               {{-- <h3 class="card-title">Bordered Table</h3> --}}
@@ -35,6 +35,7 @@
                   <tr>
                     <th style="width: 10px">#</th>
                     <th>Dossier N°</th>
+                    @if(getLoggedUser()->role=='cellule_manager')<th>Demandeur</th>@endif
                     <th>Date depart</th>
                     <th>Date retour</th>
                     <th>Nom</th>
@@ -47,6 +48,7 @@
                   <tr>
                     <td>1</td>
                     <td><a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->num_dossier}}</a> </td>
+                    @if(getLoggedUser()->role=='cellule_manager')<td>Ministere des ......</td>@endif
                     <td>{{$reservation->date_depart}}</td>
                     <td>{{$reservation->date_retour}}</td>
                     <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
@@ -76,6 +78,9 @@
 @php
     function statusBg($status): string {
         switch ($status) {
+            case 'nouveau':
+               $color = 'bg-danger';
+                break;
             case 'terminé':
                $color = 'bg-primary';
                 break;
@@ -83,7 +88,7 @@
             $color = 'bg-secondary';
                 break;
             case 'mission en cours':
-            $color = 'bg-secondary';
+            $color = 'bg-info';
                 break;
             case 'approuvé':
             $color = 'bg-success';

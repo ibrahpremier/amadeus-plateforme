@@ -23,12 +23,22 @@ class ReservationController extends Controller
      * Display a listing of the resource.
      */
 
-     public function index()
+     public function index(Request $request)
      {
          $reservations = [];
-         $statuses = ["traitement", "approuvé", "mission en cours", "terminé"];
-
-         for ($i = 1; $i <= 20; $i++) {
+         
+         if($request->has('new')){
+            $max = 5;
+            $status_list = ["nouveau"];
+        } else if($request->has('encours')){
+            $max = 10;
+            $status_list = ["mission en cours"];
+        } else {
+            
+         $status_list = ["traitement", "approuvé", "mission en cours", "terminé"];
+         $max = 20;
+        }
+         for ($i = 1; $i <= $max; $i++) {
              $reservation = new Reservation();
 
              $reservation->id = $i;
@@ -37,7 +47,7 @@ class ReservationController extends Controller
              $reservation->date_retour = date('Y-m-d', strtotime("+".$i." days"));
              $reservation->nom = $this->random_african_name();
              $reservation->destination = $this->random_african_destination();
-             $reservation->status = $statuses[array_rand($statuses)];
+             $reservation->status = $status_list[array_rand($status_list)];
 
              $reservations[] = $reservation;
          }
