@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->string('prenom');
+            $table->string('numero_dossier');
             $table->string('numero_passport')->nullable();
             $table->string('ville_depart');
             $table->string('ville_destination');
             $table->string('date_depart');
             $table->string('date_retour');
             $table->foreignId('charge_de_mission_id')->constrained('users');
+            $table->foreignId('agent_cellule_id')->nullable();
             $table->string('status');
             $table->timestamps();
         });

@@ -74,30 +74,3 @@
     </div>
 </div>
 @endsection
-
-@php
-    function statusBg($status): string {
-        switch ($status) {
-            case 'nouveau':
-               $color = 'bg-danger';
-                break;
-            case 'terminé':
-               $color = 'bg-primary';
-                break;
-            case 'traitement':
-            $color = 'bg-secondary';
-                break;
-            case 'mission en cours':
-            $color = 'bg-info';
-                break;
-            case 'approuvé':
-            $color = 'bg-success';
-                break;
-
-            default:
-            $color = 'bg-light';
-                break;
-        }
-        return $color;
-     }
-@endphp

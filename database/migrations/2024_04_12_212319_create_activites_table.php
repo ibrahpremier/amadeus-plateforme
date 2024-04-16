@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('activites', function (Blueprint $table) {
             $table->id();
             $table->string('action');
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
         });
     }

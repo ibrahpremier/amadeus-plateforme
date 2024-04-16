@@ -4,13 +4,13 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
 
-        @if (getLoggedUser()->role == 'cellule_manager')
+        @if (getLoggedUser()->role == 'chef_cellule')
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="index3.html" class="nav-link {{ request()->has('new') ? 'active' : '' }}">Nouvelles demandes</a>
             </li>
         @endif
 
-        @if (getLoggedUser()->role == 'ministere')
+        @if (getLoggedUser()->role == 'agent_ministere')
         <li class="nav-item d-none d-sm-inline-block">
             <a href="index3.html"
                 class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">Nouvelle Reservation</a>
@@ -92,7 +92,7 @@
                 <div class="dropdown-divider"></div>
                 <li class="nav-item">
 
-                    @if (getLoggedUser()->role == 'cellule_manager')
+                    @if ((getLoggedUser()->role == 'chef_cellule') || (getLoggedUser()->role == 'agent_cellule'))
                         <a href="{{ route('reservation.index', 'new') }}"
                             class="nav-link {{ request()->has('new') ? 'active' : '' }}">
                             <p>
@@ -104,7 +104,7 @@
                 <div class="dropdown-divider"></div>
                 @endif
 
-        @if (getLoggedUser()->role == 'ministere')
+        @if (getLoggedUser()->role == 'agent_ministere')
                 <li class="nav-item">
                     <a href="{{ route('reservation.create') }}"
                         class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">
@@ -119,6 +119,16 @@
                     <a href="{{ route('reservation.index', 'encours') }}"
                         class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
                         <p>
+                            Missions terminées
+                            <i class="fas fa-angle-right right"></i>
+                        </p>
+                    </a>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li class="nav-item">
+                    <a href="{{ route('reservation.index', 'encours') }}"
+                        class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
+                        <p>
                             Missions en cours
                             <i class="fas fa-angle-right right"></i>
                         </p>
@@ -129,8 +139,31 @@
                     <a href="{{ route('reservation.index') }}"
                         class="nav-link {{ request()->routeIs('reservation.index') && !request()->has('encours') && !request()->has('new') ? 'active' : '' }}">
                         <p>
-                            Historique des missions
+                            Tous
                             <i class="fas fa-angle-right right"></i>
+                        </p>
+                    </a>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li class="nav-item">
+                    <a href="{{ route('user.index') }}"
+                        class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}">
+                        <p>
+                            <i class="fas fa-plus-circle left"></i>
+                            Nouvel utilisateur
+                            <i class="fas fa-angle-right right"></i>
+                        </p>
+                    </a>
+                </li>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div>
+                <li class="nav-item">
+                    <a href="{{ route('disconnect') }}" class="nav-link bg-dark">
+                        <p>
+                          <i class="fas fa-power-off left mr-2"></i>
+                            Se déconnecter
+                            {{-- <i class="fas fa-angle-right right"></i> --}}
                         </p>
                     </a>
                 </li>

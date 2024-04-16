@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\reservation;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -19,69 +19,56 @@ class ReservationController extends Controller
     }
 
 
+    // for ($i = 1; $i <= $max; $i++) {
+    //     $reservation = new Reservation();
+
+    //     $reservation->id = $i;
+    //     $reservation->num_dossier = rand(100000,999999);
+    //     $reservation->date_depart = date('Y-m-d', strtotime("+".($i-1)." days"));
+    //     $reservation->date_retour = date('Y-m-d', strtotime("+".$i." days"));
+    //     $reservation->nom = $this->random_african_name();
+    //     $reservation->destination = $this->random_african_destination();
+    //     $reservation->status = $status_list[array_rand($status_list)];
+
+    //     $reservations[] = $reservation;
+    // }
+
     /**
      * Display a listing of the resource.
      */
-
-     public function index(Request $request)
-     {
-         $reservations = [];
-         
-         if($request->has('new')){
-            $max = 5;
-            $status_list = ["nouveau"];
-        } else if($request->has('encours')){
-            $max = 10;
-            $status_list = ["mission en cours"];
-        } else {
-            
-         $status_list = ["traitement", "approuvé", "mission en cours", "terminé"];
-         $max = 20;
+    public function index(Request $request)
+    {
+        $query = Reservation::query();
+    
+        if (getLoggedUser()->role == 'agent_ministere') {
+            $query->where('charge_de_mission_id', getLoggedUser()->id)
+                  ->where('active', 1);
+        } elseif (getLoggedUser()->role == 'agent_cellule') {
+            $query->where('agent_cellule_id', getLoggedUser()->id)
+                  ->where('active', 1);
         }
-         for ($i = 1; $i <= $max; $i++) {
-             $reservation = new Reservation();
+    
+        if ($request->has('new')) {
+            $query->where("status", "nouveau");
+        } elseif ($request->has('encours')) {
+            $query->where("status", "mission en cours");
+        } elseif ($request->has('ended')) {
+            $query->where("status", "terminé");
+        }
+    
+        $reservations = $query->get();
+    
+        return view('pages.reservation.reservation', compact('reservations'));
+    }
+    
 
-             $reservation->id = $i;
-             $reservation->num_dossier = rand(100000,999999);
-             $reservation->date_depart = date('Y-m-d', strtotime("+".($i-1)." days"));
-             $reservation->date_retour = date('Y-m-d', strtotime("+".$i." days"));
-             $reservation->nom = $this->random_african_name();
-             $reservation->destination = $this->random_african_destination();
-             $reservation->status = $status_list[array_rand($status_list)];
-
-             $reservations[] = $reservation;
-         }
-
-         return view('pages.reservation', compact('reservations'));
-     }
-
-    //  public function statusBg(string $status): string {
-    //     switch ($status) {
-    //         case 'terminé':
-    //            return 'bg-primary';
-    //             break;
-    //         case 'traitement':
-    //            return 'bg-secondary';
-    //             break;
-    //         case 'mission en cours':
-    //            return 'bg-secondary';
-    //             break;
-    //         case 'approuvé':
-    //            return 'bg-success';
-    //             break;
-
-    //         default:
-    //         return 'bg-light';
-    //             break;
-    //     }
-    //  }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('pages.reservation-form');
+        return view('pages.reservation.reservation-form');
     }
 
     /**

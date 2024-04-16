@@ -76,16 +76,23 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    @if (getLoggedUser()->role == 'ministere')
+                    @if (getLoggedUser()->role == 'agent_ministere')
                         <button type="submit" class="btn btn-primary btn-block">Demande de correction</button>
-                    @elseif(getLoggedUser()->role == 'cellule_manager')
+                    @elseif(getLoggedUser()->role == 'chef_cellule')
+                    <div class="row">
+                      <div class="col-md-6">
                         <u>Chargé de mission</u>: <b>COULIBALY Rasmane</b>
+                      </div>
+                      <div class="col-md-6 text-right">
+                        <u>Traité par</u>: <b>COULIBALY Rasmane</b>
+                      </div>
+                    </div>
                     @endif
                 </div>
             </div>
         </div>
 
-        @if (getLoggedUser()->role == 'ministere')
+        @if (getLoggedUser()->role == 'agent_ministere')
             <div class="col-md-10 offset-md-1">
                 <div class="tab-pane" id="timeline">
                     <div class="timeline timeline-inverse">
@@ -183,7 +190,7 @@
                 <!-- /.tab-pane -->
             </div>
         @endif
-        @if (getLoggedUser()->role == 'cellule_manager')
+        @if (getLoggedUser()->role == 'chef_cellule')
             <div class="col-md-10 offset-md-1">
                 <div class="tab-pane" id="timeline">
                     <div class="timeline timeline-inverse">
