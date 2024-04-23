@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'super',
             'poste' => 'Administrateur',
             'email' => 'john.doe@example.com',
+            'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
@@ -29,6 +30,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'chef_cellule',
             'poste' => 'Chef de cellule',
             'email' => 'jane.smith@example.com',
+            'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
@@ -38,6 +40,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'agent_cellule',
             'poste' => 'Agent de cellule',
             'email' => 'mike.brown@example.com',
+            'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
@@ -47,6 +50,8 @@ class UsersTableSeeder extends Seeder
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
             'email' => 'emily.johnson@example.com',
+            'telephone' => "80000000",
+            'ministere_id' => 1,
             'password' => Hash::make('password'),
         ]);
 
@@ -56,6 +61,8 @@ class UsersTableSeeder extends Seeder
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
             'email' => 'alex.garcia@example.com',
+            'telephone' => "80000000",
+            'ministere_id' => 3,
             'password' => Hash::make('password'),
         ]);
     }

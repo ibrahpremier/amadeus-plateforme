@@ -11,7 +11,7 @@
           <h3 class="card-title">Formulaire de demande</h3>
         </div>
 
-        <form>
+        <form method="POST" action="{{ route('reservation.store') }}">
           <div class="card-body">
 
             <div class="row">
@@ -73,30 +73,26 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                      <label for="pays" class="col-sm-4 col-form-label">Depart</label>
+                      <label for="ville_depart" class="col-sm-4 col-form-label">Depart</label>
                       <div class="col-sm-8">
-                        <select id="pays" class="form-control select2" style="width: 100%;">
-                            <option selected="selected">Benin</option>
-                            <option>Burkina Faso</option>
-                            <option>Côte d'Ivoire</option>
-                            <option>Mali</option>
-                            <option>Niger</option>
-                            <option>Togo</option>
+                        <select id="ville_depart" class="form-control select2" style="width: 100%;">
+                          <option value=""> -- Choisir --  </option>
+                          @foreach (getCapitalNames() as $ville)
+                          <option> {{ $ville }} </option>
+                          @endforeach
                         </select>
                       </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                      <label for="pays" class="col-sm-4 col-form-label">Destination</label>
+                      <label for="ville_destination" class="col-sm-4 col-form-label">Destination</label>
                       <div class="col-sm-8">
-                        <select id="pays" class="form-control select2" style="width: 100%;">
-                            <option selected="selected">Benin</option>
-                            <option>Burkina Faso</option>
-                            <option>Côte d'Ivoire</option>
-                            <option>Mali</option>
-                            <option>Niger</option>
-                            <option>Togo</option>
+                        <select id="ville_destination" class="form-control select2" style="width: 100%">
+                            <option value=""> -- Choisir --  </option>
+                            @foreach (getCapitalNames() as $ville)
+                            <option> {{ $ville }} </option>
+                            @endforeach
                         </select>
                       </div>
                     </div>
@@ -107,7 +103,7 @@
           <!-- /.card-body -->
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary btn-block">ENvoyer</button>
+            <button type="submit" class="btn btn-primary btn-block">envoyer</button>
           </div>
         </form>
       </div>

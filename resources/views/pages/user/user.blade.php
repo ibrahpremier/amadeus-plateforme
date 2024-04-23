@@ -38,18 +38,16 @@
                     <th>Poste</th>
                     <th>Email</th>
                     <th>Télephone</th>
-                    <th>Ministere</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reservations as $reservation)
+                    @foreach ($users as $user)
                   <tr>
                     <td>{{$loop->index+1}}</td>
-                    <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
-                    <td>{{$reservation->date_retour}}</td>
-                    <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
-                    <td>{{$reservation->destination}}</td>
-                    <td><span class="badge {{statusBg($reservation->status)}}">{{$reservation->status}}</span></td>
+                    <td>{{$user->nom}} {{$user->prenom}}</td>
+                    <td>{{$user->poste}} <br> <small>{{ $user->ministere?->nom }}</small></td>
+                    <td>{{$user->email}}</td>
+                    <td>{{$user->telephone}}</td>
                   </tr>
                     @endforeach
                 </tbody>

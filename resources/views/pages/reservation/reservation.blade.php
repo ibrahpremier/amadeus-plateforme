@@ -47,7 +47,7 @@
                     @foreach ($reservations as $reservation)
                   <tr>
                     <td>1</td>
-                    <td><a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->num_dossier}}</a> </td>
+                    <td><a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->numero_dossier}}</a> </td>
                     @if(getLoggedUser()->role=='cellule_manager')<td>Ministere des ......</td>@endif
                     <td>{{$reservation->date_depart}}</td>
                     <td>{{$reservation->date_retour}}</td>

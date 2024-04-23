@@ -95,7 +95,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return view("pages.user.user",compact("users"));
     }
 
     /**
@@ -105,8 +106,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $ministeres = Ministere::where("active",1)->get();
-       return view("user-form",compact("ministeres"));
+        $ministeres = Ministere::all();
+       return view("pages.user.user-form",compact("ministeres"));
     }
 
     /**
@@ -120,13 +121,13 @@ class UserController extends Controller
         $request->validate([
             "nom" => "required",
             "prenom" => "required",
-            "phone" => "required|numeric|digits:8",
+            "telephone" => "required|numeric|digits:8",
             "email" => "required|email|unique:users,email,id",
-            "departement" => "required",
             "poste" => "required",
             "civilite" => "required",
         ]);
 
+        try {
         $user = User::create([
             "nom" => strtolower($request->nom),
             "prenom" => strtolower($request->prenom),
@@ -134,9 +135,12 @@ class UserController extends Controller
             "email" => strtolower($request->email),
             "telephone" => strtolower($request->email),
             "poste" => strtolower($request->poste),
-            "role" => strtolower($request->note),
+            "role" => 'agent_ministere',
             "created_by" => getLoggedUser()->id
         ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
 
         // $this->sendEmailRegister($user);
         return redirect()->route("user.index")->with("success","Utilisateur enregistré")
@@ -154,9 +158,9 @@ class UserController extends Controller
     public function show(User $user)
     {
         if(getLoggedUser()->id != $user->id && Auth::user()->role != "chef_cellule"){
-            return redirect()->route("user.index")->with("error","Utilisateur enregistré");
+            return redirect()->route("user.index")->with("error","Accès refusé");
         }
-        return view("profil-user",compact("user"));
+        return view("pages.user.user-profil",compact("user"));
     }
 
 

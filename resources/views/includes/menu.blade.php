@@ -11,10 +11,11 @@
         @endif
 
         @if (getLoggedUser()->role == 'agent_ministere')
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="index3.html"
-                class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">Nouvelle Reservation</a>
-        </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="index3.html"
+                    class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">Nouvelle
+                    Reservation</a>
+            </li>
         @endif
         <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link {{ request()->has('encours') ? 'active' : '' }}">Mission en cours</a>
@@ -75,7 +76,7 @@
                 <span class="fas fa-user-circle fa-2x"></span>
             </div>
             <div class="info">
-                {{getLoggedUser()->nom.' '.getLoggedUser()->prenom}}
+                {{ getLoggedUser()->nom . ' ' . getLoggedUser()->prenom }}
             </div>
         </div>
 
@@ -90,78 +91,128 @@
                     MENU
                 </li>
                 <div class="dropdown-divider"></div>
-                <li class="nav-item">
 
-                    @if ((getLoggedUser()->role == 'chef_cellule') || (getLoggedUser()->role == 'agent_cellule'))
-                        <a href="{{ route('reservation.index', 'new') }}"
-                            class="nav-link {{ request()->has('new') ? 'active' : '' }}">
-                            <p>
-                                Nouvelles demandes
-                                <i class="fas fa-angle-right right"></i>
-                            </p>
-                        </a>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                         <p>
+                            Tableau de bord
+                            <i class="fas fa-angle-right right"></i>
+                        </p>
+                    </a>
                 </li>
                 <div class="dropdown-divider"></div>
-                @endif
 
-        @if (getLoggedUser()->role == 'agent_ministere')
+
+                {{-- @if (getLoggedUser()->role == 'agent_ministere') --}}
                 <li class="nav-item">
                     <a href="{{ route('reservation.create') }}"
                         class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-plus-circle"></i>
                         <i class="fas fa-angle-right right"></i>
-                        <p>Nouvelle reservation</p>
+                        <p>Créer demande</p>
                     </a>
                 </li>
                 <div class="dropdown-divider"></div>
-            @endif
+                {{-- @endif --}}
 
-                <li class="nav-item">
-                    <a href="{{ route('reservation.index', 'encours') }}"
-                        class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
+                <li class="nav-item menu-is-opening menu-open">
+                    <a href="#" class="nav-link {{ request()->routeIs('reservation.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-info-circle"></i>
                         <p>
-                            Missions terminées
-                            <i class="fas fa-angle-right right"></i>
+                            Demandes
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="{{ route('reservation.index', 'new') }}"
+                                class="nav-link {{ request()->has('new') ? 'active' : '' }}">
+                                <i class="fas fa-angle-right left"></i>
+                                <p>
+                                    Nouvelles
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reservation.index', 'ended') }}"
+                                class="nav-link {{ request()->has('ended') ? 'active' : '' }}">
+                                <i class="fas fa-angle-right left"></i>
+                                <p>
+                                    Terminées
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reservation.index', 'encours') }}"
+                                class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
+                                <i class="fas fa-angle-right left"></i>
+                                <p>
+                                   En cours
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reservation.index') }}"
+                                class="nav-link {{ request()->routeIs('reservation.index') && !request()->has('encours') && !request()->has('ended') && !request()->has('new') ? 'active' : '' }}">
+                                <i class="fas fa-angle-right left"></i>
+                                <p>
+                                    Toutes
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <div class="dropdown-divider"></div>
+
+                <li class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Utilisateurs
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('user.create') }}"
+                                class="nav-link {{ request()->routeIs('user.create') ? 'active' : '' }}">
+                                <i class="fas fa-plus-circle left"></i>
+                                <p> Nouvel utilisateur<i class="fas fa-angle-right right"></i></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('user.index') }}"
+                                class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}">
+                                <i class="fas fa-list"></i>
+                                <p> Liste des utilisateurs <i class="fas fa-angle-right right"></i> </p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <div class="dropdown-divider"></div>
                 <li class="nav-item">
-                    <a href="{{ route('reservation.index', 'encours') }}"
-                        class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
-                        <p>
-                            Missions en cours
-                            <i class="fas fa-angle-right right"></i>
-                        </p>
+                    <a href="{{ route('user.show',getLoggedUser()->id) }}"
+                        class="nav-link {{ request()->routeIs('user.show') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <i class="fas fa-angle-right right"></i>
+                        <p>Mon profil</p>
                     </a>
                 </li>
                 <div class="dropdown-divider"></div>
-                <li class="nav-item">
-                    <a href="{{ route('reservation.index') }}"
-                        class="nav-link {{ request()->routeIs('reservation.index') && !request()->has('encours') && !request()->has('new') ? 'active' : '' }}">
-                        <p>
-                            Tous
-                            <i class="fas fa-angle-right right"></i>
-                        </p>
-                    </a>
-                </li>
+
+
                 <div class="dropdown-divider"></div>
-                <li class="nav-item">
-                    <a href="{{ route('user.index') }}"
-                        class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}">
-                        <p>
-                            <i class="fas fa-plus-circle left"></i>
-                            Nouvel utilisateur
-                            <i class="fas fa-angle-right right"></i>
-                        </p>
-                    </a>
-                </li>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider mt-5"></div>
+                <div class="dropdown-divider mt-5"></div>
                 <div class="dropdown-divider"></div>
                 <li class="nav-item">
                     <a href="{{ route('disconnect') }}" class="nav-link bg-dark">
                         <p>
-                          <i class="fas fa-power-off left mr-2"></i>
+                            <i class="fas fa-power-off left mr-2"></i>
                             Se déconnecter
                             {{-- <i class="fas fa-angle-right right"></i> --}}
                         </p>

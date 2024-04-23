@@ -1,16 +1,18 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
-    return redirect('reservation');
+    return redirect('dashboard');
 });
 
 Route::resources([
     'reservation'=>ReservationController::class,
     'user'=>UserController::class,
+    'dashboard'=>DashboardController::class,
 ]
 ,['middleware' => ['auth']]
 );

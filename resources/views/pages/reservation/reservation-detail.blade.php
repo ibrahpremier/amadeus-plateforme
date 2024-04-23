@@ -14,7 +14,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Nom du voyageur</label>
-                                <input type="text" class="form-control" value="{{ $reservation_fake->nom }}" readonly>
+                                <input type="text" class="form-control" value="{{ $reservation->nom.' '.$reservation->prenom }}" readonly>
                             </div>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                                 <label for="passport_num" class="col-sm-4 col-form-label">Numéro passport</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="passport_num"
-                                        value="{{ $reservation_fake->num_passport }}AAA" readonly>
+                                        value="{{ $reservation->num_passport }}AAA" readonly>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                                 <label for="depart" class="col-sm-4 col-form-label">Date de départ</label>
                                 <div class="col-sm-8">
                                     <input type="date" class="form-control" id="depart"
-                                        value="{{ $reservation_fake->date_depart }}" readonly>
+                                        value="{{ $reservation->date_depart }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                                 <label for="retour" class="col-sm-4 col-form-label">Date de retour</label>
                                 <div class="col-sm-8">
                                     <input type="date" class="form-control" id="retour"
-                                        value="{{ $reservation_fake->date_retour }}" readonly>
+                                        value="{{ $reservation->date_retour }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -57,8 +57,7 @@
                             <div class="form-group row">
                                 <label for="pays" class="col-sm-4 col-form-label">Depart</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="pays"
-                                        value="{{ $reservation_fake->depart }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $reservation->ville_depart }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -66,8 +65,7 @@
                             <div class="form-group row">
                                 <label for="pays" class="col-sm-4 col-form-label">Destination</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="pays"
-                                        value="{{ $reservation_fake->destination }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $reservation->ville_destination }}" readonly>
                                 </div>
                             </div>
                         </div>

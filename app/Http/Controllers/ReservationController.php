@@ -82,22 +82,9 @@ class ReservationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(Reservation $reservation)
     {
-
-        $reservation_fake = new Reservation();
-
-        $reservation_fake->id = 2;
-        $reservation_fake->num_dossier = rand(100000,999999);
-        $reservation_fake->num_passport = rand(10000,99999);
-        $reservation_fake->date_depart = date('Y-m-d', strtotime("+10 days"));
-        $reservation_fake->date_retour = date('Y-m-d', strtotime("+15 days"));
-        $reservation_fake->nom = "Traoré Moussa";
-        $reservation_fake->depart = "Ouagadougou";
-        $reservation_fake->destination = "Nairobi";
-        $reservation_fake->status = "traitement";
-
-        return view('pages.reservation-detail',compact('reservation_fake'));
+        return view('pages.reservation.reservation-detail',compact('reservation'));
     }
 
     /**

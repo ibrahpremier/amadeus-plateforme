@@ -81,7 +81,7 @@ $(function () {
   // eslint-disable-next-line no-unused-vars
   var visitorsChart = new Chart($visitorsChart, {
     data: {
-      labels: ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
+      labels: ['18', '20', '22', '24', '26', '28', '30'],
       datasets: [{
         type: 'line',
         data: [100, 120, 170, 167, 180, 177, 160],

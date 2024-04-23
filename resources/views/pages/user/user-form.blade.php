@@ -8,41 +8,36 @@
         <i class="mdi mdi-home"></i>
       </span> Gestion des Utilisateur
     </h3>
-    <nav aria-label="breadcrumb">
-      <ul class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">
-          <span></span>Dashboard
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          <span></span>Services
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          <span></span>Création
-        </li>
-      </ul>
-    </nav>
   </div>
 
   <div class="row">
     <div class="col-lg-10 col-12 grid-margin stretch-card">
       <div class="card">
+        <div class="card-header">
+
+          <h2 class="card-title">Nouvel utilisateur</h2> <br>
+          <small><em>Remplissez le formulaire pour créer un nouvel utilisateur</em></small>
+        </div>
         <div class="card-body border">
-          <h4 class="card-title">Nouvel utilisateur</h4>
-          <p class="card-description"> <small><em>Remplissez le formulaire pour créer un nouvel utilisateur</em></small> </p>
     <form class="forms-sample" method="post" action="{{route("user.store")}}" enctype="multipart/form-data">
 @csrf
 
 <div class="row">
     <div class="form-group mb-2 col-lg-6">
       <label for="poste">Poste <sup class="text-danger">*</sup></label>
-      <input type="text" class="form-control @error('poste') is-invalid @enderror" value="{{old('poste')}}" id="poste" name="poste" placeholder="poste">
+      <select name="poste" id="poste" class="form-control @error('poste') is-invalid @enderror" value="{{old("poste")}}" required>
+        <option value=""> -- Choisir --  </option>
+        <option value="cellule" class="text-capitalize">Agent Cellule</option>
+              <option value="charge_mission" class="text-capitalize">Chargé de mission</option>
+              <option value="comptable" class="text-capitalize">Comptable</option>
+      </select>
       @error('poste')
       <p class="text-danger text-center">{{ $message }}</p>
       @enderror
     </div>
   <div class="form-group mb-2 col-lg-6 ">
       <label for="departement">Ministere</label>
-      <select name="ministere" id="ministere" class="form-select @error('ministere') is-invalid @enderror" value="{{old("ministere")}}" required>
+      <select name="ministere" id="ministere" class="form-control @error('ministere') is-invalid @enderror" value="{{old("ministere")}}" required>
         <option value=""> -- Choisir --  </option>
           @foreach ($ministeres as $ministere)
               <option value="{{$ministere->id}}" class="text-capitalize">{{$ministere->nom}}</option>
@@ -58,7 +53,7 @@
 <div class="row">
     <div class="form-group mb-2 col-lg-2">
         <label for="civilite">Civilité <sup class="text-danger">*</sup></label>
-        <select name="civilite" id="civilite" class="form-select @error('civilite') is-invalid @enderror" value="{{old("civilite")}}" required>
+        <select name="civilite" id="civilite" class="form-control @error('civilite') is-invalid @enderror" value="{{old("civilite")}}" required>
           <option value=""> --  </option>
           <option value="M." class="text-capitalize">M.</option>
           <option value="Mme." class="text-capitalize">Mme</option>
@@ -89,7 +84,7 @@
 <div class="row">
             <div class="form-group mb-2 col-md-6">
               <label for="phone">Téléphone <sup class="text-danger">*</sup></label>
-              <input type="text" class="form-control @error('phone') is-invalid @enderror" value="{{old('phone')}}" id="phone" name="phone" placeholder="phone">
+              <input type="tel" class="form-control @error('phone') is-invalid @enderror" value="{{old('phone')}}" id="phone" name="phone" placeholder="phone">
               @error('phone')
               <p class="text-danger text-center">{{ $message }}</p>
               @enderror
@@ -105,10 +100,10 @@
 
 </div>
 
-<div class="row">
+{{-- <div class="row">
     <div class="form-group mb-2 col-lg-6 ">
         <label for="contrat_type">Type de contrat</label>
-        <select onchange="typeChange()" name="contrat_type" id="type" class="form-select @error('contrat_type') is-invalid @enderror" value="{{old("contrat_type")}}" required>
+        <select onchange="typeChange()" name="contrat_type" id="type" class="form-control @error('contrat_type') is-invalid @enderror" value="{{old("contrat_type")}}" required>
             <option value=""> -- Choisir --  </option>
             <option value="stage"> Stage </option>
             <option value="consultant"> Consultance </option>
@@ -135,9 +130,9 @@
         @enderror
     </div>
 
-</div>
+</div> --}}
 
-<div class="row">
+{{-- <div class="row">
     <div class="form-group col-12">
         <label for="note">Joindre le contrat</label>
         <input type="file" name="contrat_file" class="form-control">
@@ -155,14 +150,14 @@
         <p class="text-danger text-center">{{ $message }}</p>
         @enderror
     </div>
-</div>
+</div> --}}
 
-<div class="row">
+<div class="row mt-5">
   <div class="col-6">
-    <a class="btn btn-light" href="{{ url()->previous() }}">annuler</a>
+    <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
   </div>
   <div class="col-6">
-    <button type="submit" class="btn btn-primary me-2">Enregistrer</button>
+    <a class="btn btn-secondary" href="{{ url()->previous() }}">annuler</a>
   </div>
 </div>
           </form>
