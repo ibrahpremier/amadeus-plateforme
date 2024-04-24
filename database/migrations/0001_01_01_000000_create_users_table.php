@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->enum('role', ['chef_cellule','agent_cellule','agent_ministere','super']);
-            $table->string('poste');
+            $table->string('poste')->nullable();
             $table->string('telephone')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->boolean('active')->default(true);
             $table->foreignId("ministere_id")->nullable();
             $table->integer("created_by")->nullable();

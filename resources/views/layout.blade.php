@@ -79,9 +79,6 @@
 <!-- Select2 -->
 <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
 
-<script src="{{asset('dist/js/pages/dashboard3.js')}}"></script>
-<!-- Chart -->
-<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 
 
 {{-- <script src="{{asset('dist/js/demo.js')}}"></script> --}}

@@ -268,3 +268,9 @@
       <!-- /.col-md-6 -->
     </div>
 @endsection
+
+@section('custom_js')
+<!-- Chart -->
+<script src="{{asset('dist/js/pages/dashboard3.js')}}"></script>
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+@endsection

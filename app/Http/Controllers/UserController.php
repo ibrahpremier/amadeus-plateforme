@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ministere;
 use App\Models\User;
+use App\Notifications\UserCreatedNotification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -131,7 +132,6 @@ class UserController extends Controller
         $user = User::create([
             "nom" => strtolower($request->nom),
             "prenom" => strtolower($request->prenom),
-            "phone" => $request->phone,
             "email" => strtolower($request->email),
             "telephone" => strtolower($request->email),
             "poste" => strtolower($request->poste),
@@ -142,7 +142,12 @@ class UserController extends Controller
             throw $th;
         }
 
+        $email = [
+            "user" => $user,
+            "code" => 1234
+        ];
         // $this->sendEmailRegister($user);
+        $user->notify(new UserCreatedNotification($email));
         return redirect()->route("user.index")->with("success","Utilisateur enregistré")
                                                 ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
                                                 ->header('Pragma', 'no-cache')
