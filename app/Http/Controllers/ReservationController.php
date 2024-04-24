@@ -76,8 +76,46 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'numero_passport' => 'required|string',
+            'date_depart' => 'required|date',
+            'date_retour' => 'required|date',
+            'ville_depart' => 'required|string',
+            'ville_destination' => 'required|string',
+            'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120'
+        ]);
+
+        $reservation = new Reservation();
+        $reservation->nom = $request->nom;
+        $reservation->prenom = $request->prenom;
+        $reservation->numero_passport = $request->numero_passport;
+        $reservation->ville_depart = $request->ville_depart;
+        $reservation->ville_destination = $request->ville_destination;
+        $reservation->date_depart = $request->date_depart;
+        $reservation->date_retour = $request->date_retour;
+        $reservation->charge_de_mission_id = getLoggedUser()->id;
+
+        if ($request->hasFile('file_passport')) {
+            $file_passport = $request->file('file_passport');
+
+            if ($file_passport->isValid()) {
+                $photo_path = $file_passport->store('documents', 'public');
+                $reservation->file_passport = $photo_path;
+            } else {
+                return redirect()->back()->with('error', 'Le fichier file_passport est invalide.');
+            }
+        }
+
+
+        $reservation->save();
+        $reservation->numero_dossier = date("Ym/") . $reservation->id;
+        $reservation->save();
+
+        return redirect()->route('reservation.index',['new'])->with('success', 'Réservation créée avec succès.');
     }
+
 
     /**
      * Display the specified resource.

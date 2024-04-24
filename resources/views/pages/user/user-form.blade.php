@@ -28,12 +28,8 @@
                                 <select name="poste" id="poste"
                                     class="form-control @error('poste') is-invalid @enderror" required>
                                     <option value=""> -- Choisir -- </option>
-                                    <option value="cellule" class="text-capitalize"
-                                        @if (old('poste') == 'cellule') selected @endif>Agent Cellule</option>
-                                    <option value="charge_mission" class="text-capitalize"
-                                        @if (old('poste') == 'charge_mission') selected @endif>Chargé de mission</option>
-                                    <option value="comptable" class="text-capitalize"
-                                        @if (old('poste') == 'comptable') selected @endif>Comptable</option>
+                                    <option value="agent_cellule" class="text-capitalize" @if (old('poste') == 'agent_cellule') selected @endif>Agent Cellule</option>
+                                    <option value="agent_ministere" class="text-capitalize" @if (old('poste') == 'agent_ministere') selected @endif>Chargé de mission</option>
                                 </select>
                                 @error('poste')
                                     <p class="text-danger text-center">{{ $message }}</p>
@@ -46,8 +42,7 @@
                                     class="form-control @error('ministere') is-invalid @enderror">
                                     <option value=""> -- Choisir -- </option>
                                     @foreach ($ministeres as $ministere)
-                                        <option value="{{ $ministere->id }}" class="text-capitalize"
-                                            @if (old('ministere') == $ministere->id) selected @endif>{{ $ministere->nom }}</option>
+                                        <option value="{{ $ministere->id }}" class="text-capitalize" @if (old('ministere') == $ministere->id) selected @endif>{{ $ministere->nom }}</option>
                                     @endforeach
                                 </select>
                                 @error('ministere')
@@ -194,13 +189,16 @@
                 console.log("POSTE: ", poste);
                 if (poste === 'cellule') {
                     $('#ministereCol').hide();
-                    // $('#ministere').prop('disabled', true);
                 } else {
                     $('#ministereCol').fadeIn();
-                    // $('#ministere').prop('disabled', false);
                 }
             });
 
         });
+
+
+    function typeChange(){
+      
+    }
     </script>
 @endsection

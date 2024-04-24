@@ -126,7 +126,7 @@ if (!function_exists('getCapitalNames')) {
         'Brazzaville',
         'Kinshasa',
         'San Jose',
-        'Yamoussoukro',
+        'Abidjan',
         'Zagreb',
         'Havana',
         'Nicosia',

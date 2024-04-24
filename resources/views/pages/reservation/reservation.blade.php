@@ -36,10 +36,10 @@
                     <th style="width: 10px">#</th>
                     <th>Dossier N°</th>
                     @if(getLoggedUser()->role=='cellule_manager')<th>Demandeur</th>@endif
+                    <th>Trajet</th>
                     <th>Date depart</th>
                     <th>Date retour</th>
                     <th>Nom</th>
-                    <th>Destination</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -49,10 +49,13 @@
                     <td>1</td>
                     <td><a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->numero_dossier}}</a> </td>
                     @if(getLoggedUser()->role=='cellule_manager')<td>Ministere des ......</td>@endif
+                    <td>
+                      <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_destination}} <br>
+                      <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->ville_destination}}
+                    </td>
                     <td>{{$reservation->date_depart}}</td>
                     <td>{{$reservation->date_retour}}</td>
                     <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
-                    <td>{{$reservation->destination}}</td>
                     <td><span class="badge {{statusBg($reservation->status)}}">{{$reservation->status}}</span></td>
                   </tr>
                     @endforeach

@@ -128,17 +128,24 @@ class UserController extends Controller
             "civilite" => "required",
         ]);
 
+        switch ($request->poste){
+            case "agent_cellule": $poste = "agent cellule"; 
+            break;
+            case "agent_ministere": $poste = "chargé de mission"; 
+            break;
+        }
+
         try {
-        $user = User::create([
-            "nom" => strtolower($request->nom),
-            "prenom" => strtolower($request->prenom),
-            "email" => strtolower($request->email),
-            "telephone" => strtolower($request->telephone),
-            "poste" => strtolower($request->poste),
-            "role" => 'agent_ministere',
-            "ministere_id" => $request->ministere,
-            "created_by" => getLoggedUser()->id
-        ]);
+            $user = User::create([
+                "nom" => strtolower($request->nom),
+                "prenom" => strtolower($request->prenom),
+                "email" => strtolower($request->email),
+                "telephone" => strtolower($request->telephone),
+                "poste" => $poste,
+                "role" => $request->poste,
+                "ministere_id" => $request->ministere,
+                "created_by" => getLoggedUser()->id
+            ]);
         } catch (\Throwable $th) {
             throw $th;
         }
