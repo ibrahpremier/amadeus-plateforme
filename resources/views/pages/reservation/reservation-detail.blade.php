@@ -25,7 +25,7 @@
                                 <label for="passport_num" class="col-sm-4 col-form-label">Numéro passport</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="passport_num"
-                                        value="{{ $reservation->num_passport }}AAA" readonly>
+                                        value="{{ $reservation->numero_passport }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -79,10 +79,14 @@
                     @elseif(getLoggedUser()->role == 'chef_cellule')
                     <div class="row">
                       <div class="col-md-6">
-                        <u>Chargé de mission</u>: <b>COULIBALY Rasmane</b>
+                        <u>Chargé de mission</u>: <b>{{ $reservation->agent_ministere?->nom.' '.$reservation->agent_ministere?->prenom }}</b>
                       </div>
                       <div class="col-md-6 text-right">
-                        <u>Traité par</u>: <b>COULIBALY Rasmane</b>
+                        @if ($reservation->agent_cellule)
+                            <u>Traité par</u>: <b>{{ $reservation->agent_cellule->nom.' '.$reservation->agent_cellule->prenom }}</b>
+                        @else
+                            
+                        @endif
                       </div>
                     </div>
                     @endif
@@ -188,21 +192,22 @@
                 <!-- /.tab-pane -->
             </div>
         @endif
-        @if (getLoggedUser()->role == 'chef_cellule')
+
+@foreach ($reservation->tickets as $ticket)
             <div class="col-md-10 offset-md-1">
                 <div class="tab-pane" id="timeline">
                     <div class="timeline timeline-inverse">
                         {{-- ELEMENT TIMELINE --}}
                         <div class="time-label">
                             <span class="bg-danger">
-                                17 Avril 2024 12:05
+                                {{date('d/m/Y à H:i',strtotime($ticket->created_at))}}
                             </span>
                         </div>
                         <div>
                             <i class="far fa-clock bg-gray"></i>
                             <div class="timeline-item">
-                                <span class="time"><em>par Kaboré Inoussa</em></span>
-                                <h3 class="timeline-header"><a href="#">Demande de modification de billet</a>: Report de la date
+                                <span class="time"><em>par {{ $ticket->agent_ministere }}</em></span>
+                                <h3 class="timeline-header"><a href="#">{{ $ticket->demande_titre }}</a>: {{ $ticket->demande_message }}
                                     de retour</h3>
                                 <div class="timeline-body">
                                     <div class="row">
@@ -259,6 +264,7 @@
                 </div>
                 <!-- /.tab-pane -->
             </div>
-        @endif
+@endforeach
+
     </div>
 @endsection

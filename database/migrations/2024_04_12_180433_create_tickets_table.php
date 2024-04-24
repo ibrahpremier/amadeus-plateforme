@@ -11,12 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tikets', function (Blueprint $table) {
+        Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->enum('type_ticket',['demande','reponse']);
             $table->string('demande_titre');
-            $table->string('demande_message');
+            $table->string('demande_message')->nullable();
+            $table->string('demande_ville_depart');
+            $table->string('demande_ville_destination');
+            $table->string('demande_date_depart');
+            $table->string('demande_date_retour');
             $table->string('reponse_titre')->nullable();
             $table->string('reponse_message')->nullable();
+            $table->string('reponse_ville_depart')->nullable();
+            $table->string('reponse_ville_destination')->nullable();
+            $table->string('reponse_date_depart')->nullable();
+            $table->string('reponse_date_retour')->nullable();
             $table->integer('reponse_cout')->nullable();
             $table->foreignId('agence_id')->nullable();
             $table->foreignId('compagnie_id')->nullable();
@@ -33,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tikets');
+        Schema::dropIfExists('tickets');
     }
 };

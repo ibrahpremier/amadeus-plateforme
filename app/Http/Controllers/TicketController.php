@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tiket;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
-class TiketController extends Controller
+class TicketController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class TiketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tiket $tiket)
+    public function show(Ticket $ticket)
     {
         //
     }
@@ -42,7 +42,7 @@ class TiketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tiket $tiket)
+    public function edit(Ticket $ticket)
     {
         //
     }
@@ -50,7 +50,7 @@ class TiketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tiket $tiket)
+    public function update(Request $request, Ticket $ticket)
     {
         //
     }
@@ -58,7 +58,7 @@ class TiketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tiket $tiket)
+    public function destroy(Ticket $ticket)
     {
         //
     }

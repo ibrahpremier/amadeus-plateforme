@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Reservation extends Model
+class Ticket extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 
     /**
      * Get the agent_ministere qui à emit reservation
@@ -31,13 +32,4 @@ class Reservation extends Model
         return $this->belongsTo(User::class,'agent_cellule_id');
     }
 
-    /**
-     * Get the agent_cellule qui traite la reservation
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function tickets(): HasMany
-    {
-        return $this->hasMany(Ticket::class);
-    }
 }

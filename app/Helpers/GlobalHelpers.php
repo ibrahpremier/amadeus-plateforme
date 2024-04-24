@@ -59,7 +59,7 @@ if (!function_exists('statusBg')) {
                 $color = 'bg-danger';
                 break;
             case 'terminé':
-                $color = 'bg-primary';
+                $color = 'bg-success';
                 break;
             case 'traitement':
                 $color = 'bg-secondary';

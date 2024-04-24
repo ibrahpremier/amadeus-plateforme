@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -112,6 +113,14 @@ class ReservationController extends Controller
         $reservation->save();
         $reservation->numero_dossier = date("Ym/") . $reservation->id;
         $reservation->save();
+
+
+        Ticket::create([
+           'demande_titre' => "Nouvelle requete",
+           'demande_message' => "Demande de billet d'avion",
+           'reservation_id' => $reservation->id
+        ]);
+
 
         return redirect()->route('reservation.index',['new'])->with('success', 'Réservation créée avec succès.');
     }
