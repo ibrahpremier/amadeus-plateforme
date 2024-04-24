@@ -207,8 +207,7 @@
                             <i class="far fa-clock bg-gray"></i>
                             <div class="timeline-item">
                                 <span class="time"><em>par {{ $ticket->agent_ministere }}</em></span>
-                                <h3 class="timeline-header"><a href="#">{{ $ticket->demande_titre }}</a>: {{ $ticket->demande_message }}
-                                    de retour</h3>
+                                <h3 class="timeline-header"><a href="#">{{ $ticket->demande_titre }}</a>: {{ $ticket->demande_message }}</h3>
                                 <div class="timeline-body">
                                     <div class="row">
                                         <div class="col-md-4">
