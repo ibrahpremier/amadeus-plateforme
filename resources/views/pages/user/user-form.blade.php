@@ -43,7 +43,7 @@
                             <div class="form-group mb-2 col-lg-6" id="ministereCol">
                                 <label for="ministere">Ministère</label>
                                 <select name="ministere" id="ministere"
-                                    class="form-control @error('ministere') is-invalid @enderror" required>
+                                    class="form-control @error('ministere') is-invalid @enderror">
                                     <option value=""> -- Choisir -- </option>
                                     @foreach ($ministeres as $ministere)
                                         <option value="{{ $ministere->id }}" class="text-capitalize"

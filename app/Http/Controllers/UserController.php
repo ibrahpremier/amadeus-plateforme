@@ -133,9 +133,10 @@ class UserController extends Controller
             "nom" => strtolower($request->nom),
             "prenom" => strtolower($request->prenom),
             "email" => strtolower($request->email),
-            "telephone" => strtolower($request->email),
+            "telephone" => strtolower($request->telephone),
             "poste" => strtolower($request->poste),
             "role" => 'agent_ministere',
+            "ministere_id" => $request->ministere,
             "created_by" => getLoggedUser()->id
         ]);
         } catch (\Throwable $th) {
