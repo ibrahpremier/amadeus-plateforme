@@ -116,8 +116,12 @@ class ReservationController extends Controller
 
 
         Ticket::create([
-           'demande_titre' => "Nouvelle requete",
+           'demande_titre' => "Nouvelle requête",
            'demande_message' => "Demande de billet d'avion",
+           'demande_ville_depart' => $reservation->ville_depart,
+           'demande_date_depart' => $reservation->date_depart,
+           'demande_ville_destination' => $reservation->ville_destination,
+           'demande_date_retour' => $reservation->date_retour,
            'reservation_id' => $reservation->id
         ]);
 

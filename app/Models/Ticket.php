@@ -13,7 +13,7 @@ class Ticket extends Model
     protected $guarded = [];
 
     /**
-     * Get the agent_ministere qui à emit reservation
+     *  agent ministere qui à emit le ticket
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -23,7 +23,7 @@ class Ticket extends Model
     }
 
     /**
-     * Get the agent_cellule qui traite la reservation
+     * Get the agent cellule qui à traité le ticket
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

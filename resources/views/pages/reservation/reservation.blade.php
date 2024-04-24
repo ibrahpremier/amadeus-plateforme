@@ -51,13 +51,13 @@
                       <a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->numero_dossier}}</a>  <br>
                       <a href="{{route('reservation.show',$reservation->id)}}" class="btn btn-primary btn-sm">voir details</a> 
                     </td>
-                    @if(getLoggedUser()->role=='cellule_manager')<td>Ministere des ......</td>@endif
+                    @if(getLoggedUser()->role=='cellule_manager')<td>{{ $reservation->agent_ministere->ministere->nom }}</td>@endif
                     <td>
                       <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_depart}} <br>
                       <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->ville_destination}}
                     </td>
-                    <td>{{$reservation->date_depart}}</td>
-                    <td>{{$reservation->date_retour}}</td>
+                    <td>{{date('d/m/Y à H:i',strtotime($ticket->date_depart))}}</td>
+                    <td>{{date('d/m/Y à H:i',strtotime($ticket->date_retour))}}</td>
                     <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
                     <td><span class="badge {{statusBg($reservation->status)}} p-2">{{$reservation->status}}</span></td>
                   </tr>

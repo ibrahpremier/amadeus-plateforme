@@ -26,13 +26,14 @@ return new class extends Migration
             $table->string('reponse_ville_destination')->nullable();
             $table->string('reponse_date_depart')->nullable();
             $table->string('reponse_date_retour')->nullable();
+            $table->string('reponse_file')->nullable();
             $table->integer('reponse_cout')->nullable();
             $table->foreignId('agence_id')->nullable();
             $table->foreignId('compagnie_id')->nullable();
             $table->foreignId('reservation_id');
-            $table->foreignId('agent_cellule_id')->constrained('users');
-            $table->foreignId('chef_cellule_id')->constrained('users');
-            $table->enum('status',['nouveau','affecté','traité','approuvé','refusé','annulé'])->default('nouveau');
+            $table->foreignId('agent_cellule_id')->nullable();
+            $table->foreignId('chef_cellule_id')->nullable();
+            $table->enum('status',['nouveau','affecté','traité','non disponible','approuvé','refusé','annulé'])->default('nouveau');
             $table->timestamps();
         });
     }

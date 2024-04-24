@@ -101,44 +101,6 @@
                         {{-- ELEMENT TIMELINE --}}
                         <div class="time-label">
                             <span class="bg-danger">
-                                17 Avril 2024 12:05
-                            </span>
-                        </div>
-                        <div>
-                            <i class="far fa-clock bg-gray"></i>
-                            <div class="timeline-item">
-                                <span class="time"><em>par Kaboré Inoussa</em></span>
-                                <h3 class="timeline-header"><a href="#">Modification de billet</a>: Report de la date
-                                    de retour</h3>
-                                <div class="timeline-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="pays" class="col-sm-6 col-form-label">Ancienne date</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" id="pays"
-                                                        value="15/04/2024" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 offset-md-1">
-                                            <div class="form-group row">
-                                                <label for="pays" class="col-sm-6 col-form-label">Nouvelle date</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" id="pays"
-                                                        value="15/04/2024" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- FIN ELEMENT TIMELINE --}}
-                        {{-- ELEMENT TIMELINE --}}
-                        <div class="time-label">
-                            <span class="bg-danger">
                                 17 Avril 2024 14:39
                             </span>
                         </div>
@@ -208,7 +170,7 @@
                             <i class="far fa-clock bg-gray"></i>
                             <div class="timeline-item">
                                 <span class="time"><em>par {{ $ticket->agent_ministere }}</em></span>
-                                <h3 class="timeline-header"><a href="#">{{ $ticket->demande_titre }}</a>: {{ $ticket->demande_message }}</h3>
+                                <h3 class="timeline-header">{{ $ticket->demande_titre }}: {{ $ticket->demande_message }}</h3>
                                 <div class="timeline-body">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -225,8 +187,90 @@
                         </div>
                         {{-- FIN TICKET DEMANDE --}}
 
+                        {{-- TICKET REPONSE AGENT FORM --}}
+            @if ($ticket->status==='affecté')
+                        
+                        <div>
+                            <div class="timeline-item">
+                                {{-- <span class="time"><em>par Kaboré Inoussa</em></span> --}}
+                                <h3 class="timeline-header">Reponse à la requête: {{ $ticket->demande_titre }}</h3>
+                                <div class="timeline-body">
+                                    
+
+        <form method="POST" action="{{ route('ticket.update',$ticket->id) }}" enctype="multipart/form-data">
+            @csrf
+  
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group row">
+                          <label for="reponse_date_depart" class="col-sm-4 col-form-label">Date de départ</label>
+                          <div class="col-sm-8">
+                            <input type="date" class="form-control" id="reponse_date_depart" name="reponse_date_depart" required>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group row">
+                          <label for="reponse_retour" class="col-sm-4 col-form-label">Date de retour</label>
+                          <div class="col-sm-8">
+                            <input type="date" class="form-control" id="reponse_retour" name="reponse_date_retour" required>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+  
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="reponse_ville_depart" class="col-sm-4 col-form-label">Depart</label>
+                        <div class="col-sm-8">
+                          <select class="form-control select2" style="width: 100%;" id="reponse_ville_depart" name="reponse_ville_depart" required>
+                            <option value=""> -- Choisir --  </option>
+                            @foreach (getCapitalNames() as $ville)
+                            <option> {{ $ville }} </option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="reponse_ville_destination" class="col-sm-4 col-form-label">Destination</label>
+                        <div class="col-sm-8">
+                          <select class="form-control select2" style="width: 100%" id="reponse_ville_destination" name="reponse_ville_destination" required>
+                              <option value=""> -- Choisir --  </option>
+                              @foreach (getCapitalNames() as $ville)
+                              <option> {{ $ville }} </option>
+                              @endforeach
+                          </select>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="file_reponse">Joindre un fichier (image/pdf)</label>
+                        <input type="file" class="form-control" id="file_reponse" name="file_reponse">
+                      </div>
+                </div>
+              </div>
+  
+  
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <button type="submit" class="btn btn-primary btn-block">envoyer</button>
+                </div>
+            </div>
+          </form>
+                                </div>
+                            </div>
+                        </div>
+                @endif
+                        {{-- FIN TICKET REPONSE AGENT FORM --}}
+
+                        {{-- TICKET REPONSE CHEF FORM--}}
                     @if ($ticket->status==='traité')
-                        {{-- TICKET REPONSE CHEF --}}
                         <div class="time-label">
                             <span class="bg-danger">
                                 {{date('d/m/Y à H:i',strtotime($ticket->updated_at))}}
@@ -251,8 +295,8 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- FIN TICKET REPONSE CHEF--}}
                     @endif
+                        {{-- FIN TICKET REPONSE CHEF FORM--}}
                         <div>
                             <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
                         </div>
