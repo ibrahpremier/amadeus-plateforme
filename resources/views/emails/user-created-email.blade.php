@@ -43,7 +43,8 @@
                               <tbody>
                                 <tr>
                                   <td style="line-height: 24px; font-size: 16px; margin: 0;" align="left">
-                                    <img class="w-24" src="https://assets.bootstrapemail.com/logos/light/square.png" style="height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; width: 96px; border-style: none; border-width: 0;" width="96">
+                                    {{-- <img class="w-24" src="https://assets.bootstrapemail.com/logos/light/square.png" style="height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; width: 96px; border-style: none; border-width: 0;" width="96"> --}}
+                                    <h1>Logo</h1>
                                   </td>
                                 </tr>
                               </tbody>
@@ -62,7 +63,7 @@
                                 <tr>
                                   <td style="line-height: 24px; font-size: 16px; width: 100%; margin: 0; padding: 40px;" align="left" bgcolor="#ffffff">
                                     <h1 class="h3 fw-700" style="padding-top: 0; padding-bottom: 0; font-weight: 700 !important; vertical-align: baseline; font-size: 28px; line-height: 33.6px; margin: 0;" align="left">
-                                      Bienvenue {{ $email->user->prenom }}
+                                      Bienvenue {{ $user->prenom }}
                                     </h1>
                                     <table class="s-4 w-full" role="presentation" border="0" cellpadding="0" cellspacing="0" style="width: 100%;" width="100%">
                                       <tbody>
@@ -90,7 +91,7 @@
                                       <tbody>
                                         <tr>
                                           <td style="line-height: 24px; font-size: 16px; border-radius: 6px; font-weight: 700 !important; margin: 0;" align="center" bgcolor="#0d6efd">
-                                            <a href="/register/{{ $email->code }}" style="color: #ffffff; font-size: 16px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 6px; line-height: 20px; display: block; font-weight: 700 !important; white-space: nowrap; background-color: #0d6efd; padding: 12px; border: 1px solid #0d6efd;">Me connecter</a>
+                                            <a href="http/register/{{ $code }}" style="color: #ffffff; font-size: 16px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 6px; line-height: 20px; display: block; font-weight: 700 !important; white-space: nowrap; background-color: #0d6efd; padding: 12px; border: 1px solid #0d6efd;">Me connecter</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -112,7 +113,8 @@
                               <tbody>
                                 <tr>
                                   <td style="line-height: 24px; font-size: 16px; margin: 0;" align="left">
-                                    <img class="w-40" src="https://assets.bootstrapemail.com/logos/light/text.png" style="height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; width: 160px; border-style: none; border-width: 0;" width="160">
+                                    {{-- <img class="w-40" src="https://assets.bootstrapemail.com/logos/light/text.png" style="height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; width: 160px; border-style: none; border-width: 0;" width="160"> --}}
+                                    <h1>LOGO</h1>
                                   </td>
                                 </tr>
                               </tbody>
@@ -127,9 +129,7 @@
                               </tbody>
                             </table>
                             <div class="text-muted text-center" style="color: #718096;" align="center">
-                              Sent with &lt;3 from Hip Corp. <br>
-                              Hip Corp. 1 Hip Street<br>
-                              Gnarly State, 01234 USA <br>
+                              Copyright &copy; Avril 2024 <br>
                             </div>
                             <table class="s-6 w-full" role="presentation" border="0" cellpadding="0" cellspacing="0" style="width: 100%;" width="100%">
                               <tbody>

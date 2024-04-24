@@ -142,12 +142,8 @@ class UserController extends Controller
             throw $th;
         }
 
-        $email = [
-            "user" => $user,
-            "code" => 1234
-        ];
-        // $this->sendEmailRegister($user);
-        $user->notify(new UserCreatedNotification($email));
+        $code = 12345;
+        // $user->notify(new UserCreatedNotification($code,$user)); //Work
         return redirect()->route("user.index")->with("success","Utilisateur enregistré")
                                                 ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
                                                 ->header('Pragma', 'no-cache')

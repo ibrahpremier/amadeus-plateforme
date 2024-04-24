@@ -11,13 +11,15 @@ class UserCreatedNotification extends Notification
 {
     use Queueable;
 
-    public $email;
+    public $code;
+    public $user;
     /**
      * Create a new notification instance.
      */
-    public function __construct($email)
+    public function __construct($code, $user)
     {
-        $this->email = $email;
+        $this->code = $code;
+        $this->user = $user;
     }
 
     /**
@@ -36,7 +38,7 @@ class UserCreatedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->view('emails.user-created-email', $this->email);
+                    ->view('emails.user-created-email', ["user"=>$this->user ,"code"=> $this->code]);
     }
 
 
