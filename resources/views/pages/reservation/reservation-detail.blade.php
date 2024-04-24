@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        @if (getLoggedUser()->role == 'agent_ministere')
+        {{-- @if (getLoggedUser()->role == 'agent_ministere') --}}
             <div class="col-md-10 offset-md-1">
                 <div class="tab-pane" id="timeline">
                     <div class="timeline timeline-inverse">
@@ -191,13 +191,14 @@
                 </div>
                 <!-- /.tab-pane -->
             </div>
-        @endif
+        {{-- @endif --}}
 
 @foreach ($reservation->tickets as $ticket)
             <div class="col-md-10 offset-md-1">
                 <div class="tab-pane" id="timeline">
                     <div class="timeline timeline-inverse">
-                        {{-- ELEMENT TIMELINE --}}
+                       
+                        {{-- TICKET DEMANDE --}}
                         <div class="time-label">
                             <span class="bg-danger">
                                 {{date('d/m/Y à H:i',strtotime($ticket->created_at))}}
@@ -207,55 +208,51 @@
                             <i class="far fa-clock bg-gray"></i>
                             <div class="timeline-item">
                                 <span class="time"><em>par {{ $ticket->agent_ministere }}</em></span>
-                                <h3 class="timeline-header"><a href="#">{{ $ticket->type_ticket }}</a>: {{ $ticket->message }}</h3>
+                                <h3 class="timeline-header"><a href="#">{{ $ticket->demande_titre }}</a>: {{ $ticket->demande_message }}</h3>
                                 <div class="timeline-body">
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="pays" class="col-sm-6 col-form-label">Ancienne date</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" id="pays"
-                                                        value="15/04/2024" readonly>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            Départ: <i class="fas fa-plane-departure mr-2"></i>{{$ticket->demande_ville_depart}} <br>
+                                            {{date('d/m/Y à H:i',strtotime($ticket->demande_date_depart))}}
                                         </div>
-                                        <div class="col-md-4 offset-md-1">
-                                            <div class="form-group row">
-                                                <label for="pays" class="col-sm-6 col-form-label">Nouvelle date</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" id="pays"
-                                                        value="15/04/2024" readonly>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            Destination: <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->demande_ville_destination}} <br>
+                                            {{date('d/m/Y à H:i',strtotime($ticket->demande_date_retour))}}
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- FIN ELEMENT TIMELINE --}}
-                        {{-- ELEMENT TIMELINE --}}
+                        {{-- FIN TICKET DEMANDE --}}
+
+                    @if ($ticket->status==='traité')
+                        {{-- TICKET REPONSE CHEF --}}
+                        <div class="time-label">
+                            <span class="bg-danger">
+                                {{date('d/m/Y à H:i',strtotime($ticket->updated_at))}}
+                            </span>
+                        </div>
                         <div>
+                            <i class="far fa-clock bg-gray"></i>
                             <div class="timeline-item">
-                                <span class="time"><em>traité par: <b>Kafondo Michelle</b></em></span>
-                                <h3 class="timeline-header">Repondre à la rêquete de modification</h3>
+                                <span class="time"><em>traité par: <b>{{ $ticket->agent_cellule }}</b></em></span>
+                                <h3 class="timeline-header">{{ $ticket->reponse_titre }}: {{ $ticket->reponse_message }}</h3>
                                 <div class="timeline-body">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <a href=""
-                                                target="blank" class="btn btn-success btn-block">Approuver et transmettre au demandeur
-                                              </a>
+                                        <div class="col-md-6 offset-md-3">
+                                            <a href="" target="blank" class="btn btn-success btn-block">Approuver et transmettre au demandeur  </a>
                                         </div>
-                                        <div class="col-md-6">
+                                        {{-- <div class="col-md-6">
                                           <a href="#"
                                               target="blank" class="btn btn-warning btn-block">Autre option(à preciser)
                                             </a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- FIN ELEMENT TIMELINE --}}
+                        {{-- FIN TICKET REPONSE CHEF--}}
+                    @endif
                         <div>
                             <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
                         </div>
