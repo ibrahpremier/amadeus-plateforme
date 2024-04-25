@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -135,13 +136,14 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-        return view('pages.reservation.reservation-detail',compact('reservation'));
+        $agents_cellule = User::where("role","agent_cellule")->get();
+        return view('pages.reservation.reservation-detail',compact('reservation','agents_cellule'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(reservation $reservation)
+    public function edit(Reservation $reservation)
     {
         //
     }
@@ -149,9 +151,26 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, reservation $reservation)
+    public function update(Request $request, Reservation $reservation)
     {
-        //
+        $request->validate([
+            'agent_cellule' => 'required',
+            'status' => 'required'
+        ]);
+
+        $reservation->status = $request->status;
+        $reservation->agent_cellule_id = $request->agent_cellule;
+        $reservation->save();
+
+        if($request->status==='affecté'){
+            $ticket = Ticket::where("reservation_id", $reservation->id)->latest()->first();
+            if($ticket->status === 'nouveau'){ 
+                $ticket->status = 'affecté';
+                $ticket->save();
+            }
+        }
+
+        return redirect()->route('reservation.show',$reservation->id)->with('success', 'Réservation affecté avec succès.');
     }
 
     /**

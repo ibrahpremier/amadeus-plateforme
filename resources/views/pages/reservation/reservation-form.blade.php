@@ -73,7 +73,7 @@
                         <select class="form-control select2" style="width: 100%;" id="ville_depart" name="ville_depart" required>
                           <option value=""> -- Choisir --  </option>
                           @foreach (getCapitalNames() as $ville)
-                          <option> {{ $ville }} </option>
+                          <option @if (old('ville_depart') == $ville) selected @endif> {{ $ville }} </option>
                           @endforeach
                         </select>
                       </div>
@@ -86,7 +86,7 @@
                         <select class="form-control select2" style="width: 100%" id="ville_destination" name="ville_destination" required>
                             <option value=""> -- Choisir --  </option>
                             @foreach (getCapitalNames() as $ville)
-                            <option> {{ $ville }} </option>
+                            <option @if (old('ville_destination') == $ville) selected @endif> {{ $ville }} </option>
                             @endforeach
                         </select>
                       </div>

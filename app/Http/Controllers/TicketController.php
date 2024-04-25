@@ -52,7 +52,16 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        //
+        $request->validate([
+            'agent_cellule' => 'required'
+        ]);
+
+        $ticket->status = 'affecté';
+        $ticket->save();
+        $ticket->reservation->agent_cellule_id = $request->agent_cellule;
+        $ticket->reservation->save();
+
+        return redirect()->route('reservation.show',$ticket->reservation->id)->with('success', 'Réservation affecté avec succès.');
     }
 
     /**

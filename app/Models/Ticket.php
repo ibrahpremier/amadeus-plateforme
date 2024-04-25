@@ -32,4 +32,14 @@ class Ticket extends Model
         return $this->belongsTo(User::class,'agent_cellule_id');
     }
 
+    /**
+     * Get the reservation relatif a ce ticket
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function reservation(): BelongsTo
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
 }
