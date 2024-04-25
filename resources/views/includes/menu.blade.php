@@ -118,7 +118,7 @@
                 {{-- @endif --}}
 
                 <li class="nav-item menu-is-opening menu-open">
-                    <a href="#" class="nav-link {{ request()->routeIs('reservation.index') ? 'active' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs('reservation.index') || request()->routeIs('reservation.show') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-info-circle"></i>
                         <p>
                             Demandes

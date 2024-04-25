@@ -99,7 +99,7 @@
                                                 <select class="form-control select2" style="width: 100%;" id="agent_cellule"  name="agent_cellule" required>
                                                 <option value=""> -- Choisir -- </option>
                                                 @foreach ($agents_cellule as $agent)
-                                                    <option  @if (old('agent_cellule') == $agent->id) selected @endif value="{{ $agent->id }}"> {{ $agent->nom.' '.$agent->prenom }} </option>
+                                                    <option @if (old('agent_cellule') == $agent->id) selected @endif value="{{ $agent->id }}"> {{ $agent->nom.' '.$agent->prenom }} </option>
                                                 @endforeach
                                             </select>
                                             <input type="hidden" name="status" value="affecté">
@@ -195,19 +195,16 @@
                                 {{-- <span class="time"><em>par {{ $ticket->agent_ministere->nom }}</em></span> --}}
                                 <h3 class="timeline-header"><u>{{ $ticket->demande_titre }}</u>:
                                     {{ $ticket->demande_message }}</h3>
-                                <div class="timeline-body">
+                                <div class="timeline-body ">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 bg-warning p-3">
                                             Départ: <i
                                                 class="fas fa-plane-departure mr-2"></i>{{ $ticket->demande_ville_depart }}
-                                            <br>
-                                            {{ date('d/m/Y', strtotime($ticket->demande_date_depart)) }}
+                                            le  {{ date('d/m/Y', strtotime($ticket->demande_date_depart)) }}
                                         </div>
-                                        <div class="col-md-6">
-                                            Destination: <i
-                                                class="fas fa-plane-arrival mr-2"></i>{{ $reservation->demande_ville_destination }}
-                                            <br>
-                                            {{ date('d/m/Y', strtotime($ticket->demande_date_retour)) }}
+                                        <div class="col-md-6 bg-success p-3">
+                                            Destination: <i class="fas fa-plane-arrival mr-2"></i>{{ $ticket->demande_ville_destination }}
+                                            le {{ date('d/m/Y', strtotime($ticket->demande_date_retour)) }}
                                         </div>
                                     </div>
                                 </div>
@@ -215,12 +212,18 @@
                         </div>
                         {{-- FIN TICKET DEMANDE --}}
 
-                        {{-- TICKET REPONSE AGENT FORM --}}
-                        @if ($ticket->status === 'affecté')
+                        {{-- TICKET REPONSE AGENT && CHEF FORM --}}
+                        @if (($ticket->status === 'affecté') 
+                                && ((getLoggedUser()->role == 'agent_cellule') || (getLoggedUser()->role == 'chef_cellule')))
+                            
+                        <div class="time-label">
+                            <span class="bg-danger">Aujourd'hui</span>
+                        </div>
                             <div>
+                            <i class="far fa-clock bg-gray"></i>
                                 <div class="timeline-item">
                                     {{-- <span class="time"><em>par Kaboré Inoussa</em></span> --}}
-                                    <h3 class="timeline-header">Reponse à la requête: {{ $ticket->demande_titre }}</h3>
+                                    <h3 class="timeline-header">Reponse à la requête: {{ $ticket->demande_message }}</h3>
                                     <div class="timeline-body">
 
 
@@ -229,24 +232,26 @@
                                             @csrf
 
                                             <div class="row">
+                                                <div class="col-md-6 offset-md-3">
+                                                    <h5 class="text-center text-danger">ATTENTION</h3>
+                                                    <p class="text-danger text-center"> Veuillez a modifier les dates et/ou les villes de départ et de destination si celles-ci ne correspondent pas au billet disponible</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label for="reponse_date_depart"
                                                             class="col-sm-4 col-form-label">Date de départ</label>
                                                         <div class="col-sm-8">
-                                                            <input type="date" class="form-control"
-                                                                id="reponse_date_depart" name="reponse_date_depart"
-                                                                required>
+                                                            <input type="date" class="form-control" id="reponse_date_depart" name="reponse_date_depart" value="{{ $ticket->demande_date_depart }}" required>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
-                                                        <label for="reponse_retour" class="col-sm-4 col-form-label">Date
-                                                            de retour</label>
+                                                        <label for="reponse_date_retour" class="col-sm-4 col-form-label">Date de retour</label>
                                                         <div class="col-sm-8">
-                                                            <input type="date" class="form-control"
-                                                                id="reponse_retour" name="reponse_date_retour" required>
+                                                            <input type="date" class="form-control" id="reponse_date_retour" name="reponse_date_retour" value="{{ $ticket->demande_date_retour }}" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -258,12 +263,11 @@
                                                         <label for="reponse_ville_depart"
                                                             class="col-sm-4 col-form-label">Depart</label>
                                                         <div class="col-sm-8">
-                                                            <select class="form-control select2" style="width: 100%;"
-                                                                id="reponse_ville_depart" name="reponse_ville_depart"
+                                                            <select class="form-control select2" style="width: 100%;" id="reponse_ville_depart" name="reponse_ville_depart"
                                                                 required>
                                                                 <option value=""> -- Choisir -- </option>
                                                                 @foreach (getCapitalNames() as $ville)
-                                                                    <option> {{ $ville }} </option>
+                                                                    <option @if ($ticket->demande_ville_depart == $ville) selected @endif> {{ $ville }} </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -279,7 +283,7 @@
                                                                 name="reponse_ville_destination" required>
                                                                 <option value=""> -- Choisir -- </option>
                                                                 @foreach (getCapitalNames() as $ville)
-                                                                    <option> {{ $ville }} </option>
+                                                                    <option @if ($ticket->demande_ville_destination == $ville) selected @endif> {{ $ville }} </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -287,11 +291,17 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="file_reponse">Joindre un fichier (image/pdf)</label>
                                                         <input type="file" class="form-control" id="file_reponse"
                                                             name="file_reponse">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                      <label for="commentaire">Commentaire(Facultatif):</label>
+                                                      <textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Saisissez votre commentaire si vous en avez un" id="commentaire" name="commentaire"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -300,7 +310,7 @@
                                             <div class="row">
                                                 <div class="col-md-6 offset-md-3">
                                                     <button type="submit"
-                                                        class="btn btn-primary btn-block">envoyer</button>
+                                                        class="btn btn-primary btn-block">Enregistrer</button>
                                                 </div>
                                             </div>
                                         </form>

@@ -43,11 +43,9 @@ class ReservationController extends Controller
         $query = Reservation::query();
     
         if (getLoggedUser()->role == 'agent_ministere') {
-            $query->where('charge_de_mission_id', getLoggedUser()->id)
-                  ->where('active', 1);
+            $query->where('charge_de_mission_id', getLoggedUser()->id);
         } elseif (getLoggedUser()->role == 'agent_cellule') {
-            $query->where('agent_cellule_id', getLoggedUser()->id)
-                  ->where('active', 1);
+            $query->where('agent_cellule_id', getLoggedUser()->id);
         }
     
         if ($request->has('new')) {
