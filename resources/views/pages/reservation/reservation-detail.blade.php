@@ -78,7 +78,11 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                     @if (getLoggedUser()->role == 'agent_ministere')
-                        <button type="submit" class="btn btn-primary btn-block">Demande de correction</button>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <button type="submit" class="btn btn-primary btn-block">Demande de modificaction</button>
+                        </div>
+                    </div>
                     @elseif(getLoggedUser()->role == 'chef_cellule')
                         <div class="row">
                             <div class="col-md-6">
@@ -117,66 +121,6 @@
             </div>
         </div>
 
-        @if (getLoggedUser()->role == 'agent_ministere')
-            <div class="col-md-10 offset-md-1">
-                <div class="tab-pane" id="timeline">
-                    <div class="timeline timeline-inverse">
-                        {{-- ELEMENT TIMELINE --}}
-                        <div class="time-label">
-                            <span class="bg-danger">
-                                17 Avril 2024 14:39
-                            </span>
-                        </div>
-                        <div>
-                            <i class="far fa-clock bg-gray"></i>
-                            <div class="timeline-item">
-                                <span class="time"><em>par Coulibaly Anatole</em></span>
-                                <h3 class="timeline-header"><a href="#" class="text-success">Demande traité</a>:
-                                    Report de la date de retour appliqué</h3>
-                                <div class="timeline-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <a href="https://www.coursehero.com/file/43160696/Billet-dAvion-1pdf/"
-                                                target="blank" class="btn btn-warning btn-block">Télecharger le billet</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- FIN ELEMENT TIMELINE --}}
-
-                        {{-- ELEMENT TIMELINE --}}
-                        <div class="time-label">
-                            <span class="bg-danger">
-                                21 Avril 2024 10:02
-                            </span>
-                        </div>
-                        <div>
-                            <i class="far fa-clock bg-gray"></i>
-                            <div class="timeline-item">
-                                <span class="time"><em>par Kaboré Inoussa</em></span>
-                                <h3 class="timeline-header"><a href="#" class="text-success">Fin de mission</a>
-                                    Cout total du billet: 556 000 FCFA TTC</h3>
-                                <div class="timeline-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <a href="https://www.kafeo.com/factures/Modele-facture-Kafeo.doc"
-                                                target="blank" class="btn btn-warning btn-block">Télecharger la
-                                                facture</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- FIN ELEMENT TIMELINE --}}
-                        <div>
-                            <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.tab-pane -->
-            </div>
-        @endif
 
         @foreach ($reservation->tickets as $ticket)
             <div class="col-md-10 offset-md-1">
@@ -212,10 +156,42 @@
                         </div>
                         {{-- FIN TICKET DEMANDE --}}
 
+                        {{-- TICKET REPONSE --}}
+                        @if ($ticket->status === 'approuvé') 
+                        <div class="time-label">
+                            <span class="bg-danger">
+                                {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
+                            </span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock bg-gray"></i>
+                            <div class="timeline-item">
+                                <span class="time"><em>par {{ $ticket->agent_cellule->nom .' '. $ticket->agent_cellule->prenom }}</em></span>
+                                <h3 class="timeline-header"><u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}</h3>
+                                <div class="timeline-body">
+                                    <div class="row">
+                                        @if ($ticket->reponse_commentaire)
+                                        <div class="col-md-12 text-justify">
+                                            <p> {{ $ticket->reponse_commentaire }}</p>                                            
+                                        </div>
+                                        @endif
+                                        @if ($ticket->reponse_file)
+                                        <div class="col-md-6 offset-md-3">
+                                            <a href="{{ route("download.reponse_file",$ticket) }}" target="blank" class="btn btn-warning btn-block">
+                                                Télecharger le billet
+                                            </a>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        {{-- FIN TICKET REPONSE --}}
+                        
                         {{-- TICKET REPONSE AGENT && CHEF FORM --}}
                         @if (($ticket->status === 'affecté') 
                                 && ((getLoggedUser()->role == 'agent_cellule') || (getLoggedUser()->role == 'chef_cellule')))
-                            
                         <div class="time-label">
                             <span class="bg-danger">Aujourd'hui</span>
                         </div>
@@ -301,16 +277,16 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                       <label for="commentaire">Commentaire(Facultatif):</label>
-                                                      <textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Saisissez votre commentaire si vous en avez un" id="commentaire" name="commentaire"></textarea>
+                                                      <textarea cols="30" rows="3" class="form-control" placeholder="Saisissez votre commentaire si vous en avez un" id="commentaire" name="commentaire"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <input type="hidden" name="status" value="traité">
 
                                             <div class="row">
                                                 <div class="col-md-6 offset-md-3">
-                                                    <button type="submit"
-                                                        class="btn btn-primary btn-block">Enregistrer</button>
+                                                    <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -321,34 +297,50 @@
                         {{-- FIN TICKET REPONSE AGENT FORM --}}
 
                         {{-- TICKET REPONSE CHEF FORM --}}
-                        @if ($ticket->status === 'traité')
-                            <div class="time-label">
-                                <span class="bg-danger">
-                                    {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
-                                </span>
-                            </div>
-                            <div>
-                                <i class="far fa-clock bg-gray"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><em>traité par: <b>{{ $ticket->agent_cellule }}</b></em></span>
-                                    <h3 class="timeline-header">{{ $ticket->reponse_titre }}:
-                                        {{ $ticket->reponse_message }}</h3>
-                                    <div class="timeline-body">
-                                        <div class="row">
-                                            <div class="col-md-6 offset-md-3">
-                                                <a href="" target="blank"
-                                                    class="btn btn-success btn-block">Approuver et transmettre au demandeur
-                                                </a>
-                                            </div>
-                                            {{-- <div class="col-md-6">
-                                          <a href="#"
-                                              target="blank" class="btn btn-warning btn-block">Autre option(à preciser)
-                                            </a>
-                                        </div> --}}
+                        @if (($ticket->status === 'traité') 
+                                && ((getLoggedUser()->role == 'agent_cellule') || (getLoggedUser()->role == 'chef_cellule')))
+
+                        <div class="time-label">
+                            <span class="bg-danger">
+                                {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
+                            </span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock bg-gray"></i>
+                            <div class="timeline-item">
+                                <span class="time"><em>par {{ $ticket->agent_cellule?->nom .' '. $ticket->agent_cellule?->prenom }}</em></span>
+                                <h3 class="timeline-header"><u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}</h3>
+                                <div class="timeline-body">
+                                    <div class="row">
+                                        @if ($ticket->reponse_commentaire)
+                                        <div class="col-md-12 text-justify">
+                                            <p> {{ $ticket->reponse_commentaire }}</p>                                            
                                         </div>
+                                        @endif
+                                        @if ($ticket->reponse_file)
+                                        <div class="col-md-6 offset-md-3">
+                                            <a href="{{ route("download.reponse_file",$ticket) }}" target="blank" class="btn btn-warning btn-block">
+                                                Télecharger le billet
+                                            </a>
+                                        </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="row pt-3">
+                                        <div class="col-md-6 offset-md-3">
+                                            <a href="" target="blank"
+                                                class="btn btn-primary btn-block">Approuver et transmettre au demandeur
+                                            </a>
+                                        </div>
+                                        {{-- <div class="col-md-6">
+                                      <a href="#"
+                                          target="blank" class="btn btn-warning btn-block">Autre option(à preciser)
+                                        </a>
+                                    </div> --}}
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         @endif
                         {{-- FIN TICKET REPONSE CHEF FORM --}}
                         <div>

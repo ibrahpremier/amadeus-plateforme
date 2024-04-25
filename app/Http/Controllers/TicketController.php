@@ -52,7 +52,7 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        
+
         $request->validate([
             'reponse_date_depart' => 'required|date',
             'reponse_date_retour' => 'required|date',
@@ -62,12 +62,14 @@ class TicketController extends Controller
             'commentaire' => 'nullable|string'
         ]);
 
-        $ticket->reponse_ville_depart = $request->ville_depart;
-        $ticket->reponse_ville_destination = $request->ville_destination;
-        $ticket->reponse_date_depart = $request->date_depart;
-        $ticket->reponse_date_retour = $request->date_retour;
-        
-        if ($request->has('commentaire')) {
+        $ticket->reponse_ville_depart = $request->reponse_ville_depart;
+        $ticket->reponse_ville_destination = $request->reponse_ville_destination;
+        $ticket->reponse_date_depart = $request->reponse_date_depart;
+        $ticket->reponse_date_retour = $request->reponse_date_retour;
+        $ticket->status = $request->status;
+        $ticket->agent_cellule_id = getLoggedUser()->id;
+
+        if ($request->filled('commentaire')) {
             $ticket->response_commentaire = $request->commentaire;
         }
 
@@ -81,10 +83,13 @@ class TicketController extends Controller
                 return redirect()->back()->with('error', 'Le fichier est invalide.');
             }
         }
-        $ticket->status = 'traité';
         $ticket->save();
 
-        return redirect()->route('reservation.show',$ticket->reservation->id)->with('success', 'Ticket mis à jour');
+        //Mettre a jour la reservertion
+        $ticket->reservation->status = $ticket->status;
+        $ticket->reservation->save();
+
+        return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
 
     /**
@@ -93,5 +98,19 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         //
+    }
+
+
+    public function download(Ticket $ticket)
+    {
+
+        // Vérifiez si l'utilisateur est autorisé à télécharger le fichier
+        // $this->authorize('download-file', $file);
+
+        // Chemin vers le fichier
+        $filePath = storage_path('app/public/documents/' . $ticket->reponse_file);
+
+
+        return response()->file($filePath);
     }
 }
