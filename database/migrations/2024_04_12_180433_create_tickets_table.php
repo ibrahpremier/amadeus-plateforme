@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('reponse_date_depart')->nullable();
             $table->string('reponse_date_retour')->nullable();
             $table->string('reponse_file')->nullable();
+            $table->string('response_commentaire')->nullable();
             $table->integer('reponse_cout')->nullable();
             $table->foreignId('agence_id')->nullable();
             $table->foreignId('compagnie_id')->nullable();

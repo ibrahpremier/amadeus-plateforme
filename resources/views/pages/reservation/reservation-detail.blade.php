@@ -227,9 +227,9 @@
                                     <div class="timeline-body">
 
 
-                                        <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
-                                            enctype="multipart/form-data">
+                                        <form method="POST" action="{{ route('ticket.update', $ticket->id) }}" enctype="multipart/form-data">
                                             @csrf
+                                            @method("put")
 
                                             <div class="row">
                                                 <div class="col-md-6 offset-md-3">
@@ -293,9 +293,9 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="file_reponse">Joindre un fichier (image/pdf)</label>
-                                                        <input type="file" class="form-control" id="file_reponse"
-                                                            name="file_reponse">
+                                                        <label for="reponse_file">Joindre un fichier (image/pdf)</label>
+                                                        <input type="file" class="form-control" id="reponse_file"
+                                                            name="reponse_file">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">

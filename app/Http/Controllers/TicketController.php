@@ -52,16 +52,40 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        
         $request->validate([
-            'agent_cellule' => 'required'
+            'reponse_date_depart' => 'required|date',
+            'reponse_date_retour' => 'required|date',
+            'reponse_ville_depart' => 'required|string',
+            'reponse_ville_destination' => 'required|string',
+            'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
+            'commentaire' => 'nullable|string'
         ]);
 
-        $ticket->status = 'affecté';
-        $ticket->save();
-        $ticket->reservation->agent_cellule_id = $request->agent_cellule;
-        $ticket->reservation->save();
+        $ticket->reponse_ville_depart = $request->ville_depart;
+        $ticket->reponse_ville_destination = $request->ville_destination;
+        $ticket->reponse_date_depart = $request->date_depart;
+        $ticket->reponse_date_retour = $request->date_retour;
+        
+        if ($request->has('commentaire')) {
+            $ticket->response_commentaire = $request->commentaire;
+        }
 
-        return redirect()->route('reservation.show',$ticket->reservation->id)->with('success', 'Réservation affecté avec succès.');
+        if ($request->hasFile('reponse_file')) {
+            $reponse_file = $request->file('reponse_file');
+
+            if ($reponse_file->isValid()) {
+                $photo_path = $reponse_file->store('documents', 'public');
+                $ticket->reponse_file = $photo_path;
+            } else {
+                return redirect()->back()->with('error', 'Le fichier est invalide.');
+            }
+        }
+
+
+        $ticket->save();
+
+        return redirect()->route('reservation.show',$ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
 
     /**
