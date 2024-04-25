@@ -35,7 +35,7 @@
                   <tr>
                     <th style="width: 10px">#</th>
                     <th>Dossier N°</th>
-                    @if(getLoggedUser()->role=='cellule_manager')<th>Demandeur</th>@endif
+                    @if(getLoggedUser()->role=='chef_cellule')<th>Demandeur</th>@endif
                     <th>Trajet</th>
                     <th>Date depart</th>
                     <th>Date retour</th>
@@ -51,13 +51,18 @@
                       <a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->numero_dossier}}</a>  <br>
                       <a href="{{route('reservation.show',$reservation->id)}}" class="btn btn-primary btn-sm">voir details</a> 
                     </td>
-                    @if(getLoggedUser()->role=='cellule_manager')<td>{{ $reservation->agent_ministere->ministere->nom }}</td>@endif
+                    @if(getLoggedUser()->role=='chef_cellule')
+                    <td>
+                      {{ $reservation->agent_ministere->nom }} {{ $reservation->agent_ministere->prenom }} <br> 
+                      <small>{{ $reservation->agent_ministere?->ministere->nom }}
+                    </td>
+                    @endif
                     <td>
                       <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_depart}} <br>
                       <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->ville_destination}}
                     </td>
-                    <td>{{date('d/m/Y à H:i',strtotime($ticket->date_depart))}}</td>
-                    <td>{{date('d/m/Y à H:i',strtotime($ticket->date_retour))}}</td>
+                    <td>{{date('d/m/Y',strtotime($reservation->date_depart))}}</td>
+                    <td>{{date('d/m/Y',strtotime($reservation->date_retour))}}</td>
                     <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
                     <td><span class="badge {{statusBg($reservation->status)}} p-2">{{$reservation->status}}</span></td>
                   </tr>
