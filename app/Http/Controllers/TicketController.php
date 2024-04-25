@@ -81,8 +81,7 @@ class TicketController extends Controller
                 return redirect()->back()->with('error', 'Le fichier est invalide.');
             }
         }
-
-
+        $ticket->status = 'traité';
         $ticket->save();
 
         return redirect()->route('reservation.show',$ticket->reservation->id)->with('success', 'Ticket mis à jour');
