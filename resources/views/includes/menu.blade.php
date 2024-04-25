@@ -167,7 +167,8 @@
                 </li>
 
                 <div class="dropdown-divider"></div>
-
+                
+            @if (getLoggedUser()->role=="chef_cellule")
                 <li class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
@@ -193,6 +194,7 @@
                         </li>
                     </ul>
                 </li>
+            @endif
                 <div class="dropdown-divider"></div>
                 <li class="nav-item">
                     <a href="{{ route('user.show',getLoggedUser()->id) }}"

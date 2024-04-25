@@ -49,7 +49,7 @@ class ReservationController extends Controller
         }
     
         if ($request->has('new')) {
-            $query->where("status", "nouveau");
+            $query->whereIn("status", ["nouveau", "affecté"]);
         } elseif ($request->has('encours')) {
             $query->where("status", "mission en cours");
         } elseif ($request->has('ended')) {
