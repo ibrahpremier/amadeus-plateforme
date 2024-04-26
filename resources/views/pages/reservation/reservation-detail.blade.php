@@ -326,6 +326,8 @@
                                         @endif
                                     </div>
 
+                                    @if(getLoggedUser()->role == 'chef_cellule')
+
                                     <div class="row pt-3">
                                         <div class="col-md-6 offset-md-3">
                                             <a href="" target="blank"
@@ -338,6 +340,7 @@
                                         </a>
                                     </div> --}}
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
