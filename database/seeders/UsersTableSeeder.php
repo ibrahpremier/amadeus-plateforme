@@ -15,52 +15,52 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'nom' => 'Doe',
-            'prenom' => 'John',
+            'nom' => 'Kone',
+            'prenom' => 'Moïse',
             'role' => 'super',
             'poste' => 'Administrateur',
-            'email' => 'john.doe@example.com',
+            'email' => 'kone@example.com',
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
         User::create([
-            'nom' => 'Smith',
-            'prenom' => 'Jane',
+            'nom' => 'Coulibaly',
+            'prenom' => 'melissa',
             'role' => 'chef_cellule',
             'poste' => 'Chef de cellule',
-            'email' => 'jane.smith@example.com',
+            'email' => 'melissa@example.com',
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
         User::create([
-            'nom' => 'Brown',
-            'prenom' => 'Mike',
+            'nom' => 'Kaboré',
+            'prenom' => 'Elie',
             'role' => 'agent_cellule',
             'poste' => 'Agent de cellule',
-            'email' => 'mike.brown@example.com',
+            'email' => 'elie@example.com',
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
         User::create([
-            'nom' => 'Johnson',
-            'prenom' => 'Emily',
+            'nom' => 'Zongo',
+            'prenom' => 'Emilie',
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
-            'email' => 'emily.johnson@example.com',
+            'email' => 'emilie@example.com',
             'telephone' => "80000000",
             'ministere_id' => 1,
             'password' => Hash::make('password'),
         ]);
 
         User::create([
-            'nom' => 'Garcia',
-            'prenom' => 'Alex',
+            'nom' => 'Zida',
+            'prenom' => 'François',
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
-            'email' => 'alex.garcia@example.com',
+            'email' => 'zida@example.com',
             'telephone' => "80000000",
             'ministere_id' => 3,
             'password' => Hash::make('password'),
