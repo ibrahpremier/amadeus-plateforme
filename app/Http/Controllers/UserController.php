@@ -144,7 +144,7 @@ class UserController extends Controller
                 "poste" => $poste,
                 "role" => $request->poste,
                 "ministere_id" => $request->ministere,
-                "password" => Hash::make($request->ministere),
+                "password" => Hash::make('password'),
                 "created_by" => getLoggedUser()->id
             ]);
         } catch (\Throwable $th) {
