@@ -138,7 +138,7 @@ class UserController extends Controller
         }
 
         try {
-            User::create([
+           $user = User::create([
                 "nom" => strtolower($request->nom),
                 "prenom" => strtolower($request->prenom),
                 "email" => strtolower($request->email),
@@ -153,8 +153,8 @@ class UserController extends Controller
             throw $th;
         }
 
-        // $code = 12345;
-        // $user->notify(new UserCreatedNotification($code,$user)); //Work
+        $code = 12345;
+        $user->notify(new UserCreatedNotification($code,$user)); //Work
         return redirect()->route("user.index")->with("success","Utilisateur enregistré")
                                                 ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
                                                 ->header('Pragma', 'no-cache')

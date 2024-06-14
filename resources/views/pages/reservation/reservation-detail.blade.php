@@ -172,48 +172,15 @@
                         </div>
                         {{-- FIN TICKET DEMANDE --}}
 
-                        {{-- TICKET REPONSE --}}
-                        @if ($ticket->status === 'approuvé')
+
+                        {{-- TICKET REPONSE AGENT && CHEF FORM --}}
+                        @if (
+                            (($ticket->status === 'affecté' || $ticket->status === 'traité') &&
+                                (getLoggedUser()->role == 'agent_cellule' || getLoggedUser()->role == 'chef_cellule')) || ($ticket->status === 'approuvé') )
                             <div class="time-label">
                                 <span class="bg-danger">
                                     {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
                                 </span>
-                            </div>
-                            <div>
-                                <i class="far fa-clock bg-gray"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><em>par
-                                            {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em></span>
-                                    <h3 class="timeline-header">
-                                        <u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}</h3>
-                                    <div class="timeline-body">
-                                        <div class="row">
-                                            @if ($ticket->reponse_commentaire)
-                                                <div class="col-md-12 text-justify">
-                                                    <p> {{ $ticket->reponse_commentaire }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($ticket->reponse_file)
-                                                <div class="col-md-6 offset-md-3">
-                                                    <a href="{{ route('download.reponse_file', $ticket) }}" target="blank"
-                                                        class="btn btn-warning btn-block">
-                                                        Télecharger le billet
-                                                    </a>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        {{-- FIN TICKET REPONSE --}}
-
-                        {{-- TICKET REPONSE AGENT && CHEF FORM --}}
-                        @if (
-                            ($ticket->status === 'affecté' || $ticket->status === 'traité') &&
-                                (getLoggedUser()->role == 'agent_cellule' || getLoggedUser()->role == 'chef_cellule'))
-                            <div class="time-label">
-                                <span class="bg-danger">Aujourd'hui</span>
                             </div>
                             <div>
                                 <i class="far fa-clock bg-gray"></i>
@@ -245,7 +212,7 @@
                                                         <div class="col-sm-8">
                                                             <input type="date" class="form-control"
                                                                 id="reponse_date_depart" name="reponse_date_depart"
-                                                                value="{{ $ticket->demande_date_depart }}" @readonly($ticket->status === 'traité')
+                                                                value="{{ $ticket->demande_date_depart }}" @readonly($ticket->status !== 'affecté')
                                                                 required>
                                                         </div>
                                                     </div>
@@ -258,7 +225,7 @@
                                                             <input type="date" class="form-control"
                                                                 id="reponse_date_retour" name="reponse_date_retour"
                                                                 value="{{ $ticket->demande_date_retour }}"
-                                                                @readonly($ticket->status === 'traité') required>
+                                                                @readonly($ticket->status !== 'affecté') required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,7 +239,7 @@
                                                         <div class="col-sm-8">
                                                             <select class="form-control select2" style="width: 100%;"
                                                                 id="reponse_ville_depart" name="reponse_ville_depart"
-                                                                required @disabled($ticket->status === 'traité')>
+                                                                required @disabled($ticket->status !== 'affecté')>
                                                                 <option value=""> -- Choisir -- </option>
                                                                 @foreach (getCapitalNames() as $ville)
                                                                     <option
@@ -291,7 +258,7 @@
                                                             <select class="form-control select2" style="width: 100%"
                                                                 id="reponse_ville_destination"
                                                                 name="reponse_ville_destination" required
-                                                                @disabled($ticket->status === 'traité')>
+                                                                @disabled($ticket->status !== 'affecté')>
                                                                 <option value=""> -- Choisir -- </option>
                                                                 @foreach (getCapitalNames() as $ville)
                                                                     <option
@@ -317,16 +284,16 @@
                                                         <label for="reponse_file">Joindre un fichier (image/pdf)</label>
                                                         <input type="file" class="form-control" id="reponse_file"
                                                             name="reponse_file"
-                                                            @disabled($ticket->status === 'traité')>
+                                                            @disabled($ticket->status !== 'affecté')>
                                                     </div>
                                                 @endif
 
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="commentaire">Commentaire(Facultatif):</label>
+                                                        <label for="commentaire">Commentaire:</label>
                                                         <textarea cols="30" rows="3" class="form-control"
-                                                            placeholder="{{ $ticket->status === 'affecté'?'Saisissez votre commentaire si vous en avez un':''}}" id="commentaire" name="commentaire"  @readonly($ticket->status === 'traité')></textarea>
+                                                            placeholder="{{ $ticket->status === 'affecté'?'Saisissez votre commentaire si vous en avez un':''}}" id="commentaire" name="commentaire"  @readonly($ticket->status !== 'affecté')>{{ $ticket->response_commentaire }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -336,17 +303,23 @@
                                             @if ($ticket->status === 'affecté')
                                             <div class="row">
                                                     <div class="col-md-6 offset-md-3">
-                                                        <button type="submit"
-                                                            class="btn btn-primary btn-block">Enregistrer</button>
+                                                        <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
                                                     </div>
                                             </div>
-                                                @elseif ($ticket->status === 'traité' && getLoggedUser()->role == 'chef_cellule')
+                                            @endif
+
+                                    </form>
+                                    
+                                    <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
+                                        @csrf
+                                        @method('put')
+                                            @if ($ticket->status === 'traité' && getLoggedUser()->role == 'chef_cellule')
+
+                                            <input type="hidden" name="status" value="approuvé">
                                             <div class="row">
                                                     <div class="col-md-6 offset-md-3">
-                                                        <a href="" target="blank"
-                                                            class="btn btn-primary btn-block">Approuver et transmettre
-                                                            au demandeur
-                                                        </a>
+                                                        <button type="submit" class="btn btn-primary btn-block">Approuver et transmettre
+                                                            au demandeur</button>
                                                     </div>
                                                         {{-- <div class="col-md-6">
                                                     <a href="#"
@@ -359,12 +332,48 @@
                                     </form>
                                 </div>
                             </div>
-                    </div>
         @endif
         {{-- FIN TICKET REPONSE AGENT FORM --}}
+
+                        {{-- TICKET REPONSE --}}
+                        @if ($ticket->status === 'approuvé')
+                            {{-- <div class="time-label">
+                                <span class="bg-danger">
+                                    {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
+                                </span>
+                            </div> --}}
+                            <div>
+                                <i class="far fa-clock bg-gray"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><em>par
+                                            {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em></span>
+                                    <h3 class="timeline-header">
+                                        <u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}</h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            @if ($ticket->reponse_commentaire)
+                                                <div class="col-md-12 text-justify">
+                                                    <p> {{ $ticket->reponse_commentaire }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($ticket->reponse_file)
+                                                <div class="col-md-6 offset-md-3">
+                                                    <a href="{{ route('download.reponse_file', $ticket) }}" target="blank"
+                                                        class="btn btn-warning btn-block">
+                                                        Télecharger le fichier
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        {{-- FIN TICKET REPONSE --}}
         <div>
             <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
         </div>
+    </div>
     </div>
     </div>
     <!-- /.tab-pane -->

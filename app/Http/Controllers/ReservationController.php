@@ -85,7 +85,8 @@ class ReservationController extends Controller
             'ville_depart' => 'required|string',
             'ville_destination' => 'required|string',
             'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
-            'classe' => 'nullable'
+            'classe' => 'nullable',
+            'commentaire' => 'nullable'
         ]);
 
         $reservation = new Reservation();
@@ -97,6 +98,7 @@ class ReservationController extends Controller
         $reservation->date_depart = $request->date_depart;
         $reservation->date_retour = $request->date_retour;
         $reservation->classe = $request->classe;
+        $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
 
         if ($request->hasFile('file_passport')) {
@@ -154,12 +156,13 @@ class ReservationController extends Controller
     public function update(Request $request, Reservation $reservation)
     {
         $request->validate([
-            'agent_cellule' => 'required',
+            // 'agent_cellule' => 'required',
             'status' => 'required'
         ]);
 
         $reservation->status = $request->status;
         $reservation->agent_cellule_id = $request->agent_cellule;
+        $reservation->commentaire = $request->commentaire;
         $reservation->save();
 
         if($request->status==='affecté'){

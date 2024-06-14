@@ -53,35 +53,40 @@ class TicketController extends Controller
     public function update(Request $request, Ticket $ticket)
     {
 
-        $request->validate([
-            'reponse_date_depart' => 'required|date',
-            'reponse_date_retour' => 'required|date',
-            'reponse_ville_depart' => 'required|string',
-            'reponse_ville_destination' => 'required|string',
-            'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
-            'commentaire' => 'nullable|string'
-        ]);
+        if ($request->filled('status') && $request->status=="traité") {
+            $request->validate([
+                'reponse_date_depart' => 'required|date',
+                'reponse_date_retour' => 'required|date',
+                'reponse_ville_depart' => 'required|string',
+                'reponse_ville_destination' => 'required|string',
+                'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
+                'commentaire' => 'nullable|string'
+            ]);
 
-        $ticket->reponse_ville_depart = $request->reponse_ville_depart;
-        $ticket->reponse_ville_destination = $request->reponse_ville_destination;
-        $ticket->reponse_date_depart = $request->reponse_date_depart;
-        $ticket->reponse_date_retour = $request->reponse_date_retour;
-        $ticket->status = $request->status;
-        $ticket->agent_cellule_id = getLoggedUser()->id;
+            $ticket->reponse_ville_depart = $request->reponse_ville_depart;
+            $ticket->reponse_ville_destination = $request->reponse_ville_destination;
+            $ticket->reponse_date_depart = $request->reponse_date_depart;
+            $ticket->reponse_date_retour = $request->reponse_date_retour;
+            $ticket->status = $request->status;
+            $ticket->agent_cellule_id = getLoggedUser()->id;
 
-        if ($request->filled('commentaire')) {
-            $ticket->response_commentaire = $request->commentaire;
-        }
-
-        if ($request->hasFile('reponse_file')) {
-            $reponse_file = $request->file('reponse_file');
-
-            if ($reponse_file->isValid()) {
-                $photo_path = $reponse_file->store('documents', 'public');
-                $ticket->reponse_file = $photo_path;
-            } else {
-                return redirect()->back()->with('error', 'Le fichier est invalide.');
+            if ($request->filled('commentaire')) {
+                $ticket->response_commentaire = $request->commentaire;
             }
+
+            if ($request->hasFile('reponse_file')) {
+                $reponse_file = $request->file('reponse_file');
+
+                if ($reponse_file->isValid()) {
+                    $photo_path = $reponse_file->store('documents', 'public');
+                    $ticket->reponse_file = $photo_path;
+                } else {
+                    return redirect()->back()->with('error', 'Le fichier est invalide.');
+                }
+            }
+        }
+        elseif ($request->filled('status')) {
+            $ticket->status = $request->status;
         }
         $ticket->save();
 
