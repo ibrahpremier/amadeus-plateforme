@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('agences', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->string('description')->nullable();
+            $table->string('telephone')->nullable();
+            $table->string('email')->nullable();
+            $table->foreignId('user_id');
+            $table->decimal('taux');
             $table->timestamps();
         });
     }

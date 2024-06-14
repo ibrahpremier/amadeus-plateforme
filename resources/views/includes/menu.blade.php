@@ -209,7 +209,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ route('user.create') }}"
+                        <a href="{{ route('agence.create') }}"
                             class="nav-link {{ request()->routeIs('agence.create') ? 'active' : '' }}">
                             <i class="fas fa-angle-right left"></i>
                             <i class="fas fa-angle-right left"></i>
@@ -218,7 +218,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('user.index') }}"
+                        <a href="{{ route('agence.index') }}"
                             class="nav-link {{ request()->routeIs('agence.index') ? 'active' : '' }}">
                             <i class="fas fa-angle-right left"></i>
                             <i class="fas fa-angle-right left"></i>

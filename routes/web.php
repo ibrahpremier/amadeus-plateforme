@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgenceController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
@@ -11,6 +12,7 @@ Route::get('/', function () {
 });
 
 Route::resources([
+    'agence'=>AgenceController::class,
     'reservation'=>ReservationController::class,
     'ticket'=>TicketController::class,
     'user'=>UserController::class,

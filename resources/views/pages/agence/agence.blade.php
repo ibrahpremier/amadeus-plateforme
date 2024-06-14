@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titre')
-    Liste des utilisateurs 
+    Liste des Agencess 
 @endsection
 
 @section('content')
@@ -35,34 +35,25 @@
                   <tr>
                     <th style="width: 10px">#</th>
                     <th>Nom</th>
-                    <th>Poste</th>
-                    <th>Email</th>
-                    <th>Télephone</th>
+                    <th>taux</th>
+                    <th>Contact</th>
+                    <th>description</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($agences as $agence)
                   <tr>
                     <td>{{$loop->index+1}}</td>
-                    <td>{{strtoupper($user->nom)}} {{ucwords($user->prenom)}}</td>
-                    <td>{{$user->poste}} <br> <small>{{ $user->ministere?->nom }}</small></td>
-                    <td>{{$user->email}}</td>
-                    <td>{{$user->telephone}}</td>
+                    <td>{{$agence->nom}} </td>
+                    <td>{{$agence->taux}} %</td>
+                    <td>{{$agence->telephone}} <br>{{$agence->email}} </td>
+                    <td>{{$agence->description}}</td>
                   </tr>
                     @endforeach
                 </tbody>
               </table>
             </div>
             <!-- /.card-body -->
-            <div class="card-footer clearfix">
-              <ul class="pagination pagination-sm m-0 float-right">
-                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-              </ul>
-            </div>
           </div>
           <!-- /.card -->
     </div>

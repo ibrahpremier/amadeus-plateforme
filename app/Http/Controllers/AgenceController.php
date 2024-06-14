@@ -12,7 +12,8 @@ class AgenceController extends Controller
      */
     public function index()
     {
-        //
+        $agences = Agence::all();
+        return view("pages.agence.agence",compact("agences"));
     }
 
     /**
@@ -20,7 +21,7 @@ class AgenceController extends Controller
      */
     public function create()
     {
-        //
+       return view("pages.agence.agence-form");
     }
 
     /**
@@ -28,7 +29,26 @@ class AgenceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $agence = $request->validate(
+            [
+                'nom' => ['required'],
+                'taux' => ['required', 'numeric'],
+                'telephone' => ['required'],
+                'email' => ['required','email'],
+                'description' => ['nullable'],
+            ]
+        );
+        $agence['user_id'] = getLoggedUser()->id;
+
+        try {
+            Agence::create($agence);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return redirect()->route("agence.index")->with("success","Agence enregistré")
+                                                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                                                ->header('Pragma', 'no-cache')
+                                                ->header('Expires', '0');
     }
 
     /**

@@ -111,58 +111,6 @@
 
                         </div>
 
-                        {{-- <div class="row">
-    <div class="form-group mb-2 col-lg-6 ">
-        <label for="contrat_type">Type de contrat</label>
-        <select onchange="typeChange()" name="contrat_type" id="type" class="form-control @error('contrat_type') is-invalid @enderror" value="{{old("contrat_type")}}" required>
-            <option value=""> -- Choisir --  </option>
-            <option value="stage"> Stage </option>
-            <option value="consultant"> Consultance </option>
-          <option value="CDD"> CDD </option>
-          <option value="CDI"> CDI </option>
-        </select>
-        @error('contrat_type')
-        <p class="text-danger text-center">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="form-group mb-2 col-3">
-        <label for="contrat_start">Date de debut</label>
-        <input type="date" class="form-control @error('contrat_start') is-invalid @enderror" value="{{old('contrat_start')}}" id="contrat_start" name="contrat_start">
-        @error('contrat_start')
-        <p class="text-danger text-center">{{ $message }}</p>
-        @enderror
-    </div>
-    <div class="form-group mb-2 col-3" id="contrat_end_group">
-        <label for="contrat_end">Date de fin</label>
-        <input type="date" class="form-control @error('contrat_end') is-invalid @enderror" value="{{old('contrat_end')}}" id="contrat_end" name="contrat_end">
-        @error('contrat_end')
-        <p class="text-danger text-center">{{ $message }}</p>
-        @enderror
-    </div>
-
-</div> --}}
-
-                        {{-- <div class="row">
-    <div class="form-group col-12">
-        <label for="note">Joindre le contrat</label>
-        <input type="file" name="contrat_file" class="form-control">
-        @error('note')
-        <p class="text-danger text-center">{{ $message }}</p>
-        @enderror
-    </div>
-</div>
-
-<div class="row mb-2">
-    <div class="form-group col-12">
-        <label for="note">Note</label>
-        <textarea class="form-control @error('note') is-invalid @enderror" value="{{old('note')}}" id="note" name="note" placeholder="Notes particulières à propos de cet employé"></textarea>
-        @error('note')
-        <p class="text-danger text-center">{{ $message }}</p>
-        @enderror
-    </div>
-</div> --}}
-
                         <div class="row mt-5">
                             <div class="col-6">
                                 <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
@@ -187,7 +135,7 @@
             $('#poste').change(function() {
                 var poste = $(this).val();
                 console.log("POSTE: ", poste);
-                if (poste === 'cellule') {
+                if (poste === 'agent_cellule') {
                     $('#ministereCol').hide();
                 } else {
                     $('#ministereCol').fadeIn();
