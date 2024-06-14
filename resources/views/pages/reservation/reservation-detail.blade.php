@@ -245,8 +245,8 @@
                                                         <div class="col-sm-8">
                                                             <input type="date" class="form-control"
                                                                 id="reponse_date_depart" name="reponse_date_depart"
-                                                                value="{{ $ticket->demande_date_depart }}"
-                                                                readonly="{{ $ticket->status === 'traité' }}" required>
+                                                                value="{{ $ticket->demande_date_depart }}" @readonly($ticket->status === 'traité')
+                                                                required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -258,7 +258,7 @@
                                                             <input type="date" class="form-control"
                                                                 id="reponse_date_retour" name="reponse_date_retour"
                                                                 value="{{ $ticket->demande_date_retour }}"
-                                                                readonly="{{ $ticket->status === 'traité' }}" required>
+                                                                @readonly($ticket->status === 'traité') required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,7 +272,7 @@
                                                         <div class="col-sm-8">
                                                             <select class="form-control select2" style="width: 100%;"
                                                                 id="reponse_ville_depart" name="reponse_ville_depart"
-                                                                required disabled="{{ $ticket->status === 'traité' }}">
+                                                                required @disabled($ticket->status === 'traité')>
                                                                 <option value=""> -- Choisir -- </option>
                                                                 @foreach (getCapitalNames() as $ville)
                                                                     <option
@@ -291,7 +291,7 @@
                                                             <select class="form-control select2" style="width: 100%"
                                                                 id="reponse_ville_destination"
                                                                 name="reponse_ville_destination" required
-                                                                disabled="{{ $ticket->status === 'traité' }}">
+                                                                @disabled($ticket->status === 'traité')>
                                                                 <option value=""> -- Choisir -- </option>
                                                                 @foreach (getCapitalNames() as $ville)
                                                                     <option
@@ -317,7 +317,7 @@
                                                         <label for="reponse_file">Joindre un fichier (image/pdf)</label>
                                                         <input type="file" class="form-control" id="reponse_file"
                                                             name="reponse_file"
-                                                            disabled="{{ $ticket->status === 'traité' }}">
+                                                            @disabled($ticket->status === 'traité')>
                                                     </div>
                                                 @endif
 
@@ -326,7 +326,7 @@
                                                     <div class="form-group">
                                                         <label for="commentaire">Commentaire(Facultatif):</label>
                                                         <textarea cols="30" rows="3" class="form-control"
-                                                            placeholder="{{ $ticket->status === 'affecté'?'Saisissez votre commentaire si vous en avez un':''}}" id="commentaire" name="commentaire" readonly="{{ $ticket->status === 'traité' }}"></textarea>
+                                                            placeholder="{{ $ticket->status === 'affecté'?'Saisissez votre commentaire si vous en avez un':''}}" id="commentaire" name="commentaire"  @readonly($ticket->status === 'traité')></textarea>
                                                     </div>
                                                 </div>
                                             </div>
