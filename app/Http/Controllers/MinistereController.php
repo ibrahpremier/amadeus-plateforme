@@ -12,7 +12,8 @@ class MinistereController extends Controller
      */
     public function index()
     {
-        //
+        $ministeres = Ministere::all();
+        return view("pages.ministere.ministere",compact("ministeres"));
     }
 
     /**
@@ -20,7 +21,7 @@ class MinistereController extends Controller
      */
     public function create()
     {
-        //
+        return view("pages.ministere.ministere-form");
     }
 
     /**
@@ -28,7 +29,23 @@ class MinistereController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ministere = $request->validate(
+            [
+                'nom' => ['required'],
+                'dotation_disponible' => ['nullable','numeric'],
+                'description' => ['nullable'],
+            ]
+        );
+
+        try {
+            Ministere::create($ministere);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return redirect()->route("ministere.index")->with("success","Ministère enregistré")
+                                                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                                                ->header('Pragma', 'no-cache')
+                                                ->header('Expires', '0');
     }
 
     /**

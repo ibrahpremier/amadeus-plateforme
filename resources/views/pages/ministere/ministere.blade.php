@@ -6,9 +6,10 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header">
+              {{-- <h3 class="card-title">Bordered Table</h3> --}}
 
             </div>
             <!-- /.card-header -->
@@ -18,19 +19,15 @@
                   <tr>
                     <th style="width: 10px">#</th>
                     <th>Nom</th>
-                    <th>taux</th>
-                    <th>Contact</th>
-                    <th>description</th>
+                    <th>Notes</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($agences as $agence)
+                    @foreach ($ministeres as $ministere)
                   <tr>
                     <td>{{$loop->index+1}}</td>
-                    <td>{{$agence->nom}} </td>
-                    <td>{{$agence->taux}} %</td>
-                    <td>{{$agence->telephone}} <br>{{$agence->email}} </td>
-                    <td>{{$agence->description}}</td>
+                    <td>{{$ministere->nom}} </td>
+                    <td>{{$ministere->description}}</td>
                   </tr>
                     @endforeach
                 </tbody>

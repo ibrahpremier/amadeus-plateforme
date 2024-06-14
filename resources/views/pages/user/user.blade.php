@@ -11,7 +11,7 @@
             <div class="card-header">
               {{-- <h3 class="card-title">Bordered Table</h3> --}}
 
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-md-8 offset-md-2">
                     <form action="simple-results.html">
                         <div class="input-group">
@@ -25,7 +25,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> --}}
 
             </div>
             <!-- /.card-header -->
@@ -36,8 +36,8 @@
                     <th style="width: 10px">#</th>
                     <th>Nom</th>
                     <th>Poste</th>
-                    <th>Email</th>
                     <th>Télephone</th>
+                    <th>Email</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -46,8 +46,8 @@
                     <td>{{$loop->index+1}}</td>
                     <td>{{strtoupper($user->nom)}} {{ucwords($user->prenom)}}</td>
                     <td>{{$user->poste}} <br> <small>{{ $user->ministere?->nom }}</small></td>
-                    <td>{{$user->email}}</td>
                     <td>{{$user->telephone}}</td>
+                    <td>{{$user->email}}</td>
                   </tr>
                     @endforeach
                 </tbody>
