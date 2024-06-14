@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('ville_destination');
             $table->string('date_depart');
             $table->string('date_retour');
+            $table->string('classe')->default('economique');
             $table->integer('modification')->default(0);
             $table->foreignId('charge_de_mission_id')->nullable();
             $table->foreignId('agent_cellule_id')->nullable();

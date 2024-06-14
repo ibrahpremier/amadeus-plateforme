@@ -84,7 +84,8 @@ class ReservationController extends Controller
             'date_retour' => 'required|date',
             'ville_depart' => 'required|string',
             'ville_destination' => 'required|string',
-            'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120'
+            'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
+            'classe' => 'nullable'
         ]);
 
         $reservation = new Reservation();
@@ -95,6 +96,7 @@ class ReservationController extends Controller
         $reservation->ville_destination = $request->ville_destination;
         $reservation->date_depart = $request->date_depart;
         $reservation->date_retour = $request->date_retour;
+        $reservation->classe = $request->classe;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
 
         if ($request->hasFile('file_passport')) {

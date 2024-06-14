@@ -66,30 +66,42 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group row">
-                      <label for="ville_depart" class="col-sm-4 col-form-label">Depart</label>
-                      <div class="col-sm-8">
+                      <label for="ville_depart">Depart</label>
+                      {{-- <div class="col-sm-8"> --}}
                         <select class="form-control select2" style="width: 100%;" id="ville_depart" name="ville_depart" required>
                           <option value=""> -- Choisir --  </option>
                           @foreach (getCapitalNames() as $ville)
                           <option @if (old('ville_depart') == $ville) selected @endif> {{ $ville }} </option>
                           @endforeach
                         </select>
-                      </div>
+                      {{-- </div> --}}
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group row">
-                      <label for="ville_destination" class="col-sm-4 col-form-label">Destination</label>
-                      <div class="col-sm-8">
+                <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="ville_destination">Destination</label>
+                      {{-- <div class="col-sm-8"> --}}
                         <select class="form-control select2" style="width: 100%" id="ville_destination" name="ville_destination" required>
                             <option value=""> -- Choisir --  </option>
                             @foreach (getCapitalNames() as $ville)
                             <option @if (old('ville_destination') == $ville) selected @endif> {{ $ville }} </option>
                             @endforeach
                         </select>
-                      </div>
+                      {{-- </div> --}}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                      <label for="ville_destination">Classe</label>
+                      {{-- <div class="col-sm-8"> --}}
+                        <select class="form-control" style="width: 100%" id="ville_destination" name="ville_destination" required>
+                            <option value="">Economique </option>
+                            <option value="">Business </option>
+                            <option value="">First </option>
+                        </select>
+                      {{-- </div> --}}
                     </div>
                 </div>
             </div>
