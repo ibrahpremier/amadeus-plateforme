@@ -133,6 +133,8 @@ class UserController extends Controller
             break;
             case "agent_ministere": $poste = "chargé de mission"; 
             break;
+            case "comptable_ministere": $poste = "Comptable ministère"; 
+            break;
         }
 
         try {

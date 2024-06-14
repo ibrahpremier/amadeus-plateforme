@@ -94,12 +94,12 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group row">
-                      <label for="ville_destination">Classe</label>
+                      <label for="classe">Classe</label>
                       {{-- <div class="col-sm-8"> --}}
-                        <select class="form-control" style="width: 100%" id="ville_destination" name="ville_destination" required>
-                            <option value="">Economique </option>
-                            <option value="">Business </option>
-                            <option value="">First </option>
+                        <select class="form-control" style="width: 100%" id="classe" name="classe" required>
+                            <option @if (old('classe') == 'economique') selected @endif value="economique">Economique </option>
+                            <option @if (old('classe') == 'business') selected @endif value="business">Business </option>
+                            <option @if (old('classe') == 'first') selected @endif value="first">First </option>
                         </select>
                       {{-- </div> --}}
                     </div>
