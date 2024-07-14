@@ -31,20 +31,33 @@
                                     <p class="text-danger text-center">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group mb-2 col-md-4">
-                                <label for="nom">Taux (%)<sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control @error('taux') is-invalid @enderror"
-                                    value="{{ old('taux') }}" id="taux" name="taux" placeholder="taux">
-                                @error('taux')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-
                         </div>
 
                         <div class="row">
-
-
+                            <div class="form-group mb-2 col-md-4">
+                                <label for="marge_eco">Marge classe Eco<sup class="text-danger">*</sup></label>
+                                <input type="number" class="form-control @error('marge_eco') is-invalid @enderror"
+                                    value="{{ old('marge_eco') }}" id="marge_eco" name="marge_eco">
+                                @error('marge_eco')
+                                    <p class="text-danger text-center">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-2 col-md-4">
+                                <label for="marge_business">Marge classe affaire<sup class="text-danger">*</sup></label>
+                                <input type="number" class="form-control @error('marge_business') is-invalid @enderror"
+                                    value="{{ old('marge_business') }}" id="marge_business" name="marge_business">
+                                @error('marge_business')
+                                    <p class="text-danger text-center">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-2 col-md-4">
+                                <label for="marge_first">Marge première classe<sup class="text-danger">*</sup></label>
+                                <input type="number" class="form-control @error('marge_first') is-invalid @enderror"
+                                    value="{{ old('marge_first') }}" id="marge_first" name="marge_first">
+                                @error('marge_first')
+                                    <p class="text-danger text-center">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="row">

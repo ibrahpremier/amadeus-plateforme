@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('telephone')->nullable();
             $table->string('email')->nullable();
             $table->foreignId('user_id');
-            $table->decimal('taux');
+            $table->integer('marge_eco');
+            $table->integer('marge_business');
+            $table->integer('marge_first');
+            $table->integer('marge_jet');
             $table->timestamps();
         });
     }

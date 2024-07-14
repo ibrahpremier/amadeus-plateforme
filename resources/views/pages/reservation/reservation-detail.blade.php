@@ -30,6 +30,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="pays" class="col-sm-4 col-form-label">Classe</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="{{ $reservation->classe }}"
+                                        readonly>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -79,9 +88,9 @@
                 <div class="card-footer">
                     @if (getLoggedUser()->role == 'agent_ministere')
                         <div class="row">
-                            <div class="col-md-6 offset-md-3">
+                            {{-- <div class="col-md-6 offset-md-3">
                                 <button type="submit" class="btn btn-primary btn-block">Demande de modificaction</button>
-                            </div>
+                            </div> --}}
                         </div>
                     @elseif(getLoggedUser()->role == 'chef_cellule')
                         <div class="row">

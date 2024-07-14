@@ -32,7 +32,9 @@ class AgenceController extends Controller
         $agence = $request->validate(
             [
                 'nom' => ['required'],
-                'taux' => ['required', 'numeric'],
+                'marge_eco' => ['required', 'numeric'],
+                'marge_business' => ['required', 'numeric'],
+                'marge_first' => ['required', 'numeric'],
                 'telephone' => ['required'],
                 'email' => ['required','email'],
                 'description' => ['nullable'],
