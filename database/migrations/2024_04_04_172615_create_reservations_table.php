@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('numero_dossier')->nullable();
             $table->string('numero_passport')->nullable();
             $table->string('file_passport')->nullable();
+            $table->string('commentaire')->nullable();
             $table->string('ville_depart');
             $table->string('ville_destination');
             $table->string('date_depart');
