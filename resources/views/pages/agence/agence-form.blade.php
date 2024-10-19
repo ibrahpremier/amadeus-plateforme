@@ -9,7 +9,7 @@
         </h3>
     </div>
 
-    @dump($errors->all())
+    {{-- @dump($errors->all()) --}}
     <div class="card py-3">
         <div class="card-body">
             <div class="container">

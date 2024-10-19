@@ -37,7 +37,7 @@ class AgenceController extends Controller
                 'marge_business' => ['required', 'numeric', 'min:0'],
                 'marge_first' => ['required', 'numeric', 'min:0'],
                 'marge_jet' => ['required', 'numeric', 'min:0'],
-                'telephone' => ['required', 'string', 'max:20'],
+                'telephone' => ['required', 'string'],
                 'email' => ['required', 'email', 'max:255'],
                 'description' => ['nullable', 'string', 'max:1000'],
             ]
@@ -78,7 +78,7 @@ class AgenceController extends Controller
      */
     public function edit(Agence $agence)
     {
-        //
+        return view("pages.agence.agence-edit", compact("agence"));
     }
 
     /**
@@ -86,7 +86,28 @@ class AgenceController extends Controller
      */
     public function update(Request $request, Agence $agence)
     {
-        //
+
+        // Valider les données de la requête
+        $validatedData = $request->validate([
+            'nom' => 'required|string|max:255',
+            'telephone' => 'required|string',
+            'email' => 'required|email|max:255',
+            'description' => 'nullable|string',
+            'marge_eco' => 'required|numeric|min:0',
+            'marge_business' => 'required|numeric|min:0',
+            'marge_first' => 'required|numeric|min:0',
+            'marge_jet' => 'required|numeric|min:0',
+        ]);
+
+        // Mettre à jour l'agence avec les données validées
+        $agence->update($validatedData);
+
+        // Rediriger vers la liste des agences avec un message de succès
+        return redirect()->route('agence.index')
+            ->with('success', 'L\'agence a été mise à jour avec succès.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     /**
@@ -94,6 +115,12 @@ class AgenceController extends Controller
      */
     public function destroy(Agence $agence)
     {
-        //
+        $agence->delete();
+
+        return redirect()->route('agence.index')
+            ->with('success', 'L\'agence a été supprime avec succès.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 }
