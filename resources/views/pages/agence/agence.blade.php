@@ -5,8 +5,20 @@
 @endsection
 
 @section('content')
+
+    @session('success')
+        <div class="alert alert-success" role="alert">
+            {{ $value }}
+        </div>
+    @endsession
+
     <div class="row">
         <div class="col-md-12">
+            <div class="clearfix mb-3">
+                <a class="btn btn-primary float-right" href="{{ route('agence.create') }}">
+                    Creer une agence
+                </a>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Liste des Agences</h3>

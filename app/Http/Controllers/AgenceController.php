@@ -70,7 +70,7 @@ class AgenceController extends Controller
      */
     public function show(Agence $agence)
     {
-        //
+        return view("pages.agence.agence-show", compact("agence"));
     }
 
     /**
