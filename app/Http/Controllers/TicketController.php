@@ -60,7 +60,8 @@ class TicketController extends Controller
                 'reponse_ville_depart' => 'required|string',
                 'reponse_ville_destination' => 'required|string',
                 'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
-                'commentaire' => 'nullable|string'
+                'commentaire' => 'nullable|string',
+                'prix' => 'nullable|string'
             ]);
 
             $ticket->reponse_ville_depart = $request->reponse_ville_depart;
@@ -68,6 +69,7 @@ class TicketController extends Controller
             $ticket->reponse_date_depart = $request->reponse_date_depart;
             $ticket->reponse_date_retour = $request->reponse_date_retour;
             $ticket->status = $request->status;
+            $ticket->prix = $request->prix;
             $ticket->agent_cellule_id = getLoggedUser()->id;
 
             if ($request->filled('commentaire')) {

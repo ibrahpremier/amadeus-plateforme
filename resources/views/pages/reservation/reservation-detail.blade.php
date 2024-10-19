@@ -306,7 +306,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="prix">Saisir le prix de La réservation:</label>
+                                                    <input  @disabled($ticket->prix > 0) value="{{$ticket->prix}}" name="prix" type="number" class="form-control" placeholder="Entrer le montant">
+                                                </div>
+                                            </div>
                                             <input type="hidden" name="status" value="traité">
 
                                             @if ($ticket->status === 'affecté')
@@ -318,7 +323,7 @@
                                             @endif
 
                                     </form>
-                                    
+
                                     <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
                                         @csrf
                                         @method('put')
