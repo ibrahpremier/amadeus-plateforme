@@ -4,110 +4,158 @@
     <div class="page-header">
         <h3 class="page-title">
             <span class="page-title-icon bg-primary text-white me-2">
-                <i class="mdi mdi-home"></i>
-            </span> Gestion des Utilisateur
+                <i class="fas fa-building"></i>
+            </span> Créer une agence
         </h3>
     </div>
 
-    <div class="row">
-        <div class="col-md-8 col-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-header">
+    @dump($errors->all())
+    <div class="card py-3">
+        <div class="card-body">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <form action="{{ route('agence.store') }}" method="post">
+                            @csrf <!-- Protection contre les attaques CSRF -->
 
-                    <h2 class="card-title">Nouvel utilisateur</h2> <br>
-                    <small><em>Remplissez le formulaire pour créer un nouvel utilisateur</em></small>
-                </div>
-                <div class="card-body border">
-                    <form class="forms-sample" method="post" action="{{ route('agence.store') }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
+                            <!-- Section 1: Informations principales -->
+                            <div class="row">
+                                <!-- Colonne pour Nom, Téléphone, Email -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="nom">Nom</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                            <input type="text" class="form-control @error('nom') is-invalid @enderror"
+                                                id="nom" name="nom" value="{{ old('nom') }}"
+                                                placeholder="Nom de l'agence" required>
+                                        </div>
+                                        @error('nom')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                            <div class="form-group mb-2 col-md-8">
-                                <label for="nom">Nom <sup class="text-danger">*</sup></label>
-                                <input type="text" class="form-control @error('nom') is-invalid @enderror"
-                                    value="{{ old('nom') }}" id="nom" name="nom" placeholder="nom">
-                                @error('nom')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
+                                    <div class="form-group mb-3">
+                                        <label for="telephone">Téléphone</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                            <input type="text"
+                                                class="form-control @error('telephone') is-invalid @enderror" id="telephone"
+                                                name="telephone" value="{{ old('telephone') }}" placeholder="Téléphone"
+                                                required>
+                                        </div>
+                                        @error('telephone')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                        <div class="row">
-                            <div class="form-group mb-2 col-md-4">
-                                <label for="marge_eco">Marge classe Eco<sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control @error('marge_eco') is-invalid @enderror"
-                                    value="{{ old('marge_eco') }}" id="marge_eco" name="marge_eco">
-                                @error('marge_eco')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-2 col-md-4">
-                                <label for="marge_business">Marge classe affaire<sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control @error('marge_business') is-invalid @enderror"
-                                    value="{{ old('marge_business') }}" id="marge_business" name="marge_business">
-                                @error('marge_business')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-2 col-md-4">
-                                <label for="marge_first">Marge première classe<sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control @error('marge_first') is-invalid @enderror"
-                                    value="{{ old('marge_first') }}" id="marge_first" name="marge_first">
-                                @error('marge_first')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
+                                    <div class="form-group mb-3">
+                                        <label for="email">Email</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                                id="email" name="email" value="{{ old('email') }}"
+                                                placeholder="Email" required>
+                                        </div>
+                                        @error('email')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                        <div class="row">
-                            <div class="form-group mb-2 col-md-5">
-                                <label for="telephone">Téléphone <sup class="text-danger">*</sup></label>
-                                <input type="tel" class="form-control @error('telephone') is-invalid @enderror"
-                                    value="{{ old('telephone') }}" id="telephone" name="telephone" placeholder="Téléphone">
-                                @error('telephone')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
+                                <!-- Colonne pour la description -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
+                                            cols="30" rows="6" placeholder="Description de l'agence">{{ old('description') }}</textarea>
+                                        @error('description')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group mb-2 col-md-7">
-                                <label for="email">Email <sup class="text-danger">*</sup></label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    value="{{ old('email') }}" id="email" name="email" placeholder="email">
-                                @error('email')
-                                    <p class="text-danger text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
+                            <!-- Section 2: Marges -->
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label for="marge_eco">Marge économique</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                            <input type="number"
+                                                class="form-control @error('marge_eco') is-invalid @enderror" id="marge_eco"
+                                                name="marge_eco" value="{{ old('marge_eco') }}" placeholder="%" required>
+                                        </div>
+                                        @error('marge_eco')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                        <div class="row">
-                            <div class="form-group mb-2 col-md-8">
-                                <label for="description">Notes</label>
-                                <textarea cols="30" rows="3" class="form-control"
-                                    placeholder="Note" id="description" name="description"></textarea>
-                            </div>
-                        </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label for="marge_business">Marge business</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                            <input type="number"
+                                                class="form-control @error('marge_business') is-invalid @enderror"
+                                                id="marge_business" name="marge_business"
+                                                value="{{ old('marge_business') }}" placeholder="%" required>
+                                        </div>
+                                        @error('marge_business')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                        <div class="row mt-5">
-                            <div class="col-6">
-                                <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label for="marge_first">Marge first</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                            <input type="number"
+                                                class="form-control @error('marge_first') is-invalid @enderror"
+                                                id="marge_first" name="marge_first" value="{{ old('marge_first') }}"
+                                                placeholder="%" required>
+                                        </div>
+                                        @error('marge_first')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label for="marge_jet">Marge jet</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                            <input type="number"
+                                                class="form-control @error('marge_jet') is-invalid @enderror"
+                                                id="marge_jet" name="marge_jet" value="{{ old('marge_jet') }}"
+                                                placeholder="%" required>
+                                        </div>
+                                        @error('marge_jet')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <a class="btn btn-secondary" href="{{ url()->previous() }}">annuler</a>
-                            </div>
-                        </div>
-                    </form>
+
+                            <!-- Bouton de soumission -->
+                            <button type="submit" class="btn btn-primary mt-4 w-100">Créer l'agence</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
 
-
 @section('custom_js')
     <script>
         $(document).ready(function() {
-            console.log("BONJOUR");
+            console.log("Formulaire chargé");
         });
     </script>
 @endsection

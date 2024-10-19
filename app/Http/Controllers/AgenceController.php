@@ -12,8 +12,8 @@ class AgenceController extends Controller
      */
     public function index()
     {
-        $agences = Agence::all();
-        return view("pages.agence.agence",compact("agences"));
+        $agences = Agence::latest()->paginate(20);
+        return view("pages.agence.agence", compact("agences"));
     }
 
     /**
@@ -21,7 +21,7 @@ class AgenceController extends Controller
      */
     public function create()
     {
-       return view("pages.agence.agence-form");
+        return view("pages.agence.agence-form");
     }
 
     /**
@@ -29,29 +29,41 @@ class AgenceController extends Controller
      */
     public function store(Request $request)
     {
+        // Validation des données avec des règles plus spécifiques
         $agence = $request->validate(
             [
-                'nom' => ['required'],
-                'marge_eco' => ['required', 'numeric'],
-                'marge_business' => ['required', 'numeric'],
-                'marge_first' => ['required', 'numeric'],
-                'telephone' => ['required'],
-                'email' => ['required','email'],
-                'description' => ['nullable'],
+                'nom' => ['required', 'string', 'max:255'],
+                'marge_eco' => ['required', 'numeric', 'min:0'],
+                'marge_business' => ['required', 'numeric', 'min:0'],
+                'marge_first' => ['required', 'numeric', 'min:0'],
+                'marge_jet' => ['required', 'numeric', 'min:0'],
+                'telephone' => ['required', 'string', 'max:20'],
+                'email' => ['required', 'email', 'max:255'],
+                'description' => ['nullable', 'string', 'max:1000'],
             ]
         );
-        $agence['user_id'] = getLoggedUser()->id;
 
-        try {
-            Agence::create($agence);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-        return redirect()->route("agence.index")->with("success","Agence enregistré")
-                                                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-                                                ->header('Pragma', 'no-cache')
-                                                ->header('Expires', '0');
+        // Ajout de l'ID de l'utilisateur connecté
+        $agence['user_id'] = auth()->id();
+
+        // try {
+        // Création de l'agence dans la base de données
+        Agence::create($agence);
+
+        // Redirection avec un message de succès
+        return redirect()->route("agence.index")
+            ->with("success", "Agence enregistrée avec succès.")
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
+        // } catch (\Throwable $th) {
+        //     // Gestion des erreurs, redirection avec message d'erreur
+        //     return redirect()->back()
+        //         ->withErrors(['error' => 'Une erreur est survenue lors de la création de l\'agence.'])
+        //         ->withInput(); // Récupère les anciennes valeurs soumises
+        // }
     }
+
 
     /**
      * Display the specified resource.
