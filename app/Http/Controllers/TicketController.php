@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use App\Notifications\ReceiveResponseTicketNotification;
 
 class TicketController extends Controller
 {
@@ -52,8 +53,9 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        $change = [];
 
-        if ($request->filled('status') && $request->status=="traité") {
+        if ($request->filled('status') && $request->status == "traité") {
             $request->validate([
                 'reponse_date_depart' => 'required|date',
                 'reponse_date_retour' => 'required|date',
@@ -64,6 +66,36 @@ class TicketController extends Controller
                 'prix' => 'nullable|string'
             ]);
 
+            // Vérification des changements
+            if ($ticket->demande_date_depart != $request->reponse_date_depart) {
+                $change['reponse_date_depart'] = [
+                    'old' => $ticket->demande_date_depart,
+                    'new' => $request->reponse_date_depart,
+                ];
+            }
+
+            if ($ticket->demande_date_retour != $request->reponse_date_retour) {
+                $change['reponse_date_retour'] = [
+                    'old' => $ticket->demande_date_retour,
+                    'new' => $request->reponse_date_retour,
+                ];
+            }
+
+            if ($ticket->demande_ville_depart != $request->reponse_ville_depart) {
+                $change['reponse_ville_depart'] = [
+                    'old' => $ticket->demande_ville_depart,
+                    'new' => $request->reponse_ville_depart,
+                ];
+            }
+
+            if ($ticket->demande_ville_destination != $request->reponse_ville_destination) {
+                $change['reponse_ville_destination'] = [
+                    'old' => $ticket->demande_ville_destination,
+                    'new' => $request->reponse_ville_destination,
+                ];
+            }
+
+            // Mise à jour des valeurs
             $ticket->reponse_ville_depart = $request->reponse_ville_depart;
             $ticket->reponse_ville_destination = $request->reponse_ville_destination;
             $ticket->reponse_date_depart = $request->reponse_date_depart;
@@ -86,18 +118,24 @@ class TicketController extends Controller
                     return redirect()->back()->with('error', 'Le fichier est invalide.');
                 }
             }
-        }
-        elseif ($request->filled('status')) {
+        } elseif ($request->filled('status')) {
             $ticket->status = $request->status;
         }
+
         $ticket->save();
 
-        //Mettre a jour la reservertion
+        // Mettre à jour la réservation
         $ticket->reservation->status = $ticket->status;
         $ticket->reservation->save();
 
+        // Envoyer la notification par e-mail
+        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+
+        // Vous pouvez utiliser $change ici pour d'autres opérations, comme enregistrer dans une base de données de logs ou afficher les changements à l'utilisateur.
+
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
+
 
     /**
      * Remove the specified resource from storage.
