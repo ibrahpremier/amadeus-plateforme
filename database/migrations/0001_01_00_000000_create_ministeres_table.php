@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('ministeres', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('dotation_disponible')->nullable();
+            $table->integer('dotation');
+            $table->integer('dotation_disponible')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });
