@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->string('prix')->nullable();
             // $table->enum('type_ticket',['nouvelle demande','demande de modification','reponse']);
             $table->string('demande_titre');
             $table->string('demande_message')->nullable();

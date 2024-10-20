@@ -201,7 +201,7 @@
 
 
                                         <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
-                                            enctype="multipart/form-data">
+                                            enctype="multipart/form-data" id="ticketForm">
                                             @csrf
                                             @method('put')
 
@@ -306,7 +306,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="prix">Saisir le prix de La réservation:</label>
+                                                    <input  @disabled($ticket->prix > 0) value="{{$ticket->prix}}" name="prix" type="number" class="form-control" placeholder="Entrer le montant">
+                                                </div>
+                                            </div>
                                             <input type="hidden" name="status" value="traité">
 
                                             @if ($ticket->status === 'affecté')
@@ -315,10 +320,14 @@
                                                         <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
                                                     </div>
                                             </div>
+                                            <!-- Spinner (initialement masqué) -->
+                                            <div id="spinner" class="spinner-border text-primary" role="status" style="display: none; margin: 20px auto;">
+                                                <span class="sr-only">Chargement...</span>
+                                            </div>
                                             @endif
 
                                     </form>
-                                    
+
                                     <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
                                         @csrf
                                         @method('put')
@@ -397,5 +406,13 @@
         $(function() {
             $('.select2').select2()
         });
+        document.getElementById('ticketForm').addEventListener('submit', function(event) {
+        // Affiche le spinner
+        document.getElementById('spinner').style.display = 'block';
+
+        // Désactive le bouton pour éviter des clics multiples
+        const button = document.querySelector('.btn-primary');
+        button.disabled = true;
+    });
     </script>
 @endsection
