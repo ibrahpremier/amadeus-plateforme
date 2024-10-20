@@ -34,8 +34,7 @@
                             <div class="form-group row">
                                 <label for="pays" class="col-sm-4 col-form-label">Classe</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" value="{{ $reservation->classe }}"
-                                        readonly>
+                                    <input type="text" class="form-control" value="{{ $reservation->classe }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -185,7 +184,8 @@
                         {{-- TICKET REPONSE AGENT && CHEF FORM --}}
                         @if (
                             (($ticket->status === 'affecté' || $ticket->status === 'traité') &&
-                                (getLoggedUser()->role == 'agent_cellule' || getLoggedUser()->role == 'chef_cellule')) || ($ticket->status === 'approuvé') )
+                                (getLoggedUser()->role == 'agent_cellule' || getLoggedUser()->role == 'chef_cellule')) ||
+                                $ticket->status === 'approuvé')
                             <div class="time-label">
                                 <span class="bg-danger">
                                     {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
@@ -221,8 +221,8 @@
                                                         <div class="col-sm-8">
                                                             <input type="date" class="form-control"
                                                                 id="reponse_date_depart" name="reponse_date_depart"
-                                                                value="{{ $ticket->demande_date_depart }}" @readonly($ticket->status !== 'affecté')
-                                                                required>
+                                                                value="{{ $ticket->demande_date_depart }}"
+                                                                @readonly($ticket->status !== 'affecté') required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -283,75 +283,80 @@
                                                 <div class="col-md-6">
 
                                                     @if ($ticket->reponse_file)
-                                                    <label for="reponse_file">fichier (image/pdf)</label>
-                                                    <a href="{{ route('download.reponse_file', $ticket) }}"
-                                                        target="blank" class="btn btn-outline-primary btn-sm">
-                                                        Télecharger le fichier joint
-                                                    </a>
+                                                        <label for="reponse_file">fichier (image/pdf)</label>
+                                                        <a href="{{ route('download.reponse_file', $ticket) }}"
+                                                            target="blank" class="btn btn-outline-primary btn-sm">
+                                                            Télecharger le fichier joint
+                                                        </a>
                                                     @else
-                                                    <div class="form-group">
-                                                        <label for="reponse_file">Joindre un fichier (image/pdf)</label>
-                                                        <input type="file" class="form-control" id="reponse_file"
-                                                            name="reponse_file"
-                                                            @disabled($ticket->status !== 'affecté')>
-                                                    </div>
-                                                @endif
+                                                        <div class="form-group">
+                                                            <label for="reponse_file">Joindre un fichier
+                                                                (image/pdf)</label>
+                                                            <input type="file" class="form-control" id="reponse_file"
+                                                                name="reponse_file" @disabled($ticket->status !== 'affecté')>
+                                                        </div>
+                                                    @endif
 
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="commentaire">Commentaire:</label>
                                                         <textarea cols="30" rows="3" class="form-control"
-                                                            placeholder="{{ $ticket->status === 'affecté'?'Saisissez votre commentaire si vous en avez un':''}}" id="commentaire" name="commentaire"  @readonly($ticket->status !== 'affecté')>{{ $ticket->response_commentaire }}</textarea>
+                                                            placeholder="{{ $ticket->status === 'affecté' ? 'Saisissez votre commentaire si vous en avez un' : '' }}"
+                                                            id="commentaire" name="commentaire" @readonly($ticket->status !== 'affecté')>{{ $ticket->response_commentaire }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <label for="prix">Saisir le prix de La réservation:</label>
-                                                    <input  @disabled($ticket->prix > 0) value="{{$ticket->prix}}" name="prix" type="number" class="form-control" placeholder="Entrer le montant">
+                                                    <input @disabled($ticket->prix > 0) value="{{ $ticket->prix }}"
+                                                        name="prix" type="number" class="form-control"
+                                                        placeholder="Entrer le montant">
                                                 </div>
                                             </div>
                                             <input type="hidden" name="status" value="traité">
 
                                             @if ($ticket->status === 'affecté')
-                                            <div class="row">
+                                                <div class="row">
                                                     <div class="col-md-6 offset-md-3">
-                                                        <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
+                                                        <button type="submit"
+                                                            class="btn btn-primary btn-block">Enregistrer</button>
                                                     </div>
-                                            </div>
-                                            <!-- Spinner (initialement masqué) -->
-                                            <div id="spinner" class="spinner-border text-primary" role="status" style="display: none; margin: 20px auto;">
-                                                <span class="sr-only">Chargement...</span>
-                                            </div>
+                                                </div>
+                                                <!-- Spinner (initialement masqué) -->
+                                                <div id="spinner" class="spinner-border text-primary" role="status"
+                                                    style="display: none; margin: 20px auto;">
+                                                    <span class="sr-only">Chargement...</span>
+                                                </div>
                                             @endif
 
-                                    </form>
+                                        </form>
 
-                                    <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
-                                        @csrf
-                                        @method('put')
+                                        <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
+                                            @csrf
+                                            @method('put')
                                             @if ($ticket->status === 'traité' && getLoggedUser()->role == 'chef_cellule')
-
-                                            <input type="hidden" name="status" value="approuvé">
-                                            <div class="row">
+                                                <input type="hidden" name="status" value="approuvé">
+                                                <div class="row">
                                                     <div class="col-md-6 offset-md-3">
-                                                        <button type="submit" class="btn btn-primary btn-block">Approuver et transmettre
+                                                        <button type="submit" class="btn btn-primary btn-block">Approuver
+                                                            et transmettre
                                                             au demandeur</button>
                                                     </div>
-                                                        {{-- <div class="col-md-6">
+                                                    {{-- <div class="col-md-6">
                                                     <a href="#"
                                                         target="blank" class="btn btn-warning btn-block">Autre option(à preciser)
                                                         </a>
                                                     </div> --}}
-                                            </div>
-                                                @endif
-                                            </div>
+                                                </div>
+                                            @endif
+                                    </div>
                                     </form>
                                 </div>
                             </div>
-        @endif
-        {{-- FIN TICKET REPONSE AGENT FORM --}}
+                        @endif
+                        {{-- FIN TICKET REPONSE AGENT FORM --}}
 
                         {{-- TICKET REPONSE --}}
                         @if ($ticket->status === 'approuvé')
@@ -366,7 +371,8 @@
                                     <span class="time"><em>par
                                             {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em></span>
                                     <h3 class="timeline-header">
-                                        <u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}</h3>
+                                        <u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}
+                                    </h3>
                                     <div class="timeline-body">
                                         <div class="row">
                                             @if ($ticket->reponse_commentaire)
@@ -376,8 +382,8 @@
                                             @endif
                                             @if ($ticket->reponse_file)
                                                 <div class="col-md-6 offset-md-3">
-                                                    <a href="{{ route('download.reponse_file', $ticket) }}" target="blank"
-                                                        class="btn btn-warning btn-block">
+                                                    <a href="{{ route('download.reponse_file', $ticket) }}"
+                                                        target="blank" class="btn btn-warning btn-block">
                                                         Télecharger le fichier
                                                     </a>
                                                 </div>
@@ -388,15 +394,13 @@
                             </div>
                         @endif
                         {{-- FIN TICKET REPONSE --}}
-        <div>
-            <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
-        </div>
-    </div>
-    </div>
-    </div>
-    <!-- /.tab-pane -->
-    </div>
-    @endforeach
+                        <div>
+                            <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
 
     </div>
 @endsection
@@ -407,12 +411,12 @@
             $('.select2').select2()
         });
         document.getElementById('ticketForm').addEventListener('submit', function(event) {
-        // Affiche le spinner
-        document.getElementById('spinner').style.display = 'block';
+            // Affiche le spinner
+            document.getElementById('spinner').style.display = 'block';
 
-        // Désactive le bouton pour éviter des clics multiples
-        const button = document.querySelector('.btn-primary');
-        button.disabled = true;
-    });
+            // Désactive le bouton pour éviter des clics multiples
+            const button = document.querySelector('.btn-primary');
+            button.disabled = true;
+        });
     </script>
 @endsection

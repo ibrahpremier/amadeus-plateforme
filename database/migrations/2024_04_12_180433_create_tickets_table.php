@@ -35,7 +35,7 @@ return new class extends Migration
             $table->foreignId('reservation_id');
             $table->foreignId('agent_cellule_id')->nullable();
             $table->foreignId('chef_cellule_id')->nullable();
-            $table->enum('status',['nouveau','affecté','traité','non disponible','approuvé','refusé','annulé'])->default('nouveau');
+            $table->enum('status', ['nouveau', 'affecté', 'traité', 'non disponible', 'approuvé', 'refusé', 'annulé'])->default('nouveau');
             $table->timestamps();
         });
     }

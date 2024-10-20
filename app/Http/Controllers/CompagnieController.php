@@ -16,6 +16,11 @@ class CompagnieController extends Controller
         return view("pages.compagnie.compagnies", compact("compagnies"));
     }
 
+    public function show(Compagnie $compagnie)
+    {
+        return view("pages.compagnie.compagnie-show", compact("compagnie"));
+    }
+
     /**
      * Store a newly created resource in storage.
      */

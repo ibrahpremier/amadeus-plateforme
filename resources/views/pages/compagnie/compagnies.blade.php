@@ -52,6 +52,10 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $compagnie->nom }}</td>
                                 <td>
+                                    <a href="{{ route('compagnie.show', $compagnie) }}" class="btn btn-info">
+                                        <i class="fas fa-eye"></i>
+                                        Voir
+                                    </a>
                                     <button class="btn btn-warning btn-sm" data-toggle="modal"
                                         data-target="#editModal{{ $compagnie->id }}">
                                         <i class="fas fa-edit"></i> Modifier

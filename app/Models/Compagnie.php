@@ -14,4 +14,9 @@ class Compagnie extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, "compagnie_id");
+    }
 }
