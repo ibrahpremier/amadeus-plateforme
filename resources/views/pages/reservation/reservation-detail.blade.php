@@ -200,7 +200,7 @@
                                     <div class="timeline-body">
 
 
-                                        <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
+                                        <form method="POST" action="{{ route('ticket.create', $ticket->id) }}"
                                             enctype="multipart/form-data" id="ticketForm">
                                             @csrf
                                             @method('put')
