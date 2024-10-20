@@ -12,15 +12,8 @@ class CompagnieController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $compagnies = Compagnie::latest()->paginate(20);
+        return view("pages.compagnie.compagnies", compact("compagnies"));
     }
 
     /**
@@ -28,23 +21,18 @@ class CompagnieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+        ]);
+
+        Compagnie::create($request->all());
+
+        return redirect()->route('compagnie.index')->with('success', 'Compagnie créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Compagnie $compagnie)
+    public function create()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Compagnie $compagnie)
-    {
-        //
+        return to_route("compagnie.index");
     }
 
     /**
@@ -52,7 +40,13 @@ class CompagnieController extends Controller
      */
     public function update(Request $request, Compagnie $compagnie)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+        ]);
+
+        $compagnie->update($request->all());
+
+        return redirect()->route('compagnie.index')->with('success', 'Compagnie mise à jour avec succès.');
     }
 
     /**
@@ -60,6 +54,8 @@ class CompagnieController extends Controller
      */
     public function destroy(Compagnie $compagnie)
     {
-        //
+        $compagnie->delete();
+
+        return redirect()->route('compagnie.index')->with('success', 'Compagnie supprimée avec succès.');
     }
 }
