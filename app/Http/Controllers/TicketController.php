@@ -29,6 +29,7 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // methode store d'un nouveua ticket
     public function store(Request $request)
     {
         $change = [];
@@ -42,22 +43,31 @@ class TicketController extends Controller
             'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
             'commentaire' => 'nullable|string',
             'prix' => 'nullable|string',
-            'status' => 'required|string|in:traité,non-traité', // Ajoutez le status requis
+            'status' => 'required|string|in:nouveau,affecté,traité,non disponible,approuvé,refusé,annulé',
+            'reservation_id' => 'required|exists:reservations,id',
+            'charge_de_mission_id' => 'required',
+            'parent_ticket_id' => 'nullable|exists:tickets,id',
         ]);
+        // dd($request->all());
+
+        // Formater les dates en français avec Carbon
+        Carbon::setLocale('fr');
+        $formattedDateDepart = Carbon::parse($request->reponse_date_depart)->isoFormat('D MMMM YYYY');
+        $formattedDateRetour = Carbon::parse($request->reponse_date_retour)->isoFormat('D MMMM YYYY');
 
         // Création du nouveau ticket
         $ticket = new Ticket();
-        $ticket->reponse_ville_depart = $request->reponse_ville_depart;
-        $ticket->reponse_ville_destination = $request->reponse_ville_destination;
         $ticket->reponse_date_depart = $request->reponse_date_depart;
         $ticket->reponse_date_retour = $request->reponse_date_retour;
-        $ticket->status = $request->status;
+        $ticket->reponse_ville_depart = $request->reponse_ville_depart;
+        $ticket->reponse_ville_destination = $request->reponse_ville_destination;
+        $ticket->response_commentaire = $request->commentaire;
         $ticket->prix = $request->prix;
+        $ticket->status = $request->status;
+        $ticket->reservation_id = $request->reservation_id;
+        $ticket->parent_ticket_id = $request->parent_ticket_id;
+        $ticket->agence_id = $request->charge_de_mission_id;
         $ticket->agent_cellule_id = getLoggedUser()->id;
-
-        if ($request->filled('commentaire')) {
-            $ticket->response_commentaire = $request->commentaire;
-        }
 
         // Gestion du fichier s'il est présent
         if ($request->hasFile('reponse_file')) {
@@ -70,45 +80,19 @@ class TicketController extends Controller
             }
         }
 
-        // Enregistrement du ticket
-        $ticket->save();
+        // // Associer le ticket à une réservation et mettre à jour le statut de la réservation
+        // $reservation = Reservation::find($request->reservation_id);
+        // if ($reservation) {
+        //     $ticket->reservation()->associate($reservation);
+        // }
 
-        // Associer le ticket à une réservation et mettre à jour le statut de la réservation
-        $reservation = Reservation::find($request->reservation_id); // Assurez-vous d'avoir l'ID de réservation depuis le formulaire.
-        if ($reservation) {
-            $reservation->status = $ticket->status;
-            $reservation->save();
-            $ticket->reservation()->associate($reservation);
-        }
-
-        // Préparation des changements à noter pour le log (si nécessaire)
-        $change = [
-            'reponse_date_depart' => [
-                'old' => 'N/A',
-                'new' => $request->reponse_date_depart,
-            ],
-            'reponse_date_retour' => [
-                'old' => 'N/A',
-                'new' => $request->reponse_date_retour,
-            ],
-            'reponse_ville_depart' => [
-                'old' => 'N/A',
-                'new' => $request->reponse_ville_depart,
-            ],
-            'reponse_ville_destination' => [
-                'old' => 'N/A',
-                'new' => $request->reponse_ville_destination,
-            ],
-        ];
-
-        // Envoyer la notification par e-mail
-        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+            $ticket->save();
 
         // Redirection avec succès et les changements
         return redirect()->route('reservation.show', $ticket->reservation->id)
-            ->with('success', 'Nouveau ticket créé')
-            ->with('changes', $change);
+            ->with('success', 'Nouveau ticket créé');
     }
+
 
 
     /**

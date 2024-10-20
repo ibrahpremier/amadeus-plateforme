@@ -14,31 +14,32 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('prix')->nullable();
-            // $table->enum('type_ticket',['nouvelle demande','demande de modification','reponse']);
-            $table->string('demande_titre');
-            $table->string('demande_message')->nullable();
-            $table->string('demande_ville_depart');
-            $table->string('demande_ville_destination');
-            $table->string('demande_date_depart');
-            $table->string('demande_date_retour');
+            // $table->string('demande_titre')->nullable();
+            // $table->string('demande_message')->nullable();
+            // $table->string('demande_ville_depart');
+            // $table->string('demande_ville_destination');
+            // $table->date('demande_date_depart');
+            // $table->date('demande_date_retour');
             $table->string('reponse_titre')->nullable();
             $table->string('reponse_message')->nullable();
             $table->string('reponse_ville_depart')->nullable();
             $table->string('reponse_ville_destination')->nullable();
-            $table->string('reponse_date_depart')->nullable();
-            $table->string('reponse_date_retour')->nullable();
+            $table->date('reponse_date_depart')->nullable();
+            $table->date('reponse_date_retour')->nullable();
             $table->string('reponse_file')->nullable();
             $table->string('response_commentaire')->nullable();
-            $table->integer('reponse_cout')->nullable();
+            // $table->integer('reponse_cout')->nullable();
             $table->foreignId('agence_id')->nullable();
             $table->foreignId('compagnie_id')->nullable();
             $table->foreignId('reservation_id');
             $table->foreignId('agent_cellule_id')->nullable();
             $table->foreignId('chef_cellule_id')->nullable();
-            $table->enum('status',['nouveau','affecté','traité','non disponible','approuvé','refusé','annulé'])->default('nouveau');
+            $table->enum('status', ['nouveau', 'affecté', 'traité', 'non disponible', 'approuvé', 'refusé', 'annulé'])->default('nouveau');
+            $table->foreignId('parent_ticket_id')->nullable()->constrained('tickets');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

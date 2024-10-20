@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('commentaire')->nullable();
             $table->string('ville_depart');
             $table->string('ville_destination');
-            $table->string('date_depart');
-            $table->string('date_retour');
+            $table->date('date_depart');
+            $table->date('date_retour');
             $table->string('classe')->default('economique');
             $table->integer('modification')->default(0);
             $table->foreignId('charge_de_mission_id')->nullable();
@@ -32,6 +32,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
