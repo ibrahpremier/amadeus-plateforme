@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agence;
+use App\Models\Compagnie;
 use App\Models\Reservation;
 use App\Models\Ticket;
 use App\Models\User;
@@ -78,7 +80,7 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'numero_passport' => 'required|string',
@@ -119,7 +121,7 @@ class ReservationController extends Controller
         $reservation->numero_dossier = date("Ym/") . $reservation->id;
         $reservation->save();
 
-        $ticket = rand(1000, 9999);
+        // $ticket = rand(1000, 9999);
 
         Ticket::create([
             'reponse_titre' => "Nouvelle requête",
@@ -143,7 +145,13 @@ class ReservationController extends Controller
     public function show(Reservation $reservation)
     {
         $agents_cellule = User::where("role", "agent_cellule")->get();
-        return view('pages.reservation.reservation-detail', compact('reservation', 'agents_cellule'));
+        $agences = Agence::latest()->get();
+        $compagnies = Compagnie::latest()->get();
+
+        return view(
+            'pages.reservation.reservation-detail',
+            compact('reservation', 'agents_cellule', 'agences', 'compagnies')
+        );
     }
 
     /**

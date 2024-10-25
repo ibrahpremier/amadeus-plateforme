@@ -43,7 +43,7 @@ class TicketController extends Controller
             'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
             'commentaire' => 'nullable|string',
             'prix' => 'nullable|string',
-            'status' => 'required|string|in:nouveau,affecté,traité,non disponible,approuvé,refusé,annulé',
+            'status' => 'required|string|in:nouveau,affecté,traité,en cours,non disponible,approuvé,refusé,annulé,terminé',
             'reservation_id' => 'required|exists:reservations,id',
             'charge_de_mission_id' => 'required',
             'parent_ticket_id' => 'nullable|exists:tickets,id',
@@ -80,13 +80,19 @@ class TicketController extends Controller
             }
         }
 
+        if ($request->filled('oldTicket')) {
+            $oldTicket = Ticket::where('id', $request->oldTicket)->first();
+            $oldTicket->status = 'traité';
+            $oldTicket->save();
+        }
+
         // // Associer le ticket à une réservation et mettre à jour le statut de la réservation
         // $reservation = Reservation::find($request->reservation_id);
         // if ($reservation) {
         //     $ticket->reservation()->associate($reservation);
         // }
 
-            $ticket->save();
+        $ticket->save();
 
         // Redirection avec succès et les changements
         return redirect()->route('reservation.show', $ticket->reservation->id)
@@ -119,7 +125,9 @@ class TicketController extends Controller
         // Validation du fichier si nécessaire
         $request->validate([
             'reponse_billet' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Autorise les fichiers images et pdf de max 2 Mo
-            'status' => 'nullable|string'
+            'status' => 'sometimes|required|string|in:nouveau,affecté,traité,en cours,non disponible,approuvé,refusé,annulé,terminé',
+            'agence_id' => 'sometimes|required|exists:agences,id',
+            'compagnie_id' => 'sometimes|required|exists:compagnies,id'
         ]);
 
         // Gestion du fichier s'il est présent
@@ -134,11 +142,19 @@ class TicketController extends Controller
             }
         }
 
+        $ticket->agence_id = $request->agence_id;
+        $ticket->compagnie_id = $request->compagnie_id;
+
         // Vérifier si le statut doit être mis à jour à "approuvé"
-        if ($request->has('status') && $request->status == 'approuvé') {
-            // Mettre à jour le statut du ticket
-            $ticket->status = 'approuvé';
+        // if ($request->has('status') && $request->status == 'approuvé') {
+        //     // Mettre à jour le statut du ticket
+        //     $ticket->status = 'approuvé';
+        // }
+
+        if ($request->filled('status')) {
+            $ticket->status = $request->status;
         }
+
 
         // Enregistrer les modifications du ticket
         $ticket->save();
