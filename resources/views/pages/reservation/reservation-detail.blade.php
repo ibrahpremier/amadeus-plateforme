@@ -341,299 +341,112 @@
                                         <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
                                             @csrf
                                             @method('put')
-                                            <<<<<<< HEAD <div class="row">
-                                                <div class="col-md-6 offset-md-3">
-                                                    <h5 class="text-center text-danger">ATTENTION</h3>
-                                                        <p class="text-danger text-center"> Veuillez a modifier les dates
-                                                            et/ou les villes de départ et de destination si celles-ci ne
-                                                            correspondent pas au billet disponible</p>
+                                            @if ($ticket->status === 'traité' && getLoggedUser()->role == 'agent_ministere')
+                                                <input type="hidden" name="status" value="approuvé">
+                                                <div class="row">
+                                                    <div class="col-md-6 offset-md-3">
+                                                        <button type="submit" class="btn btn-primary btn-block">Approuver
+                                                            et transmettre au demandeur</button>
+                                                    </div>
                                                 </div>
+                                            @endif
+                                        </form>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label for="reponse_date_depart" class="col-sm-4 col-form-label">Date de
-                                                    départ</label>
-                                                <div class="col-sm-8">
-                                                    <input type="date" class="form-control" id="reponse_date_depart"
-                                                        name="reponse_date_depart"
-                                                        value="{{ $ticket->demande_date_depart }}" @readonly($ticket->status !== 'affecté')
-                                                        required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label for="reponse_date_retour" class="col-sm-4 col-form-label">Date de
-                                                    retour</label>
-                                                <div class="col-sm-8">
-                                                    <input type="date" class="form-control" id="reponse_date_retour"
-                                                        name="reponse_date_retour"
-                                                        value="{{ $ticket->demande_date_retour }}" @readonly($ticket->status !== 'affecté')
-                                                        required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label for="reponse_ville_depart"
-                                                    class="col-sm-4 col-form-label">Depart</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control select2" style="width: 100%;"
-                                                        id="reponse_ville_depart" name="reponse_ville_depart" required
-                                                        @disabled($ticket->status !== 'affecté')>
-                                                        <option value=""> -- Choisir -- </option>
-                                                        @foreach (getCapitalNames() as $ville)
-                                                            <option @if ($ticket->demande_ville_depart == $ville) selected @endif>
-                                                                {{ $ville }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label for="reponse_ville_destination"
-                                                    class="col-sm-4 col-form-label">Destination</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control select2" style="width: 100%"
-                                                        id="reponse_ville_destination" name="reponse_ville_destination"
-                                                        required @disabled($ticket->status !== 'affecté')>
-                                                        <option value=""> -- Choisir -- </option>
-                                                        @foreach (getCapitalNames() as $ville)
-                                                            <option @if ($ticket->demande_ville_destination == $ville) selected @endif>
-                                                                {{ $ville }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-
-                                            @if ($ticket->reponse_file)
-                                                <label for="reponse_file">fichier (image/pdf)</label>
-                                                <a href="{{ route('download.reponse_file', $ticket) }}" target="blank"
-                                                    class="btn btn-outline-primary btn-sm">
-                                                    Télecharger le fichier joint
-                                                </a>
-                                            @else
-                                                <div class="form-group">
-                                                    <label for="reponse_file">Joindre un fichier
-                                                        (image/pdf)</label>
-                                                    <input type="file" class="form-control" id="reponse_file"
-                                                        name="reponse_file" @disabled($ticket->status !== 'affecté')>
+                        {{-- TICKET REPONSE --}}
+                        @if ($ticket->status === 'approuvé')
+                            <div>
+                                <i class="far fa-clock bg-gray"></i>
+                                <div class="timeline-item">
+                                    <span class="time">
+                                        <em>par
+                                            {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em>
+                                    </span>
+                                    <h3 class="timeline-header">
+                                        <u>{{ $ticket->reponse_titre }}</u>: {{ $ticket->reponse_message }}
+                                    </h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            @if ($ticket->reponse_commentaire)
+                                                <div class="col-md-12 text-justify">
+                                                    <p>{{ $ticket->reponse_commentaire }}</p>
                                                 </div>
                                             @endif
 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="commentaire">Commentaire:</label>
-                                                <textarea cols="30" rows="3" class="form-control"
-                                                    placeholder="{{ $ticket->status === 'affecté' ? 'Saisissez votre commentaire si vous en avez un' : '' }}"
-                                                    id="commentaire" name="commentaire" @readonly($ticket->status !== 'affecté')>{{ $ticket->response_commentaire }}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label for="prix">Saisir le prix de La réservation:</label>
-                                            <input @disabled($ticket->prix > 0) value="{{ $ticket->prix }}"
-                                                name="prix" type="number" class="form-control"
-                                                placeholder="Entrer le montant">
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="status" value="traité">
-
-                                    @if ($ticket->status === 'affecté')
-                                        <div class="row">
-                                            <div class="col-md-6 offset-md-3">
-                                                <button type="submit"
-                                                    class="btn btn-primary btn-block">Enregistrer</button>
-                                            </div>
-                                        </div>
-                                        <!-- Spinner (initialement masqué) -->
-                                        <div id="spinner" class="spinner-border text-primary" role="status"
-                                            style="display: none; margin: 20px auto;">
-                                            <span class="sr-only">Chargement...</span>
-                                        </div>
-                                    @endif
-
-                                    </form>
-
-                                    <form method="POST" action="{{ route('ticket.update', $ticket->id) }}">
-                                        @csrf
-                                        @method('put')
-                                        @if ($ticket->status === 'traité' && getLoggedUser()->role == 'chef_cellule')
-                                            <input type="hidden" name="status" value="approuvé">
-                                            <div class="row">
-                                                <div class="col-md-6 offset-md-3">
-                                                    <button type="submit" class="btn btn-primary btn-block">Approuver
-                                                        et transmettre
-                                                        au demandeur</button>
+                                            {{-- Si un billet est présent, afficher le message à l'agent ministère --}}
+                                            @if (!$ticket->reponse_billet && getLoggedUser()->role === 'agent_ministere')
+                                                <div class="col-md-12 text-justify">
+                                                    <p><strong>Ticket approuvé :</strong> Attente du billet par l'agence.
+                                                    </p>
                                                 </div>
-                                                {{-- <div class="col-md-6">
-                                                    <a href="#"
-                                                        target="blank" class="btn btn-warning btn-block">Autre option(à preciser)
-                                                        </a>
-                                                    </div> --}}
+                                            @endif
+                                            {{-- Si un billet est présent, afficher le message à l'agent cellule --}}
+                                            @if ((!$ticket->reponse_billet && getLoggedUser()->role === 'chef_cellule') || getLoggedUser()->role === 'agent_cellule')
+                                                <div class="col-md-12 text-justify">
+                                                    <p><strong>Ticket approuvé :</strong>Attente de traitement par le
+                                                        Ministère.</p>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        {{-- Afficher un récapitulatif si le billet est présent pour l'agent ministère avec les champs désactivés --}}
+                                        @if ($ticket->reponse_billet && getLoggedUser()->role === 'agent_ministere')
+                                            <div class="col-md-12 text-justify">
+                                                <p><strong>Réservaion terminé :</strong> Vous pouvez telecharger Votre
+                                                    Billet.</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <a href="#" class="btn btn-outline-primary btn-sm" target="_blank">
+                                                    Télécharger le billet
+                                                </a>
                                             </div>
                                         @endif
-                                </div>
-                                </form>
-                            </div>
-                </div>
-                @endif
-                {{-- FIN TICKET REPONSE AGENT FORM --}}
 
-                {{-- TICKET REPONSE --}}
-                @if ($ticket->status === 'approuvé')
-                    {{-- <div class="time-label">
-                                <span class="bg-danger">
-                                    {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
-                                </span>
-                            </div> --}}
+                                        {{-- Fin de la timeline pour le chef_cellule ou agent_cellule si un billet est présent --}}
+                                        @if (getLoggedUser()->role === 'chef_cellule' || getLoggedUser()->role === 'agent_cellule')
+                                            @if ($ticket->reponse_billet)
+                                                <div class="col-md-12 text-justify">
+                                                    <p><strong>Réservaion terminé :</strong> Billet soumis.</p>
+                                                </div>
+                                            @else
+                                                {{-- Afficher le formulaire pour joindre un fichier même si le ticket est approuvé --}}
+                                                <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label for="reponse_billet">Joindre le Billet (image/pdf)</label>
+                                                        <input type="file" class="form-control" id="reponse_billet"
+                                                            name="reponse_billet" required>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 offset-md-3">
+                                                            <button type="submit"
+                                                                class="btn btn-primary btn-block">Soumettre le
+                                                                fichier</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                    @endforeach
+
+
+
                     <div>
-                        <i class="far fa-clock bg-gray"></i>
-                        <div class="timeline-item">
-                            <span class="time"><em>par
-                                    {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em></span>
-                            <h3 class="timeline-header">
-                                <u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}
-                            </h3>
-                            <div class="timeline-body">
-                                <div class="row">
-                                    @if ($ticket->reponse_commentaire)
-                                        <div class="col-md-12 text-justify">
-                                            <p> {{ $ticket->reponse_commentaire }}</p>
-                                        </div>
-                                    @endif
-                                    @if ($ticket->reponse_file)
-                                        <div class="col-md-6 offset-md-3">
-                                            <a href="{{ route('download.reponse_file', $ticket) }}" target="blank"
-                                                class="btn btn-warning btn-block">
-                                                Télecharger le fichier
-                                            </a>
-                                        </div>
-                                    @endif
-                                </div>
-                                =======
-                                @if ($ticket->status === 'traité' && getLoggedUser()->role == 'agent_ministere')
-                                    <input type="hidden" name="status" value="approuvé">
-                                    <div class="row">
-                                        <div class="col-md-6 offset-md-3">
-                                            <button type="submit" class="btn btn-primary btn-block">Approuver
-                                                et transmettre au demandeur</button>
-                                        </div>
-                                    </div>
-                                @endif
-                                </form>
-                                >>>>>>> skg
-                            </div>
-                        </div>
+                        <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
                     </div>
-                @endif
-                <<<<<<< HEAD {{-- FIN TICKET REPONSE --}} <div>
-                    <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
-    </div>
-    @endforeach
-    =======
-
-    {{-- TICKET REPONSE --}}
-    @if ($ticket->status === 'approuvé')
-        <div>
-            <i class="far fa-clock bg-gray"></i>
-            <div class="timeline-item">
-                <span class="time">
-                    <em>par {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em>
-                </span>
-                <h3 class="timeline-header">
-                    <u>{{ $ticket->reponse_titre }}</u>: {{ $ticket->reponse_message }}
-                </h3>
-                <div class="timeline-body">
-                    <div class="row">
-                        @if ($ticket->reponse_commentaire)
-                            <div class="col-md-12 text-justify">
-                                <p>{{ $ticket->reponse_commentaire }}</p>
-                            </div>
-                        @endif
-
-                        {{-- Si un billet est présent, afficher le message à l'agent ministère --}}
-                        @if (!$ticket->reponse_billet && getLoggedUser()->role === 'agent_ministere')
-                            <div class="col-md-12 text-justify">
-                                <p><strong>Ticket approuvé :</strong> Attente du billet par l'agence.</p>
-                            </div>
-                        @endif
-                        {{-- Si un billet est présent, afficher le message à l'agent cellule --}}
-                        @if ((!$ticket->reponse_billet && getLoggedUser()->role === 'chef_cellule') || getLoggedUser()->role === 'agent_cellule')
-                            <div class="col-md-12 text-justify">
-                                <p><strong>Ticket approuvé :</strong>Attente de traitement par le Ministère.</p>
-                            </div>
-                        @endif
-                    </div>
-
-                    {{-- Afficher un récapitulatif si le billet est présent pour l'agent ministère avec les champs désactivés --}}
-                    @if ($ticket->reponse_billet && getLoggedUser()->role === 'agent_ministere')
-                        <div class="col-md-12 text-justify">
-                            <p><strong>Réservaion terminé :</strong> Vous pouvez telecharger Votre Billet.</p>
-                        </div>
-                        <div class="form-group">
-                            <a href="#" class="btn btn-outline-primary btn-sm" target="_blank">
-                                Télécharger le billet
-                            </a>
-                        </div>
-                    @endif
-
-                    {{-- Fin de la timeline pour le chef_cellule ou agent_cellule si un billet est présent --}}
-                    @if (getLoggedUser()->role === 'chef_cellule' || getLoggedUser()->role === 'agent_cellule')
-                        @if ($ticket->reponse_billet)
-                            <div class="col-md-12 text-justify">
-                                <p><strong>Réservaion terminé :</strong> Billet soumis.</p>
-                            </div>
-                        @else
-                            {{-- Afficher le formulaire pour joindre un fichier même si le ticket est approuvé --}}
-                            <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
-                                <div class="form-group">
-                                    <label for="reponse_billet">Joindre le Billet (image/pdf)</label>
-                                    <input type="file" class="form-control" id="reponse_billet" name="reponse_billet"
-                                        required>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 offset-md-3">
-                                        <button type="submit" class="btn btn-primary btn-block">Soumettre le
-                                            fichier</button>
-                                    </div>
-                                </div>
-                            </form>
-                        @endif
-                    @endif
                 </div>
             </div>
         </div>
-    @endif
-
-    @endforeach
-
-
-
-    <div>
-        <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
-    </div>
-    </div>
-    </div>
-    </div>
-    >>>>>>> skg
 
     </div>
 @endsection
