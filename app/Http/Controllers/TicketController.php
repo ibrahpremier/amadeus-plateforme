@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Notifications\ReceiveResponseTicketNotification;
 
 class TicketController extends Controller
@@ -27,10 +29,71 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // methode store d'un nouveua ticket
     public function store(Request $request)
     {
-        //
+        $change = [];
+
+        // Validation des champs
+        $request->validate([
+            'reponse_date_depart' => 'required|date',
+            'reponse_date_retour' => 'required|date',
+            'reponse_ville_depart' => 'required|string',
+            'reponse_ville_destination' => 'required|string',
+            'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
+            'commentaire' => 'nullable|string',
+            'prix' => 'nullable|string',
+            'status' => 'required|string|in:nouveau,affecté,traité,non disponible,approuvé,refusé,annulé',
+            'reservation_id' => 'required|exists:reservations,id',
+            'charge_de_mission_id' => 'required',
+            'parent_ticket_id' => 'nullable|exists:tickets,id',
+        ]);
+        // dd($request->all());
+
+        // Formater les dates en français avec Carbon
+        Carbon::setLocale('fr');
+        $formattedDateDepart = Carbon::parse($request->reponse_date_depart)->isoFormat('D MMMM YYYY');
+        $formattedDateRetour = Carbon::parse($request->reponse_date_retour)->isoFormat('D MMMM YYYY');
+
+        // Création du nouveau ticket
+        $ticket = new Ticket();
+        $ticket->reponse_date_depart = $request->reponse_date_depart;
+        $ticket->reponse_date_retour = $request->reponse_date_retour;
+        $ticket->reponse_ville_depart = $request->reponse_ville_depart;
+        $ticket->reponse_ville_destination = $request->reponse_ville_destination;
+        $ticket->response_commentaire = $request->commentaire;
+        $ticket->prix = $request->prix;
+        $ticket->status = $request->status;
+        $ticket->reservation_id = $request->reservation_id;
+        $ticket->parent_ticket_id = $request->parent_ticket_id;
+        $ticket->agence_id = $request->charge_de_mission_id;
+        $ticket->agent_cellule_id = getLoggedUser()->id;
+
+        // Gestion du fichier s'il est présent
+        if ($request->hasFile('reponse_file')) {
+            $reponse_file = $request->file('reponse_file');
+            if ($reponse_file->isValid()) {
+                $photo_path = $reponse_file->store('documents', 'public');
+                $ticket->reponse_file = $photo_path;
+            } else {
+                return redirect()->back()->with('error', 'Le fichier est invalide.');
+            }
+        }
+
+        // // Associer le ticket à une réservation et mettre à jour le statut de la réservation
+        // $reservation = Reservation::find($request->reservation_id);
+        // if ($reservation) {
+        //     $ticket->reservation()->associate($reservation);
+        // }
+
+            $ticket->save();
+
+        // Redirection avec succès et les changements
+        return redirect()->route('reservation.show', $ticket->reservation->id)
+            ->with('success', 'Nouveau ticket créé');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -53,88 +116,37 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        $change = [];
+        // Validation du fichier si nécessaire
+        $request->validate([
+            'reponse_billet' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Autorise les fichiers images et pdf de max 2 Mo
+            'status' => 'nullable|string'
+        ]);
 
-        if ($request->filled('status') && $request->status == "traité") {
-            $request->validate([
-                'reponse_date_depart' => 'required|date',
-                'reponse_date_retour' => 'required|date',
-                'reponse_ville_depart' => 'required|string',
-                'reponse_ville_destination' => 'required|string',
-                'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
-                'commentaire' => 'nullable|string',
-                'prix' => 'nullable|string'
-            ]);
-
-            // Vérification des changements
-            if ($ticket->demande_date_depart != $request->reponse_date_depart) {
-                $change['reponse_date_depart'] = [
-                    'old' => $ticket->demande_date_depart,
-                    'new' => $request->reponse_date_depart,
-                ];
+        // Gestion du fichier s'il est présent
+        if ($request->hasFile('reponse_billet')) {
+            $reponse_file = $request->file('reponse_billet');
+            if ($reponse_file->isValid()) {
+                // Stocker le fichier dans le dossier 'documents' en public
+                $photo_path = $reponse_file->store('documents', 'public');
+                $ticket->reponse_billet = $photo_path;
+            } else {
+                return redirect()->back()->with('error', 'Le fichier est invalide.');
             }
-
-            if ($ticket->demande_date_retour != $request->reponse_date_retour) {
-                $change['reponse_date_retour'] = [
-                    'old' => $ticket->demande_date_retour,
-                    'new' => $request->reponse_date_retour,
-                ];
-            }
-
-            if ($ticket->demande_ville_depart != $request->reponse_ville_depart) {
-                $change['reponse_ville_depart'] = [
-                    'old' => $ticket->demande_ville_depart,
-                    'new' => $request->reponse_ville_depart,
-                ];
-            }
-
-            if ($ticket->demande_ville_destination != $request->reponse_ville_destination) {
-                $change['reponse_ville_destination'] = [
-                    'old' => $ticket->demande_ville_destination,
-                    'new' => $request->reponse_ville_destination,
-                ];
-            }
-
-            // Mise à jour des valeurs
-            $ticket->reponse_ville_depart = $request->reponse_ville_depart;
-            $ticket->reponse_ville_destination = $request->reponse_ville_destination;
-            $ticket->reponse_date_depart = $request->reponse_date_depart;
-            $ticket->reponse_date_retour = $request->reponse_date_retour;
-            $ticket->status = $request->status;
-            $ticket->prix = $request->prix;
-            $ticket->agent_cellule_id = getLoggedUser()->id;
-
-            if ($request->filled('commentaire')) {
-                $ticket->response_commentaire = $request->commentaire;
-            }
-
-            if ($request->hasFile('reponse_file')) {
-                $reponse_file = $request->file('reponse_file');
-
-                if ($reponse_file->isValid()) {
-                    $photo_path = $reponse_file->store('documents', 'public');
-                    $ticket->reponse_file = $photo_path;
-                } else {
-                    return redirect()->back()->with('error', 'Le fichier est invalide.');
-                }
-            }
-        } elseif ($request->filled('status')) {
-            $ticket->status = $request->status;
         }
 
+        // Vérifier si le statut doit être mis à jour à "approuvé"
+        if ($request->has('status') && $request->status == 'approuvé') {
+            // Mettre à jour le statut du ticket
+            $ticket->status = 'approuvé';
+        }
+
+        // Enregistrer les modifications du ticket
         $ticket->save();
-
-        // Mettre à jour la réservation
-        $ticket->reservation->status = $ticket->status;
-        $ticket->reservation->save();
-
-        // Envoyer la notification par e-mail
-        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
-
-        // Vous pouvez utiliser $change ici pour d'autres opérations, comme enregistrer dans une base de données de logs ou afficher les changements à l'utilisateur.
 
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
+
+
 
 
     /**

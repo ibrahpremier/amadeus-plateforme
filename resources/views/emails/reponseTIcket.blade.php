@@ -109,7 +109,7 @@
         </div>
         <div class="content">
             <h2>Bonjour {{ $ticket->reservation->agent_ministere->nom }},</h2>
-            <p>Nous vous informons que votre ticket de réservation a été traité par RAF Agence. Voici les détails mis à jour :</p>
+            <p>Nous vous informons que votre ticket de réservation a été traité.Voici les détails mis à jour :</p>
 
             <div class="details">
                 <p><span>Statut :</span> {{ $ticket->status }}</p>

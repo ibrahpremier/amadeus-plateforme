@@ -119,15 +119,17 @@ class ReservationController extends Controller
         $reservation->numero_dossier = date("Ym/") . $reservation->id;
         $reservation->save();
 
+        $ticket = rand(1000, 9999);
 
         Ticket::create([
-            'demande_titre' => "Nouvelle requête",
-            'demande_message' => "Demande de billet d'avion",
-            'demande_ville_depart' => $reservation->ville_depart,
-            'demande_date_depart' => $reservation->date_depart,
-            'demande_ville_destination' => $reservation->ville_destination,
-            'demande_date_retour' => $reservation->date_retour,
-            'reservation_id' => $reservation->id
+            'reponse_titre' => "Nouvelle requête",
+            'reponse_message' => "Demande de billet d'avion",
+            'reponse_ville_depart' => $reservation->ville_depart,
+            'reponse_date_depart' => $reservation->date_depart,
+            'reponse_ville_destination' => $reservation->ville_destination,
+            'reponse_date_retour' => $reservation->date_retour,
+            'reservation_id' => $reservation->id,
+            'parent_ticket_id' => null,
         ]);
 
 
