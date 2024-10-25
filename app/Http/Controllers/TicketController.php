@@ -159,6 +159,39 @@ class TicketController extends Controller
         // Enregistrer les modifications du ticket
         $ticket->save();
 
+        $change = [];
+
+        // if (
+        //     $ticket->demande_date_depart != $request->reponse_date_depart
+        // ) {
+        //     $change['reponse_date_depart'] = [
+        //         'old' => $ticket->demande_date_depart,
+        //         'new' => $request->reponse_date_depart,
+        //     ];
+        // }
+
+        // if ($ticket->demande_date_retour != $request->reponse_date_retour) {
+        //     $change['reponse_date_retour'] = [
+        //         'old' => $ticket->demande_date_retour,
+        //         'new' => $request->reponse_date_retour,
+        //     ];
+        // }
+
+        // if ($ticket->demande_ville_depart != $request->reponse_ville_depart) {
+        //     $change['reponse_ville_depart'] = [
+        //         'old' => $ticket->demande_ville_depart,
+        //         'new' => $request->reponse_ville_depart,
+        //     ];
+        // }
+
+        // if ($ticket->demande_ville_destination != $request->reponse_ville_destination) {
+        //     $change['reponse_ville_destination'] = [
+        //         'old' => $ticket->demande_ville_destination,
+        //         'new' => $request->reponse_ville_destination,
+        //     ];
+        // }
+        // $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
 
