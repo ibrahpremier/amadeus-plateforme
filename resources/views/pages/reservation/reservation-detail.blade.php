@@ -344,7 +344,7 @@
                                                 <input type="hidden" name="status"
                                                     value="{{ Auth::user()->role === 'agent_ministere' ? 'en cours' : 'traité' }}">
 
-                                                @if ($ticket->status === 'affecté' && (Auth::user()->role === 'chef_cellule' || Auth::user()->role === 'agent_cellule'))
+                                                @if ($ticket->status === 'affecté' || $ticket->status === 'nouveau' && (Auth::user()->role === 'chef_cellule' || Auth::user()->role === 'agent_cellule'))
                                                     <div class="row">
                                                         <div class="col-md-6 offset-md-3">
                                                             <button type="submit"

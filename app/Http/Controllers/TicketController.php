@@ -85,6 +85,7 @@ class TicketController extends Controller
             $oldTicket->status = 'traité';
             $oldTicket->save();
         }
+        
 
         // // Associer le ticket à une réservation et mettre à jour le statut de la réservation
         // $reservation = Reservation::find($request->reservation_id);

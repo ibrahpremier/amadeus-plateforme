@@ -107,6 +107,7 @@ class ReservationController extends Controller
         $reservation->classe = $request->classe;
         $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
+        
 
         if ($request->hasFile('file_passport')) {
             $file_passport = $request->file('file_passport');
