@@ -92,7 +92,7 @@
                         <button type="submit" class="btn btn-primary btn-block">Demande de modificaction</button>
                     </div> --}}
                         </div>
-                    @elseif(getLoggedUser()->role == 'chef_cellule')
+                    @elseif(getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
                         <div class="row">
                             <div class="col-md-6">
                                 <u>Chargé de mission</u>:
@@ -102,7 +102,18 @@
                                 @if ($reservation->agent_cellule)
                                     <u>Traité par</u>:
                                     <b>{{ $reservation->agent_cellule->nom . ' ' . $reservation->agent_cellule->prenom }}</b>
-                                @else
+                                @elseif(!$reservation->chef_cellule_id && getLoggedUser()->role == 'coordinateur')
+                                    <form action="{{ route('reservation.update', $reservation->id) }}" method="post">
+                                        @csrf
+                                        @method('put')
+                                        <input type="hidden" name="approve_for_agence" value="true">
+                                        <input type="hidden" name="status" value="affecté">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <img src="{{ asset('dist/img/spinner/blinking.gif') }}" alt="blinking Gif"
+                                                height="30px"> Approuver pour traitement
+                                        </button>
+                                    </form>
+                                    @elseif(getLoggedUser()->role == 'chef_cellule')
                                     <form action="{{ route('reservation.update', $reservation->id) }}" method="post">
                                         @csrf
                                         @method('put')
@@ -127,6 +138,7 @@
                                                 height="30px"> Affecter un agent
                                         </button>
                                     </form>
+
                                 @endif
                             </div>
                         </div>
