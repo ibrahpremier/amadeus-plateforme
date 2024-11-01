@@ -15,81 +15,80 @@ class UserController extends Controller
 {
 
     /**
-    * Handle an authentication attempt.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Response
-    */
-   public function login(Request $request): RedirectResponse
-   {
-       $credentials = $request->validate([
-           'email' => ['required'],
-           'password' => ['required'],
-       ]);
+     * Handle an authentication attempt.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required'],
+            'password' => ['required'],
+        ]);
 
-       if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'active' => 1])) {
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'active' => 1])) {
 
-            SaveLog("Connexion de ".getLoggedUser()->nom." ".getLoggedUser()->prenom,getLoggedUser()->id);
+            SaveLog("Connexion de " . getLoggedUser()->nom . " " . getLoggedUser()->prenom, getLoggedUser()->id);
             $request->session()->regenerate();
-            return redirect()->intended('/')->with('success','Connecté')
-                                            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-                                            ->header('Pragma', 'no-cache')
-                                            ->header('Expires', '0');
+            return redirect()->intended('/')->with('success', 'Connecté')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
         }
 
-        SaveLog("tentative echouée de connexion de ".$credentials['email']." avec Pass: ".$credentials['password']);
-       return redirect()->back()->withErrors([
+        SaveLog("tentative echouée de connexion de " . $credentials['email'] . " avec Pass: " . $credentials['password']);
+        return redirect()->back()->withErrors([
             'password' => 'Les détails de connexions ne sont pas valides',
-       ])->onlyInput('email');
-
-   }
-
-
-//    function register(Request $request)
-//    {
-//        $valides = $request->validate([
-//             'nom' => 'required',
-//             'prenom' => 'required',
-//             'phone' => 'required|unique:users,phone,id',
-//             'email' => 'required|unique:users,email,id|confirmed',
-//             'password' => 'required|min:6|confirmed',
-//         ]);
-
-//            $user = User::create([
-//             'nom' => strtolower($valides['nom']),
-//             'prenom' =>strtolower($valides['prenom']),
-//             'phone' => $$valides['phone'],
-//             'email' => strtolower($valides['email']),
-//             'role' => $valides['password'],
-//             'poste' => $valides['password'],
-//             'password' => Hash::make($valides['password']),
-//           ]);
+        ])->onlyInput('email');
+    }
 
 
-//           return redirect()->intended('/')->with('success','Votre compte à été créé');
+    //    function register(Request $request)
+    //    {
+    //        $valides = $request->validate([
+    //             'nom' => 'required',
+    //             'prenom' => 'required',
+    //             'phone' => 'required|unique:users,phone,id',
+    //             'email' => 'required|unique:users,email,id|confirmed',
+    //             'password' => 'required|min:6|confirmed',
+    //         ]);
+
+    //            $user = User::create([
+    //             'nom' => strtolower($valides['nom']),
+    //             'prenom' =>strtolower($valides['prenom']),
+    //             'phone' => $$valides['phone'],
+    //             'email' => strtolower($valides['email']),
+    //             'role' => $valides['password'],
+    //             'poste' => $valides['password'],
+    //             'password' => Hash::make($valides['password']),
+    //           ]);
 
 
-//    }
+    //           return redirect()->intended('/')->with('success','Votre compte à été créé');
 
 
-   function disconnect(Request $request)
-   {
-       SaveLog("Déconnexion de ".getLoggedUser()->nom." ".getLoggedUser()->prenom,getLoggedUser()->id);
-       Auth::logout();
-       $request->session()->invalidate();
-       $request->session()->regenerateToken();
-       return redirect('login')->with('success','Vous avez été déconnecté');
-   }
+    //    }
 
-   public function registerForm(Request $request)
-   {
+
+    function disconnect(Request $request)
+    {
+        SaveLog("Déconnexion de " . getLoggedUser()->nom . " " . getLoggedUser()->prenom, getLoggedUser()->id);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('login')->with('success', 'Vous avez été déconnecté');
+    }
+
+    public function registerForm(Request $request)
+    {
         return view("auth.register");
-   }
+    }
 
-   public function loginForm(Request $request)
-   {
+    public function loginForm(Request $request)
+    {
         return view("auth.login");
-   }
+    }
 
     /**
      * Display a listing of the resource.
@@ -97,7 +96,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view("pages.user.user",compact("users"));
+        return view("pages.user.user", compact("users"));
     }
 
     /**
@@ -108,7 +107,7 @@ class UserController extends Controller
     public function create()
     {
         $ministeres = Ministere::all();
-       return view("pages.user.user-form",compact("ministeres"));
+        return view("pages.user.user-form", compact("ministeres"));
     }
 
     /**
@@ -128,17 +127,20 @@ class UserController extends Controller
             "civilite" => "required",
         ]);
 
-        switch ($request->poste){
-            case "agent_cellule": $poste = "agent cellule"; 
-            break;
-            case "agent_ministere": $poste = "chargé de mission"; 
-            break;
-            case "comptable_ministere": $poste = "Comptable ministère"; 
-            break;
+        switch ($request->poste) {
+            case "agent_cellule":
+                $poste = "agent cellule";
+                break;
+            case "agent_ministere":
+                $poste = "chargé de mission";
+                break;
+            case "comptable_ministere":
+                $poste = "Comptable ministère";
+                break;
         }
 
         try {
-           $user = User::create([
+            $user = User::create([
                 "nom" => strtolower($request->nom),
                 "prenom" => strtolower($request->prenom),
                 "email" => strtolower($request->email),
@@ -154,11 +156,11 @@ class UserController extends Controller
         }
 
         $code = 12345;
-        $user->notify(new UserCreatedNotification($code,$user)); //Work
-        return redirect()->route("user.index")->with("success","Utilisateur enregistré")
-                                                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-                                                ->header('Pragma', 'no-cache')
-                                                ->header('Expires', '0');
+        $user->notify(new UserCreatedNotification($code, $user)); //Work
+        return redirect()->route("user.index")->with("success", "Utilisateur enregistré")
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     /**
@@ -169,10 +171,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if(getLoggedUser()->id != $user->id && Auth::user()->role != "chef_cellule"){
-            return redirect()->route("user.index")->with("error","Accès refusé");
+        if (getLoggedUser()->id != $user->id && Auth::user()->role != "chef_cellule") {
+            return redirect()->route("user.index")->with("error", "Accès refusé");
         }
-        return view("pages.user.user-profil",compact("user"));
+        return view("pages.user.user-profil", compact("user"));
     }
 
 

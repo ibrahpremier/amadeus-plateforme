@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agence;
+use App\Models\Compagnie;
 use App\Models\Reservation;
 use App\Models\Ticket;
 use App\Models\User;
@@ -10,12 +12,14 @@ use Illuminate\Http\Request;
 class ReservationController extends Controller
 {
 
-    public function random_african_name() {
+    public function random_african_name()
+    {
         $names = ["Omar Diop", "Aminata Diallo", "Moussa Traoré", "Aïssatou Camara", "Abdoulaye Konaté", "Fatima Touré", "Amadou Barry", "Mariam Keita", "Modibo Cissé", "Adama Sow", "Bintou Coulibaly", "Sekou Traoré", "Nana Yaw", "N'diaye Diouf", "Fatoumata Sow", "Ousmane Sarr", "Mariama Ba", "Issa Koné", "Fatoumata Diop", "Kwame Mensah"];
         return $names[array_rand($names)];
     }
 
-    public function random_african_destination() {
+    public function random_african_destination()
+    {
         $destinations = ["Casablanca", "Lagos", "Nairobi", "Abidjan", "Dakar", "Cairo", "Johannesburg", "Accra", "Kinshasa", "Maputo", "Lusaka", "Dar es Salaam", "Abuja", "Kampala", "Addis Ababa", "Bamako", "Lome", "Douala", "Harare"];
         return $destinations[array_rand($destinations)];
     }
@@ -76,7 +80,7 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'numero_passport' => 'required|string',
@@ -117,21 +121,21 @@ class ReservationController extends Controller
         $reservation->numero_dossier = date("Ym/") . $reservation->id;
         $reservation->save();
 
-        $ticket = rand(1000, 9999);
+        // $ticket = rand(1000, 9999);
 
         Ticket::create([
-           'reponse_titre' => "Nouvelle requête",
-           'reponse_message' => "Demande de billet d'avion",
-           'reponse_ville_depart' => $reservation->ville_depart,
-           'reponse_date_depart' => $reservation->date_depart,
-           'reponse_ville_destination' => $reservation->ville_destination,
-           'reponse_date_retour' => $reservation->date_retour,
-           'reservation_id' => $reservation->id,
-           'parent_ticket_id' => null,
+            'reponse_titre' => "Nouvelle requête",
+            'reponse_message' => "Demande de billet d'avion",
+            'reponse_ville_depart' => $reservation->ville_depart,
+            'reponse_date_depart' => $reservation->date_depart,
+            'reponse_ville_destination' => $reservation->ville_destination,
+            'reponse_date_retour' => $reservation->date_retour,
+            'reservation_id' => $reservation->id,
+            'parent_ticket_id' => null,
         ]);
 
 
-        return redirect()->route('reservation.index',['new'])->with('success', 'Réservation créée avec succès.');
+        return redirect()->route('reservation.index', ['new'])->with('success', 'Réservation créée avec succès.');
     }
 
 
@@ -140,8 +144,14 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-        $agents_cellule = User::where("role","agent_cellule")->get();
-        return view('pages.reservation.reservation-detail',compact('reservation','agents_cellule'));
+        $agents_cellule = User::where("role", "agent_cellule")->get();
+        $agences = Agence::latest()->get();
+        $compagnies = Compagnie::latest()->get();
+
+        return view(
+            'pages.reservation.reservation-detail',
+            compact('reservation', 'agents_cellule', 'agences', 'compagnies')
+        );
     }
 
     /**
@@ -167,15 +177,15 @@ class ReservationController extends Controller
         $reservation->commentaire = $request->commentaire;
         $reservation->save();
 
-        if($request->status==='affecté'){
+        if ($request->status === 'affecté') {
             $ticket = Ticket::where("reservation_id", $reservation->id)->latest()->first();
-            if($ticket->status === 'nouveau'){
+            if ($ticket->status === 'nouveau') {
                 $ticket->status = 'affecté';
                 $ticket->save();
             }
         }
 
-        return redirect()->route('reservation.show',$reservation->id)->with('success', 'Réservation affecté avec succès.');
+        return redirect()->route('reservation.show', $reservation->id)->with('success', 'Réservation affecté avec succès.');
     }
 
     /**
@@ -185,6 +195,4 @@ class ReservationController extends Controller
     {
         //
     }
-
-
 }

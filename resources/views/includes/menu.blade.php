@@ -97,7 +97,7 @@
                     <a href="{{ route('dashboard.index') }}"
                         class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-chart-pie"></i>
-                         <p>
+                        <p>
                             Tableau de bord
                             <i class="fas fa-angle-right right"></i>
                         </p>
@@ -107,19 +107,20 @@
 
 
                 @if (getLoggedUser()->role == 'agent_ministere')
-                <li class="nav-item">
-                    <a href="{{ route('reservation.create') }}"
-                        class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-plus-circle"></i>
-                        <i class="fas fa-angle-right right"></i>
-                        <p>Créer demande</p>
-                    </a>
-                </li>
-                <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a href="{{ route('reservation.create') }}"
+                            class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-plus-circle"></i>
+                            <i class="fas fa-angle-right right"></i>
+                            <p>Créer demande</p>
+                        </a>
+                    </li>
+                    <div class="dropdown-divider"></div>
                 @endif
 
                 <li class="nav-item menu-is-opening menu-open">
-                    <a href="#" class="nav-link {{ request()->routeIs('reservation.index') || request()->routeIs('reservation.show') ? 'active' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('reservation.index') || request()->routeIs('reservation.show') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-info-circle"></i>
                         <p>
                             Demandes
@@ -151,7 +152,7 @@
                                 class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
                                 <i class="fas fa-angle-right left"></i>
                                 <p>
-                                   En cours
+                                    En cours
                                 </p>
                             </a>
                         </li>
@@ -168,99 +169,135 @@
                 </li>
 
                 <div class="dropdown-divider"></div>
-                
-            @if (getLoggedUser()->role=="chef_cellule")
-            <li class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>
-                        Utilisateurs
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('user.create') }}"
-                            class="nav-link {{ request()->routeIs('user.create') ? 'active' : '' }}">
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-plus-circle right"></i>
-                            <p> Nouvel utilisateur</p>
+
+                @if (getLoggedUser()->role == 'chef_cellule')
+                    <li
+                        class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Utilisateurs
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('user.create') }}"
+                                    class="nav-link {{ request()->routeIs('user.create') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-plus-circle right"></i>
+                                    <p> Nouvel utilisateur</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('user.index') }}"
+                                    class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-list right"></i>
+                                    <p> Liste des utilisateurs</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('user.index') }}"
-                            class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}">
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-list right"></i>
-                            <p> Liste des utilisateurs</p>
+                    <li
+                        class="nav-item {{ request()->routeIs('agence.index') || request()->routeIs('agence.create') ? 'menu-is-opening menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->routeIs('agence.index') || request()->routeIs('agence.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Agences
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('agence.create') }}"
+                                    class="nav-link {{ request()->routeIs('agence.create') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-plus-circle right"></i>
+                                    <p> Créer une agence</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('agence.index') }}"
+                                    class="nav-link {{ request()->routeIs('agence.index') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-list right"></i>
+                                    <p> Liste des agences </p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                </ul>
-            </li>
-            <li class="nav-item {{ request()->routeIs('agence.index') || request()->routeIs('agence.create') ? 'menu-is-opening menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs('agence.index') || request()->routeIs('agence.create') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>
-                        Agences
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('agence.create') }}"
-                            class="nav-link {{ request()->routeIs('agence.create') ? 'active' : '' }}">
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-plus-circle right"></i>
-                            <p> Créer une agence</p>
+                    <li
+                        class="nav-item {{ request()->routeIs('compagnie.index') || request()->routeIs('compagnie.create') ? 'menu-is-opening menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->routeIs('compagnie.index') || request()->routeIs('compagnie.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-building"></i>
+                            <p>
+                                Compagnies
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('compagnie.create') }}"
+                                    class="nav-link {{ request()->routeIs('compagnie.create') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-plus-circle right"></i>
+                                    <p>Créer une compagnie</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('compagnie.index') }}"
+                                    class="nav-link {{ request()->routeIs('compagnie.index') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-list right"></i>
+                                    <p>Liste des compagnies</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('agence.index') }}"
-                            class="nav-link {{ request()->routeIs('agence.index') ? 'active' : '' }}">
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-list right"></i>
-                            <p> Liste des agences </p>
+
+                    <li
+                        class="nav-item {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'menu-is-opening menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Ministères
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('ministere.create') }}"
+                                    class="nav-link {{ request()->routeIs('ministere.create') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-plus-circle right"></i>
+                                    <p> Créer un ministère</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('ministere.index') }}"
+                                    class="nav-link {{ request()->routeIs('ministere.index') ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-angle-right left"></i>
+                                    <i class="fas fa-list right"></i>
+                                    <p> Liste des ministères</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                </ul>
-            </li>
-            <li class="nav-item {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'menu-is-opening menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>
-                        Ministères
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('ministere.create') }}"
-                            class="nav-link {{ request()->routeIs('ministere.create') ? 'active' : '' }}">
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-plus-circle right"></i>
-                            <p> Créer un ministère</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('ministere.index') }}"
-                            class="nav-link {{ request()->routeIs('ministere.index') ? 'active' : '' }}">
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-angle-right left"></i>
-                            <i class="fas fa-list right"></i>
-                            <p> Liste des ministères</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            @endif
+                @endif
                 <div class="dropdown-divider"></div>
                 <li class="nav-item">
-                    <a href="{{ route('user.show',getLoggedUser()->id) }}"
+                    <a href="{{ route('user.show', getLoggedUser()->id) }}"
                         class="nav-link {{ request()->routeIs('user.show') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cog"></i>
                         <i class="fas fa-angle-right right"></i>

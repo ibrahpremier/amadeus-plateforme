@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Agence;
+use App\Models\Compagnie;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ticket extends Model
 {
@@ -19,7 +21,7 @@ class Ticket extends Model
      */
     public function agent_ministere(): BelongsTo
     {
-        return $this->belongsTo(User::class,'charge_de_mission_id');
+        return $this->belongsTo(User::class, 'charge_de_mission_id');
     }
 
     /**
@@ -29,7 +31,7 @@ class Ticket extends Model
      */
     public function agent_cellule(): BelongsTo
     {
-        return $this->belongsTo(User::class,'agent_cellule_id');
+        return $this->belongsTo(User::class, 'agent_cellule_id');
     }
 
     /**
@@ -42,4 +44,13 @@ class Ticket extends Model
         return $this->belongsTo(Reservation::class);
     }
 
+    public function agence()
+    {
+        return $this->belongsTo(Agence::class, 'agence_id');
+    }
+
+    public function compagnie()
+    {
+        return $this->belongsTo(Compagnie::class, 'compagnie_id');
+    }
 }

@@ -29,6 +29,9 @@ return new class extends Migration
             $table->foreignId('agent_cellule_id')->nullable();
             $table->foreignId('chef_cellule_id')->nullable();
             $table->string('status')->default("nouveau");
+            $table->string('montant_reservation')->nullable();
+            $table->foreignId('agence_id')->nullable();
+            $table->foreignId('compagnie_id')->nullable();
             $table->timestamps();
         });
     }

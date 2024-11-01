@@ -9,52 +9,53 @@
         </h3>
     </div>
 
-    <div class="row">
-        <div class="col-md-8 col-12 grid-margin stretch-card">
+    <div class="row justify-content-center">
+        <div class="col-md-8 grid-margin stretch-card">
             <div class="card">
-                <div class="card-header">
-
-                    <h2 class="card-title">Nouveau Ministère</h2> <br>
-                    <small><em>Remplissez le formulaire</em></small>
+                <div class="card-header bg-light">
+                    <h2 class="card-title text-center">Nouveau Ministère</h2>
+                    <small class="d-block text-center text-muted"><em>Remplissez le formulaire ci-dessous</em></small>
                 </div>
-                <div class="card-body border">
+                <div class="card-body border p-4">
                     <form class="forms-sample" method="post" action="{{ route('ministere.store') }}"
                         enctype="multipart/form-data">
                         @csrf
-                        <div class="row">
 
-                            <div class="form-group mb-2 col-md-8">
-                                <label for="nom">Nom <sup class="text-danger">*</sup></label>
+                        <div class="form-row">
+                            <div class="form-group mb-4 col-md-8">
+                                <label for="nom">Nom du Ministère <sup class="text-danger">*</sup></label>
                                 <input type="text" class="form-control @error('nom') is-invalid @enderror"
-                                    value="{{ old('nom') }}" id="nom" name="nom" placeholder="nom">
+                                    value="{{ old('nom') }}" id="nom" name="nom" placeholder="Entrer le nom">
                                 @error('nom')
-                                    <p class="text-danger text-center">{{ $message }}</p>
+                                    <p class="text-danger small">{{ $message }}</p>
                                 @enderror
                             </div>
-                            {{-- <div class="form-group mb-2 col-md-4">
-                                <label for="nom">Plafond budgetaire (facultatif)<sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control @error('taux') is-invalid @enderror"
-                                    value="{{ old('taux') }}" id="taux" name="taux" placeholder="taux">
-                                @error('taux')
-                                    <p class="text-danger text-center">{{ $message }}</p>
+
+                            <div class="form-group mb-4 col-md-4">
+                                <label for="dotation">Plafond Budgétaire (facultatif)</label>
+                                <input type="number" class="form-control @error('dotation') is-invalid @enderror"
+                                    value="{{ old('dotation') }}" id="dotation" name="dotation"
+                                    placeholder="Montant en F CFA">
+                                @error('dotation')
+                                    <p class="text-danger small">{{ $message }}</p>
                                 @enderror
-                            </div> --}}
+                            </div>
                         </div>
 
-                        <div class="row">
-                            <div class="form-group mb-2 col-md-8">
+                        <div class="form-row">
+                            <div class="form-group mb-4 col-md-12">
                                 <label for="description">Notes (Facultatif)</label>
-                                <textarea cols="30" rows="3" class="form-control"
-                                    placeholder="Note" id="description" name="description"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3"
+                                    placeholder="Ajoutez des notes supplémentaires ici">{{ old('description') }}</textarea>
                             </div>
                         </div>
 
-                        <div class="row mt-5">
+                        <div class="form-row mt-4">
                             <div class="col-6">
                                 <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
                             </div>
-                            <div class="col-6">
-                                <a class="btn btn-secondary" href="{{ url()->previous() }}">annuler</a>
+                            <div class="col-6 text-right">
+                                <a class="btn btn-secondary" href="{{ url()->previous() }}">Annuler</a>
                             </div>
                         </div>
                     </form>
@@ -64,11 +65,10 @@
     </div>
 @endsection
 
-
 @section('custom_js')
     <script>
         $(document).ready(function() {
-            console.log("BONJOUR");
+            console.log("Form ready");
         });
     </script>
 @endsection
