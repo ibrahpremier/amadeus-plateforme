@@ -41,13 +41,13 @@ class ReservationController extends Controller
     public function index(Request $request)
     {
         $query = Reservation::query();
-    
+
         if (getLoggedUser()->role == 'agent_ministere') {
             $query->where('charge_de_mission_id', getLoggedUser()->id);
         } elseif (getLoggedUser()->role == 'agent_cellule') {
             $query->where('agent_cellule_id', getLoggedUser()->id);
         }
-    
+
         if ($request->has('new')) {
             $query->whereIn("status", ["nouveau", "affecté"]);
         } elseif ($request->has('encours')) {
@@ -55,12 +55,12 @@ class ReservationController extends Controller
         } elseif ($request->has('ended')) {
             $query->where("status", "terminé");
         }
-    
+
         $reservations = $query->get();
-    
+
         return view('pages.reservation.reservation', compact('reservations'));
     }
-    
+
 
 
     /**
@@ -117,15 +117,17 @@ class ReservationController extends Controller
         $reservation->numero_dossier = date("Ym/") . $reservation->id;
         $reservation->save();
 
+        $ticket = rand(1000, 9999);
 
         Ticket::create([
-           'demande_titre' => "Nouvelle requête",
-           'demande_message' => "Demande de billet d'avion",
-           'demande_ville_depart' => $reservation->ville_depart,
-           'demande_date_depart' => $reservation->date_depart,
-           'demande_ville_destination' => $reservation->ville_destination,
-           'demande_date_retour' => $reservation->date_retour,
-           'reservation_id' => $reservation->id
+           'reponse_titre' => "Nouvelle requête",
+           'reponse_message' => "Demande de billet d'avion",
+           'reponse_ville_depart' => $reservation->ville_depart,
+           'reponse_date_depart' => $reservation->date_depart,
+           'reponse_ville_destination' => $reservation->ville_destination,
+           'reponse_date_retour' => $reservation->date_retour,
+           'reservation_id' => $reservation->id,
+           'parent_ticket_id' => null,
         ]);
 
 
@@ -167,7 +169,7 @@ class ReservationController extends Controller
 
         if($request->status==='affecté'){
             $ticket = Ticket::where("reservation_id", $reservation->id)->latest()->first();
-            if($ticket->status === 'nouveau'){ 
+            if($ticket->status === 'nouveau'){
                 $ticket->status = 'affecté';
                 $ticket->save();
             }
