@@ -50,7 +50,10 @@ class ReservationController extends Controller
             $query->where('charge_de_mission_id', getLoggedUser()->id);
         } elseif (getLoggedUser()->role == 'agent_cellule') {
             $query->where('agent_cellule_id', getLoggedUser()->id);
+        } elseif (getLoggedUser()->role == 'chef_cellule') {
+            $query->where('chef_cellule_id', getLoggedUser()->id);
         }
+
 
         if ($request->has('new')) {
             $query->whereIn("status", ["nouveau", "affecté"]);

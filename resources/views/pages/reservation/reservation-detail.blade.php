@@ -172,7 +172,7 @@
                     </div>
                     {{-- FIN TICKET DEMANDE --}}
 
-                    @foreach ($reservation->tickets as $ticket)
+                    @foreach ($reservation->tickets as $ticket )
                         @if ($loop->first && $ticket->status === 'traité')
                             @continue
                         @endif
@@ -190,7 +190,7 @@
                                     <strong>Réponse à la demande </strong>{{ $ticket->reponse_message }}
                                 </h3>
                                 {{-- @dump($ticket->status) --}}
-                                @if ($ticket->status === 'nouveau')
+                                @if ($ticket->status === 'nouveau' && getLoggedUser()->role != 'chef_cellule')
                                     <div class="timeline-body">
                                         En attente de traitement
                                     </div>

@@ -106,7 +106,7 @@
                 <div class="dropdown-divider"></div>
 
 
-                @if (getLoggedUser()->role == 'agent_ministere')
+                @if (getLoggedUser()->role == 'agent_ministere' || getLoggedUser()->role == 'chef_cellule')
                     <li class="nav-item">
                         <a href="{{ route('reservation.create') }}"
                             class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">

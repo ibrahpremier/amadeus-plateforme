@@ -52,6 +52,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Ministere::class);
     }
+    public function coordinateur(): BelongsTo
+    {
+        return $this->belongsTo(Ministere::class);
+    }
 
     /**
      * Liste des reservation faites

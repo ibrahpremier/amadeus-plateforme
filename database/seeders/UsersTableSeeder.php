@@ -23,6 +23,15 @@ class UsersTableSeeder extends Seeder
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
+        User::create([
+            'nom' => 'SO',
+            'prenom' => 'Jonas Kevin',
+            'role' => 'coordinateur',
+            'poste' => 'Coordinateur',
+            'email' => 'sojonas@gmail.com',
+            'telephone' => "56785580",
+            'password' => Hash::make('password'),
+        ]);
 
         User::create([
             'nom' => 'Coulibaly',

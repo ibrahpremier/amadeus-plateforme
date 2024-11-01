@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->string('prenom');
-            $table->enum('role', ['chef_cellule', 'agent_cellule', 'agent_ministere', 'comptable_ministere', 'super']);
+            $table->enum('role', ['chef_cellule', 'agent_cellule', 'agent_ministere', 'comptable_ministere', 'super', 'coordinateur']);
             $table->string('poste')->nullable();
             $table->string('telephone')->nullable();
             $table->string('email')->unique();
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->boolean('active')->default(true);
             $table->foreignId("ministere_id")->nullable();
+            $table->foreignId("chef_cellule")->nullable();
             $table->integer("created_by")->nullable();
             $table->rememberToken();
             $table->timestamps();
