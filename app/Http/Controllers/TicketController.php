@@ -146,10 +146,10 @@ class TicketController extends Controller
         $ticket->compagnie_id = $request->compagnie_id;
 
         // Vérifier si le statut doit être mis à jour à "approuvé"
-        // if ($request->has('status') && $request->status == 'approuvé') {
-        //     // Mettre à jour le statut du ticket
-        //     $ticket->status = 'approuvé';
-        // }
+        if ($request->has('status') && $request->status == 'approuvé') {
+            // Mettre à jour le statut du ticket
+            $ticket->status = 'approuvé';
+        }
 
         if ($request->filled('status')) {
             $ticket->status = $request->status;
@@ -161,36 +161,36 @@ class TicketController extends Controller
 
         $change = [];
 
-        // if (
-        //     $ticket->demande_date_depart != $request->reponse_date_depart
-        // ) {
-        //     $change['reponse_date_depart'] = [
-        //         'old' => $ticket->demande_date_depart,
-        //         'new' => $request->reponse_date_depart,
-        //     ];
-        // }
+        if (
+            $ticket->demande_date_depart != $request->reponse_date_depart
+        ) {
+            $change['reponse_date_depart'] = [
+                'old' => $ticket->demande_date_depart,
+                'new' => $request->reponse_date_depart,
+            ];
+        }
 
-        // if ($ticket->demande_date_retour != $request->reponse_date_retour) {
-        //     $change['reponse_date_retour'] = [
-        //         'old' => $ticket->demande_date_retour,
-        //         'new' => $request->reponse_date_retour,
-        //     ];
-        // }
+        if ($ticket->demande_date_retour != $request->reponse_date_retour) {
+            $change['reponse_date_retour'] = [
+                'old' => $ticket->demande_date_retour,
+                'new' => $request->reponse_date_retour,
+            ];
+        }
 
-        // if ($ticket->demande_ville_depart != $request->reponse_ville_depart) {
-        //     $change['reponse_ville_depart'] = [
-        //         'old' => $ticket->demande_ville_depart,
-        //         'new' => $request->reponse_ville_depart,
-        //     ];
-        // }
+        if ($ticket->demande_ville_depart != $request->reponse_ville_depart) {
+            $change['reponse_ville_depart'] = [
+                'old' => $ticket->demande_ville_depart,
+                'new' => $request->reponse_ville_depart,
+            ];
+        }
 
-        // if ($ticket->demande_ville_destination != $request->reponse_ville_destination) {
-        //     $change['reponse_ville_destination'] = [
-        //         'old' => $ticket->demande_ville_destination,
-        //         'new' => $request->reponse_ville_destination,
-        //     ];
-        // }
-        // $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+        if ($ticket->demande_ville_destination != $request->reponse_ville_destination) {
+            $change['reponse_ville_destination'] = [
+                'old' => $ticket->demande_ville_destination,
+                'new' => $request->reponse_ville_destination,
+            ];
+        }
+        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }

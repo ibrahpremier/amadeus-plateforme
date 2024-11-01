@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->boolean('active')->default(true);
             $table->foreignId("ministere_id")->nullable();
-            $table->foreignId("chef_cellule")->nullable();
             $table->integer("created_by")->nullable();
             $table->rememberToken();
             $table->timestamps();
