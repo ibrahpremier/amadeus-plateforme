@@ -47,8 +47,8 @@ class TicketController extends Controller
             'reservation_id' => 'required|exists:reservations,id',
             'charge_de_mission_id' => 'required',
             'parent_ticket_id' => 'nullable|exists:tickets,id',
+            // Assurez-vous d'inclure la validation pour 'oldTicket' si nécessaire
         ]);
-        // dd($request->all());
 
         // Formater les dates en français avec Carbon
         Carbon::setLocale('fr');
@@ -67,7 +67,7 @@ class TicketController extends Controller
         $ticket->reservation_id = $request->reservation_id;
         $ticket->parent_ticket_id = $request->parent_ticket_id;
         $ticket->agence_id = $request->charge_de_mission_id;
-        $ticket->agent_cellule_id = getLoggedUser()->id;
+        $ticket->agent_cellule_id = getLoggedUser()->id; // Assurez-vous que cette fonction existe
 
         // Gestion du fichier s'il est présent
         if ($request->hasFile('reponse_file')) {
@@ -80,25 +80,61 @@ class TicketController extends Controller
             }
         }
 
+        // Vérifiez si oldTicket est fourni et récupérez l'ancien ticket
         if ($request->filled('oldTicket')) {
-            $oldTicket = Ticket::where('id', $request->oldTicket)->first();
-            $oldTicket->status = 'traité';
-            $oldTicket->save();
+            $oldTicket = Ticket::find($request->oldTicket);
+            if ($oldTicket) {
+                // Marquer l'ancien ticket comme traité
+                $oldTicket->status = 'traité';
+                $oldTicket->save();
+
+                // Comparer les anciennes et nouvelles valeurs pour déterminer les changements
+                if ($oldTicket->reponse_date_depart != $ticket->reponse_date_depart) {
+                    $change['reponse_date_depart'] = [
+                        'old' => $oldTicket->reponse_date_depart,
+                        'new' => $ticket->reponse_date_depart,
+                    ];
+                }
+
+                if ($oldTicket->reponse_date_retour != $ticket->reponse_date_retour) {
+                    $change['reponse_date_retour'] = [
+                        'old' => $oldTicket->reponse_date_retour,
+                        'new' => $ticket->reponse_date_retour,
+                    ];
+                }
+
+                if ($oldTicket->reponse_ville_depart != $ticket->reponse_ville_depart) {
+                    $change['reponse_ville_depart'] = [
+                        'old' => $oldTicket->reponse_ville_depart,
+                        'new' => $ticket->reponse_ville_depart,
+                    ];
+                }
+
+                if ($oldTicket->reponse_ville_destination != $ticket->reponse_ville_destination) {
+                    $change['reponse_ville_destination'] = [
+                        'old' => $oldTicket->reponse_ville_destination,
+                        'new' => $ticket->reponse_ville_destination,
+                    ];
+                }
+            }
         }
-        
+        // dd($change);
 
-        // // Associer le ticket à une réservation et mettre à jour le statut de la réservation
-        // $reservation = Reservation::find($request->reservation_id);
-        // if ($reservation) {
-        //     $ticket->reservation()->associate($reservation);
-        // }
-
+        // Enregistrement du nouveau ticket
         $ticket->save();
+        // $user = auth()->user(); // Obtenir l'utilisateur connecté
+        // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
+
+        // Notification à l'agent associé à la réservation
+        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Redirection avec succès et les changements
-        return redirect()->route('reservation.show', $ticket->reservation->id)
-            ->with('success', 'Nouveau ticket créé');
+        return redirect()->route('reservation.show', $ticket->reservation_id)
+            ->with('success', 'Nouveau ticket créé')
+            ->with('changes', $change); // Passer les changements si nécessaire
     }
+
+
 
 
 
@@ -123,12 +159,15 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        // Initialiser le tableau des changements
+        $change = [];
+
         // Validation du fichier si nécessaire
         $request->validate([
-            'reponse_billet' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Autorise les fichiers images et pdf de max 2 Mo
+            'reponse_billet' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'status' => 'sometimes|required|string|in:nouveau,affecté,traité,en cours,non disponible,approuvé,refusé,annulé,terminé',
             'agence_id' => 'sometimes|required|exists:agences,id',
-            'compagnie_id' => 'sometimes|required|exists:compagnies,id'
+            'compagnie_id' => 'sometimes|required|exists:compagnies,id',
         ]);
 
         // Gestion du fichier s'il est présent
@@ -143,58 +182,76 @@ class TicketController extends Controller
             }
         }
 
-        $ticket->agence_id = $request->agence_id;
-        $ticket->compagnie_id = $request->compagnie_id;
-
-        // Vérifier si le statut doit être mis à jour à "approuvé"
-        if ($request->has('status') && $request->status == 'approuvé') {
-            // Mettre à jour le statut du ticket
-            $ticket->status = 'approuvé';
+        // Vérifier si l'agence ou la compagnie a changé
+        if ($ticket->agence_id != $request->agence_id) {
+            $change['agence_id'] = [
+                'old' => $ticket->agence_id,
+                'new' => $request->agence_id,
+            ];
+            $ticket->agence_id = $request->agence_id;
         }
 
-        if ($request->filled('status')) {
-            $ticket->status = $request->status;
+        if ($ticket->compagnie_id != $request->compagnie_id) {
+            $change['compagnie_id'] = [
+                'old' => $ticket->compagnie_id,
+                'new' => $request->compagnie_id,
+            ];
+            $ticket->compagnie_id = $request->compagnie_id;
         }
 
+        // Vérifier si le statut doit être mis à jour
+        if ($request->has('status')) {
+            $ticket->status = $request->status == 'approuvé' ? 'approuvé' : $request->status;
+        }
 
-        // Enregistrer les modifications du ticket
-        $ticket->save();
-
-        $change = [];
-
-        if (
-            $ticket->demande_date_depart != $request->reponse_date_depart
-        ) {
+        // Vérification des changements sur les dates et villes
+        if ($request->filled('reponse_date_depart') && $ticket->reponse_date_depart != $request->reponse_date_depart) {
             $change['reponse_date_depart'] = [
-                'old' => $ticket->demande_date_depart,
+                'old' => $ticket->reponse_date_depart,
                 'new' => $request->reponse_date_depart,
             ];
+            $ticket->reponse_date_depart = $request->reponse_date_depart;
         }
 
-        if ($ticket->demande_date_retour != $request->reponse_date_retour) {
+        if ($request->filled('reponse_date_retour') && $ticket->reponse_date_retour != $request->reponse_date_retour) {
             $change['reponse_date_retour'] = [
-                'old' => $ticket->demande_date_retour,
+                'old' => $ticket->reponse_date_retour,
                 'new' => $request->reponse_date_retour,
             ];
+            $ticket->reponse_date_retour = $request->reponse_date_retour;
         }
 
-        if ($ticket->demande_ville_depart != $request->reponse_ville_depart) {
+        if ($request->filled('reponse_ville_depart') && $ticket->reponse_ville_depart != $request->reponse_ville_depart) {
             $change['reponse_ville_depart'] = [
-                'old' => $ticket->demande_ville_depart,
+                'old' => $ticket->reponse_ville_depart,
                 'new' => $request->reponse_ville_depart,
             ];
+            $ticket->reponse_ville_depart = $request->reponse_ville_depart;
         }
 
-        if ($ticket->demande_ville_destination != $request->reponse_ville_destination) {
+        if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
             $change['reponse_ville_destination'] = [
-                'old' => $ticket->demande_ville_destination,
+                'old' => $ticket->reponse_ville_destination,
                 'new' => $request->reponse_ville_destination,
             ];
+            $ticket->reponse_ville_destination = $request->reponse_ville_destination;
         }
+
+        // Enregistrer les modifications du ticket
+        // dd($change);
+        $ticket->save();
+
+        // Notification à l'utilisateur connecté
+        // $user = auth()->user();
+        // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
+
+        // Notification à l'agent associé à la réservation
         $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
+
+
 
 
 
