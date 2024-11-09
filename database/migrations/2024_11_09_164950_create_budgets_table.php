@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ministeres', function (Blueprint $table) {
+        Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('description')->nullable();
+            $table->integer('dotation');
+            $table->foreignId('ministere_id');
+            $table->integer('solde');
+            $table->string('annee_budgetaire');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ministeres');
+        Schema::dropIfExists('budgets');
     }
 };

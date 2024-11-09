@@ -66,4 +66,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function isMinistereAgent()
+    {
+        return $this->role == 'agent_ministere';
+    }
+
+    public function isCellAgent()
+    {
+        return $this->role == 'agent_cellule';
+    }
+
+    public function isCellChief()
+    {
+        return $this->role == 'chef_cellule';
+    }
+
+    public function isCoordinator()
+    {
+        return $this->role == 'coordinateur';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role == 'Administrateur';
+    }
 }
