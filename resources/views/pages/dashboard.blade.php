@@ -91,12 +91,12 @@
               </tr>
               </thead>
               <tbody>
-                @foreach (ministeres as ministere)
+                @foreach ($ministeres as $ministere)
                 <tr>
                   <td>{{ $ministere->nom }}</td>
-                  <td>{{ $ministere->nom }}</td>
-                  <td class="text-success">3</td>
-                  <td class="text-success"> 50% </td>
+                  <td class="text-right">{{ $ministere->reservations_news }}</td>
+                  <td class="text-right text-success"> {{ $ministere->reservations_traites }} </td>
+                  <td class="text-right" > {{ $ministere->solde }} </td>
                 </tr>
                 @endforeach
               </tbody>

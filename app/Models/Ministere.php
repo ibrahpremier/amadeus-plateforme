@@ -13,4 +13,15 @@ class Ministere extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class, 'ministere_id');
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'reservation_id');
+    }
+
 }
