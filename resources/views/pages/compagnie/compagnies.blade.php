@@ -6,7 +6,6 @@
 
 @section('content')
     <div class="container-fluid">
-        <h2 class="my-4">Gestion des Compagnies</h2>
 
         @if (session('success'))
             <div class="alert alert-success" role="alert">
