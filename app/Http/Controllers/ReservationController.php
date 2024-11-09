@@ -175,10 +175,13 @@ class ReservationController extends Controller
             // 'agent_cellule' => 'required',
             'status' => 'required'
         ]);
-
-        $reservation->status = $request->status;
-        $reservation->agent_cellule_id = $request->agent_cellule;
-        $reservation->commentaire = $request->commentaire;
+        if($request->approve_for_agence){
+            $reservation->chef_cellule_id = 3;
+        } else {
+            $reservation->status = $request->status;
+            $reservation->agent_cellule_id = $request->agent_cellule;
+            $reservation->commentaire = $request->commentaire;
+        }
         $reservation->save();
 
         if ($request->status === 'affecté') {
