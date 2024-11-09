@@ -70,7 +70,7 @@
       <div class="col-lg-6">
         <div class="card">
           <div class="card-header border-0">
-            <h3 class="card-title">TOP DEMANDES</h3>
+            <h3 class="card-title">DEMANDES</h3>
             <div class="card-tools">
               {{-- <a href="#" class="btn btn-tool btn-sm">
                 <i class="fas fa-download"></i>
@@ -85,44 +85,20 @@
               <thead>
               <tr>
                 <th>Ministères</th>
-                <th>Demandes reçu</th>
+                <th>Nouvelles demandes</th>
                 <th>Demandes traités</th>
-                <th>Taux traitement</th>
+                <th>Solde disponible</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
-                <td>
-                  Ministere de la santé
-                </td>
-                <td>6</td>
-                <td class="text-success">3</td>
-                <td class="text-success"> 50% </td>
-              </tr>
-              <tr>
-                <td>
-                  Ministère de l'administration térritorial
-                </td>
-                <td>2</td>
-                <td class="text-success">2</td>
-                <td class="text-success">100% </td>
-              </tr>
-              <tr>
-                <td>
-                  Ministère des affaires etrangères et des burkinabè de l'extérieur
-                </td>
-                <td>10</td>
-                <td class="text-success">10</td>
-                <td class="text-success">100%</td>
-              </tr>
-              <tr>
-                <td>
-                  Ministère de l'économie
-                </td>
-                <td>1</td>
-                <td class="text-success">1</td>
-                <td class="text-success">100%</td>
-              </tr>
+                @foreach ($ministeres as $ministere)
+                <tr>
+                  <td>{{ $ministere->nom }}</td>
+                  <td class="text-right">{{ $ministere->reservations_news }}</td>
+                  <td class="text-right text-success"> {{ $ministere->reservations_traites }} </td>
+                  <td class="text-right" > {{ $ministere->solde }} </td>
+                </tr>
+                @endforeach
               </tbody>
             </table>
           </div>
@@ -138,7 +114,7 @@
           </div>
           <div class="card-body">
             <div class="d-flex">
-              <p class="d-flex flex-column">
+              {{-- <p class="d-flex flex-column">
                 <span class="text-bold text-lg">18 230 FCFA</span>
                 <span>Sales Over Time</span>
               </p>
@@ -147,7 +123,7 @@
                   <i class="fas fa-arrow-up"></i> 33.1%
                 </span>
                 <span class="text-muted">Depuis le mois dernier</span>
-              </p>
+              </p> --}}
             </div>
             <!-- /.d-flex -->
 
@@ -157,11 +133,11 @@
 
             <div class="d-flex flex-row justify-content-end">
               <span class="mr-2">
-                <i class="fas fa-square text-primary"></i> Ce mois
+                <i class="fas fa-square text-primary"></i> Budget 
               </span>
 
               <span>
-                <i class="fas fa-square text-gray"></i> Mois dernier
+                <i class="fas fa-square text-gray"></i> Depensé
               </span>
             </div>
           </div>

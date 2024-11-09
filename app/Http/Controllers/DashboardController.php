@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budget;
 use App\Models\Dashboard;
+use App\Models\Ministere;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,7 +15,24 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view("pages.dashboard");
+        $ministeres = Ministere::all();
+        $annee = date("Y");
+        foreach ($ministeres as $ministere) {
+            $budget = Budget::where("ministere_id",$ministere->id)->where("annee_budgetaire",$annee)->first();
+            $ministere->budget = $budget->dotation;
+            $ministere->solde = $budget->solde;
+            $ministere->reservations_traites = Reservation::where("status","terminé")
+            ->whereHas('agent_ministere' , function($query) use ($ministere){
+                $query->where('ministere_id', $ministere->id);
+            })
+            ->count();
+            $ministere->reservations_news = Reservation::where("status","nouveau")
+            ->whereHas('agent_ministere' , function($query) use ($ministere){
+                $query->where('ministere_id', $ministere->id);
+            })
+            ->count();
+        }
+        return view("pages.dashboard",compact("ministeres"));
     }
 
     /**
