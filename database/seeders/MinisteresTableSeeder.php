@@ -15,28 +15,23 @@ class MinisteresTableSeeder extends Seeder
     {
         Ministere::create([
             'nom' => 'Ministère de la Santé',
-            'dotation' => '500000',
 
         ]);
 
         Ministere::create([
             'nom' => 'Ministère de l\'Éducation',
-            'dotation' => '800000',
         ]);
 
         Ministere::create([
             'nom' => 'Ministère de l\'Agriculture',
-            'dotation' => '600000',
         ]);
 
         Ministere::create([
             'nom' => 'Ministère de la Défense',
-            'dotation' => '900000',
         ]);
 
         Ministere::create([
             'nom' => 'Ministère de l\'Intérieur',
-            'dotation' => '700000',
         ]);
     }
 }
