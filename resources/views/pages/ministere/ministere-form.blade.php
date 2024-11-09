@@ -9,7 +9,7 @@
         </h3>
     </div>
 
-    @dump($errors->all())
+    {{-- @dump($errors->all()) --}}
 
     <div class="row justify-content-center">
         <div class="col-md-8 grid-margin stretch-card">

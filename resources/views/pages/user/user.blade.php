@@ -7,27 +7,12 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
+      <div class="clearfix mb-3">
+          <a class="btn btn-primary float-right" href="{{ route('user.create') }}">
+              Créer un utilisateur
+          </a>
+      </div>
         <div class="card">
-            <div class="card-header">
-              {{-- <h3 class="card-title">Bordered Table</h3> --}}
-
-            {{-- <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <form action="simple-results.html">
-                        <div class="input-group">
-                            <input type="search" class="form-control form-control-lg" placeholder="Faire une recherche">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-lg btn-default">
-                                    <i class="fa fa-search"></i>
-                                    Recherche
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div> --}}
-
-            </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table class="table">

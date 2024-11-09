@@ -4,7 +4,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
 
-        @if (getLoggedUser()->role == 'chef_cellule')
+        @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="index3.html" class="nav-link {{ request()->has('new') ? 'active' : '' }}">Nouvelles demandes</a>
             </li>
@@ -170,7 +170,7 @@
 
                 <div class="dropdown-divider"></div>
 
-                @if (getLoggedUser()->role == 'chef_cellule')
+                @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
                     <li
                         class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
                         <a href="#"
