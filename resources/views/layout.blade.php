@@ -70,44 +70,30 @@
     </div>
     <!-- ./wrapper -->
 
-    {{-- @session('BudjetAnuelle')
-        <div class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel"
-            style="display: block; padding-right: 15px;" aria-modal="true" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLiveLabel">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Woohoo, you're reading this text in a modal!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endsession --}}
 
-    <div class="modal fade" id="dotationAnulle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="dotationAnulle" tabindex="-1" aria-labelledby="dotationAnulleLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="dotationAnulleLabel">Budget de du ministere pour l'annee
+                        {{ date('Y') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <form action="" method="post" id="dotationAnulle">
+                        @csrf
+                        <div class="form-group">
+                            <label for="raison">Budget de du ministere pour l'annee {{ date('Y') }}</label>
+                            <input type="text" class="form-control" id="dotation" name="dotation"
+                                placeholder="budget">
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" form="dotationAnulle">Enregistrer</button>
                 </div>
             </div>
         </div>
@@ -131,10 +117,7 @@
             $('#dotationAnulle').modal('show');
     </script>
     @yield('custom_js')
-    {{-- 
-    @session('BudjetAnuelle')
-        <div class="modal-backdrop fade show"></div>
-    @endsession --}}
+
 </body>
 
 </html>

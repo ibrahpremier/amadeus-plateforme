@@ -30,7 +30,7 @@ class DotationAnnulle
             $lastYear = (int) Budget::where('ministere_id', $user->id)->latest()->first()->annee_budgetaire;
             $currentYear = (int) date('Y');
 
-            if ($currentYear == $lastYear) {
+            if ($currentYear > $lastYear) {
                 Session::flash('BudjetAnuelle', true);
             }
 
