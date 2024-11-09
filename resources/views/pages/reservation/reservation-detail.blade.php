@@ -365,7 +365,7 @@
                                                     </div>
                                                 @endif
                                             </form>
-                                            @if ($ticket->status === 'traité' && getLoggedUser()->role == 'agent_ministere')
+                                            @if ($ticket->status === 'traité' && getLoggedUser()->role == 'coordinateur')
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row">
