@@ -119,7 +119,7 @@
                 <p><span>Date de retour :</span> {{ \Carbon\Carbon::parse($ticket->reponse_date_retour)->format('d/m/Y') }}</p>
                 <p><span>Prix :</span> {{ $ticket->prix ?? 'Non précisé' }}</p>
                 <p><span>Agence :</span> {{ $ticket->agence->nom ?? 'Non précisé' }}</p>
-                <p><span>Compani :</span> {{ $ticket->compagnie->nom ?? 'Non précisé' }}</p>
+                <p><span>Companie :</span> {{ $ticket->compagnie->nom ?? 'Non précisé' }}</p>
 
 
 

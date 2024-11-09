@@ -188,12 +188,21 @@ class TicketController extends Controller
 
         $ticket->compagnie_id = $request->compagnie_id;
 
-
         // Vérifier si le statut doit être mis à jour
         if ($request->has('status')) {
-            $ticket->status = $request->status == 'approuvé' ? 'approuvé' : $request->status;
+            $ticket->status = $request->status;
+            // $ticket->status = $request->status == 'approuvé' ? 'approuvé' : $request->status;
+            // Logique de mise à jour du statut de la réservation
+            if ($request->status == 'traitement') {
+                $ticket->reservation->status = $ticket->reservation->status; // Conserver le statut actuel
+            } elseif ($request->status == 'approuvé') {
+                $ticket->reservation->status = 'terminé';
+            } else {
+                // Autres cas de statut
+                $ticket->reservation->status = $request->status;
+            }
         }
-
+        $ticket->reservation->save();
         // Vérification des changements sur les dates et villes
         if ($request->filled('reponse_date_depart') && $ticket->reponse_date_depart != $request->reponse_date_depart) {
             $change['reponse_date_depart'] = [
