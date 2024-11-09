@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Budget;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -65,5 +66,35 @@ class User extends Authenticatable
     public function reservation(): HasMany
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function isMinistereAgent()
+    {
+        return $this->role == 'agent_ministere';
+    }
+
+    public function isCellAgent()
+    {
+        return $this->role == 'agent_cellule';
+    }
+
+    public function isCellChief()
+    {
+        return $this->role == 'chef_cellule';
+    }
+
+    public function isCoordinator()
+    {
+        return $this->role == 'coordinateur';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role == 'Administrateur';
+    }
+
+    public function getMinistereCurrentBudget()
+    {
+        return  Budget::where('ministere_id', $this->ministere_id)->latest()->first();
     }
 }

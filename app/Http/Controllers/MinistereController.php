@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budget;
 use App\Models\Ministere;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MinistereController extends Controller
 {
@@ -30,26 +32,43 @@ class MinistereController extends Controller
     public function store(Request $request)
     {
         // Validation des données d'entrée
-        $ministere = $request->validate([
+        $data = $request->validate([
             'nom' => ['required'],
             'dotation' => ['required', 'numeric'],
             'description' => ['nullable'],
         ]);
 
-        // Gestion des exceptions lors de la création
-        try {
-            Ministere::create($ministere);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        // Utilisation d'une transaction pour garantir l'intégrité des données
+        DB::beginTransaction();
 
-        // Redirection après succès
-        return redirect()->route("ministere.index")
-            ->with("success", "Ministère enregistré")
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-            ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+        try {
+            // Création du ministère
+            $ministere = Ministere::create($data);
+
+            // Création du budget associé
+            Budget::create([
+                'dotation' => $data['dotation'],
+                'solde' => $data['dotation'],
+                'ministere_id' => $ministere->id,
+                'annee_budgetaire' => date('Y')
+            ]);
+
+            // Validation de la transaction
+            DB::commit();
+
+            // Redirection après succès
+            return redirect()->route("ministere.index")
+                ->with("success", "Ministère enregistré")
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
+        } catch (\Throwable $th) {
+            // Annulation de la transaction en cas d'erreur
+            DB::rollBack();
+            return back()->withErrors("Une erreur s'est produite lors de l'enregistrement du ministère.")->withInput();
+        }
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -77,6 +96,8 @@ class MinistereController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+
+
 
         // Redirection après succès
         return redirect()->route("ministere.index")
