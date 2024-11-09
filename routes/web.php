@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\DotationAnnulle;
+
+// Route::middleware(['auth', DotationAnnulle::class])->group(function () {
 
 Route::get('/', function () {
     return redirect('dashboard');
@@ -23,7 +26,7 @@ Route::resources(
         'dashboard' => DashboardController::class,
         'compagnie' => CompagnieController::class
     ],
-    ['middleware' => ['auth']]
+    ['middleware' => ['auth', 'dotationAnnulle']]
 );
 
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');
@@ -36,4 +39,5 @@ Route::post('/auth-login', [UserController::class, 'login'])->name('auth.login')
 Route::post('/password/reset', [UserController::class, 'resetPassword'])->name('password.reset');
 Route::post('/password/send', [UserController::class, 'sendEmail'])->name('password.send');
 Route::get('disconnect', [UserController::class, 'disconnect'])->middleware('auth')->name('disconnect');
-// Route::post('/register',[UserController::class,'register'])->name('auth.register');
+    // Route::post('/register',[UserController::class,'register'])->name('auth.register');
+// });

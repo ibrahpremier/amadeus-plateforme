@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Budget;
 use App\Models\Ministere;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MinisteresTableSeeder extends Seeder
 {
@@ -13,25 +14,27 @@ class MinisteresTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Ministere::create([
-            'nom' => 'Ministère de la Santé',
+        $ministeres = [
+            'Ministère de la Santé',
+            'Ministère de l\'Éducation',
+            'Ministère de l\'Agriculture',
+            'Ministère de la Défense',
+            'Ministère de l\'Intérieur',
+        ];
 
-        ]);
+        DB::transaction(function () use ($ministeres) {
+            foreach ($ministeres as $nom) {
+                $ministere = Ministere::create(['nom' => $nom]);
 
-        Ministere::create([
-            'nom' => 'Ministère de l\'Éducation',
-        ]);
+                $dotation = random_int(100000, 10000000);
 
-        Ministere::create([
-            'nom' => 'Ministère de l\'Agriculture',
-        ]);
-
-        Ministere::create([
-            'nom' => 'Ministère de la Défense',
-        ]);
-
-        Ministere::create([
-            'nom' => 'Ministère de l\'Intérieur',
-        ]);
+                Budget::create([
+                    'dotation' => $dotation,
+                    'solde' => $dotation,
+                    'ministere_id' => $ministere->id,
+                    'annee_budgetaire' => date('Y'),
+                ]);
+            }
+        });
     }
 }
