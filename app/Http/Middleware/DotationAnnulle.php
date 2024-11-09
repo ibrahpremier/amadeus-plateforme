@@ -25,11 +25,11 @@ class DotationAnnulle
 
         // dd($user);
 
-        if ($user->isMinistereAgent()) {
+        if ($user->isMinistereAgent() && !Route::currentRouteNamed('budget.store')) {
 
-            $lastYear = (int) Budget::where('ministere_id', $user->id)->latest()->first()->annee_budgetaire;
+            $lastYear = (int) $user->getMinistereCurrentBudget()?->annee_budgetaire;
             $currentYear = (int) date('Y');
-
+            // dd($lastYear, $currentYear);
             if ($currentYear > $lastYear) {
                 Session::flash('BudjetAnuelle', true);
             }

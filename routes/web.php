@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgenceController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CompagnieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MinistereController;
@@ -24,7 +25,8 @@ Route::resources(
         'ticket' => TicketController::class,
         'user' => UserController::class,
         'dashboard' => DashboardController::class,
-        'compagnie' => CompagnieController::class
+        'compagnie' => CompagnieController::class,
+        'budget' => BudgetController::class
     ],
     ['middleware' => ['auth', 'dotationAnnulle']]
 );
