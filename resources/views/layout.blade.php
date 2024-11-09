@@ -71,33 +71,35 @@
     <!-- ./wrapper -->
 
 
-    <div class="modal fade" id="dotationAnulle" tabindex="-1" aria-labelledby="dotationAnulleLabel" aria-hidden="true">
+    <div class="modal fade" id="dotationAnulleModal" tabindex="-1" aria-labelledby="dotationAnulleLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dotationAnulleLabel">Budget de du ministere pour l'annee
-                        {{ date('Y') }}</h5>
+                    <h5 class="modal-title" id="dotationAnulleLabel">
+                        Budget du ministère pour l'année {{ date('Y') }}
+                        {{-- @dump($errors->all()) --}}
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="post" id="dotationAnulle">
+                    <form action="{{ route('budget.store') }}" method="post" id="dotationAnulleForm">
                         @csrf
                         <div class="form-group">
-                            <label for="raison">Budget de du ministere pour l'annee {{ date('Y') }}</label>
-                            <input type="text" class="form-control" id="dotation" name="dotation"
-                                placeholder="budget">
+                            <label for="dotation">Budget du ministère pour l'année {{ date('Y') }}</label>
+                            <input type="number" class="form-control" id="dotation" name="dotation"
+                                placeholder="Budget">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary" form="dotationAnulle">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary" form="dotationAnulleForm">Enregistrer</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- REQUIRED SCRIPTS -->
 
@@ -113,8 +115,8 @@
     {{-- <script src="{{asset('dist/js/demo.js')}}"></script> --}}
 
     <script>
-        if (@json(@session('BudjetAnuelle')))
-            $('#dotationAnulle').modal('show');
+        if (@json(@session('BudjetAnuelle') == true))
+            $('#dotationAnulleModal').modal('show');
     </script>
     @yield('custom_js')
 

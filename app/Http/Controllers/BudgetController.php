@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Budget;
 use App\Models\Ministere;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BudgetController extends Controller
 {
@@ -29,7 +30,20 @@ class BudgetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'dotation' => ['required', 'numeric']
+        ]);
+
+        $data['solde'] = $data['dotation'];
+        $data['ministere_id'] = $request->user()->ministere_id;
+        $data['annee_budgetaire'] = date('Y');
+
+
+        Budget::create($data);
+
+        Session::remove('BudjetAnuelle');
+
+        return to_route('dashboard.index');
     }
 
     /**
@@ -53,6 +67,7 @@ class BudgetController extends Controller
      */
     public function update(Request $request, Budget $budget)
     {
+
         $data = $request->validate([
             'dotation' => ['required', 'numeric']
         ]);
@@ -60,6 +75,12 @@ class BudgetController extends Controller
         $data['solde'] = $data['dotation'];
         $data['ministere_id'] = $request->user()->ministere_id;
         $data['annee_budgetaire'] = date('Y');
+
+        $budget->update($data);
+
+        Session::remove('BudjetAnuelle');
+
+        return to_route('dashboard.index');
     }
 
     /**
