@@ -182,22 +182,12 @@ class TicketController extends Controller
             }
         }
 
-        // Vérifier si l'agence ou la compagnie a changé
-        if ($ticket->agence_id != $request->agence_id) {
-            $change['agence_id'] = [
-                'old' => $ticket->agence_id,
-                'new' => $request->agence_id,
-            ];
-            $ticket->agence_id = $request->agence_id;
-        }
 
-        if ($ticket->compagnie_id != $request->compagnie_id) {
-            $change['compagnie_id'] = [
-                'old' => $ticket->compagnie_id,
-                'new' => $request->compagnie_id,
-            ];
-            $ticket->compagnie_id = $request->compagnie_id;
-        }
+        $ticket->agence_id = $request->agence_id;
+
+
+        $ticket->compagnie_id = $request->compagnie_id;
+
 
         // Vérifier si le statut doit être mis à jour
         if ($request->has('status')) {

@@ -49,17 +49,17 @@
                     <td>{{ $loop->index+1 }}</td>
                     <td>
                       <a href="{{route('reservation.show',$reservation->id)}}">{{$reservation->numero_dossier}}</a>  <br>
-                      <a href="{{route('reservation.show',$reservation->id)}}" class="btn btn-primary btn-sm">voir details</a> 
+                      <a href="{{route('reservation.show',$reservation->id)}}" class="btn btn-primary btn-sm">voir details</a>
                     </td>
                     @if(getLoggedUser()->role=='chef_cellule')
                     <td>
-                      {{ $reservation->agent_ministere->nom }} {{ $reservation->agent_ministere->prenom }} <br> 
-                      <small>{{ $reservation->agent_ministere?->ministere->nom }}
+                      {{ $reservation->agent_ministere->nom }} {{ $reservation->agent_ministere->prenom }} <br>
+                      {{-- <small>{{ $reservation->agent_ministere?->ministere->nom }} --}}
                     </td>
                     @endif
                     <td>
                       <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_depart}} <br>
-                      <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->ville_destination}} 
+                      <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->ville_destination}}
                       <span class="badge badge-info">
                         @if ($reservation->classe=="economique") Eco @else {{ strtoupper($reservation->classe) }} @endif
                       </span>

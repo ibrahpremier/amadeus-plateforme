@@ -118,6 +118,10 @@
                 <p><span>Date de départ :</span> {{ \Carbon\Carbon::parse($ticket->reponse_date_depart)->format('d/m/Y') }}</p>
                 <p><span>Date de retour :</span> {{ \Carbon\Carbon::parse($ticket->reponse_date_retour)->format('d/m/Y') }}</p>
                 <p><span>Prix :</span> {{ $ticket->prix ?? 'Non précisé' }}</p>
+                <p><span>Agence :</span> {{ $ticket->agence->nom ?? 'Non précisé' }}</p>
+                <p><span>Compani :</span> {{ $ticket->compagnie->nom ?? 'Non précisé' }}</p>
+
+
 
                 @if(!empty($ticket->response_commentaire))
                     <p><span>Commentaire de l'agent :</span> {{ $ticket->response_commentaire }}</p>
@@ -130,7 +134,7 @@
                     <ul>
                         @foreach($changes as $key => $change)
                         <li>
-                            <strong>{{ ucfirst(str_replace('_', ' ', $key)) }} :</strong>
+                            {{-- <strong>{{ ucfirst(str_replace('_', ' ', $key)) }} :</strong> --}}
                             de <span style="color: red;">"{{ $change['old'] }}"</span> à <span style="color: green;">"{{ $change['new'] }}"</span>
                         </li>
                     @endforeach

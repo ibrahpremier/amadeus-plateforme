@@ -95,6 +95,8 @@ class ReservationController extends Controller
             'classe' => 'nullable',
             'commentaire' => 'nullable'
         ]);
+        // Vérifier si le rôle de l'utilisateur est 'chef_cellule' et récupérer l'ID
+        $IdChef = auth()->user()->role == 'chef_cellule' ? auth()->user()->id : null;
 
         $reservation = new Reservation();
         $reservation->nom = $request->nom;
@@ -107,7 +109,8 @@ class ReservationController extends Controller
         $reservation->classe = $request->classe;
         $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
-        
+        $reservation->chef_cellule_id = $IdChef;
+
 
         if ($request->hasFile('file_passport')) {
             $file_passport = $request->file('file_passport');
