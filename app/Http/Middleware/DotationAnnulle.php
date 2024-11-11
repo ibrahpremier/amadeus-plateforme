@@ -34,9 +34,9 @@ class DotationAnnulle
                 Session::flash('BudjetAnuelle', true);
             }
 
-            if (!Route::currentRouteNamed('dashboard.index')) {
-                return  to_route('dashboard.index');
-            }
+            // if (!Route::currentRouteNamed('dashboard.index')) {
+            //     return  to_route('dashboard.index');
+            // }
         }
 
         return $next($request);

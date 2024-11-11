@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Agence;
+use App\Models\Budget;
 use App\Models\Compagnie;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +43,11 @@ class Ticket extends Model
     public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    public function budget(): BelongsTo
+    {
+        return $this->belongsTo(Budget::class);
     }
 
     public function agence()

@@ -197,6 +197,7 @@ class TicketController extends Controller
                 $ticket->reservation->status = $ticket->reservation->status; // Conserver le statut actuel
             } elseif ($request->status == 'approuvé') {
                 $ticket->reservation->status = 'terminé';
+                $ticket->budget->solde -= $ticket->prix;
             } else {
                 // Autres cas de statut
                 $ticket->reservation->status = $request->status;

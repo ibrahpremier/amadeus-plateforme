@@ -55,10 +55,10 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'nom' => 'Zongo',
-            'prenom' => 'Emilie',
+            'prenom' => 'Aziz PDG',
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
-            'email' => 'emilie@example.com',
+            'email' => 'bifag20846@operades.com',
             'telephone' => "80000000",
             'ministere_id' => 1,
             'password' => Hash::make('password'),
