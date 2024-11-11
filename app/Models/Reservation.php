@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,12 @@ class Reservation extends Model
     public function agent_ministere(): BelongsTo
     {
         return $this->belongsTo(User::class,'charge_de_mission_id');
+    }
+
+    public function ministere () :Attribute{
+        return Attribute::make(
+            get: fn() => $this->agent_ministere?->ministere
+        );
     }
 
     /**

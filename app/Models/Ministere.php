@@ -19,6 +19,10 @@ class Ministere extends Model
         return $this->hasMany(Budget::class, 'ministere_id');
     }
 
+    public function currentBudget(){
+        return $this->budgets->last();
+    }
+
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'reservation_id');

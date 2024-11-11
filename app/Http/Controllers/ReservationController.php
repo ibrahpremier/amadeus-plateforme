@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agence;
 use App\Models\Compagnie;
+use App\Models\Ministere;
 use App\Models\Reservation;
 use App\Models\Ticket;
 use App\Models\User;
@@ -154,10 +155,14 @@ class ReservationController extends Controller
         $agents_cellule = User::where("role", "agent_cellule")->get();
         $agences = Agence::latest()->get();
         $compagnies = Compagnie::latest()->get();
+        
+        $ministere = Ministere::where('id', $reservation->ministere->id)->first();
+
+        // dd($ministere);
 
         return view(
             'pages.reservation.reservation-detail',
-            compact('reservation', 'agents_cellule', 'agences', 'compagnies')
+            compact('reservation', 'agents_cellule', 'agences', 'compagnies', 'ministere')
         );
     }
 

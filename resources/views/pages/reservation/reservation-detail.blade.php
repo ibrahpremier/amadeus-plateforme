@@ -1,6 +1,11 @@
 @extends('layout')
 
-@section('titre', 'Details de la réservation')
+@section('titre')
+    @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
+    {{ $ministere->nom }} | Solde: {{ $ministere->currentBudget()->solde }} 
+    @endif
+@endsection
+
 @section('content')
     {{-- @dump($errors->all()) --}}
     <div class="row">
