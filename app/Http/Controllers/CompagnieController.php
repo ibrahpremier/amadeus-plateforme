@@ -23,6 +23,7 @@ class CompagnieController extends Controller
         $reservations = $compagnie
             ->reservations()
             ->whereIn('status', ['terminé', 'refusé', 'annulé'])
+            ->latest()
             ->get();
 
         return view("pages.compagnie.compagnie-show", compact("compagnie", "reservations"));
