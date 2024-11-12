@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Agence extends Model
 {
@@ -18,5 +20,10 @@ class Agence extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class, "agence_id");
+    }
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class, "agence_id");
     }
 }

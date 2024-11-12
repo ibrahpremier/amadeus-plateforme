@@ -19,7 +19,7 @@ class Reservation extends Model
      */
     public function agent_ministere(): BelongsTo
     {
-        return $this->belongsTo(User::class,'charge_de_mission_id');
+        return $this->belongsTo(User::class, 'charge_de_mission_id');
     }
 
     public function ministere () :Attribute{
@@ -35,7 +35,7 @@ class Reservation extends Model
      */
     public function agent_cellule(): BelongsTo
     {
-        return $this->belongsTo(User::class,'agent_cellule_id');
+        return $this->belongsTo(User::class, 'agent_cellule_id');
     }
 
     /**

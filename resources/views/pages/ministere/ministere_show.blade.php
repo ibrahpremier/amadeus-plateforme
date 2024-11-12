@@ -1,15 +1,52 @@
 @extends('layout')
 
-@section('titre')
-    Liste des demandes {{ isset($_GET['encours']) ? 'en cours' : '   ' }}
-@endsection
-
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
+    <div class="container">
+        <section id="ministeDetail">
             <div class="card">
                 <div class="card-header">
-                    {{-- <h3 class="card-title">Bordered Table</h3> --}}
+                    <h3 class="card-title">{{ $ministere->nom }}</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Description :</strong> {{ $ministere->description ?? 'Aucune description' }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="budgets">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Budgets</h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Année Budgétaire</th>
+                                <th>Dotation</th>
+                                <th>Solde</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ministere->budgets as $index => $budget)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $budget->annee_budgetaire }}</td>
+                                    <td>{{ number_format($budget->dotation, 0, ',', ' ') }} FCFA</td>
+                                    <td>{{ number_format($budget->solde, 0, ',', ' ') }} FCFA</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="reservations" class="mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Réservations</h3>
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
                             <form action="simple-results.html">
@@ -18,8 +55,7 @@
                                         placeholder="Faire une recherche">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-lg btn-default">
-                                            <i class="fa fa-search"></i>
-                                            Recherche
+                                            <i class="fa fa-search"></i> Recherche
                                         </button>
                                     </div>
                                 </div>
@@ -27,18 +63,17 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th style="width: 10px">#</th>
+                                <th>#</th>
                                 <th>Dossier N°</th>
                                 @if (getLoggedUser()->role == 'chef_cellule')
                                     <th>Demandeur</th>
                                 @endif
                                 <th>Trajet</th>
-                                <th>Date depart</th>
+                                <th>Date départ</th>
                                 <th>Date retour</th>
                                 <th>Nom</th>
                                 <th>Status</th>
@@ -56,23 +91,14 @@
                                             class="btn btn-primary btn-sm">voir details</a>
                                     </td>
                                     @if (getLoggedUser()->role == 'chef_cellule')
-                                        <td>
-                                            {{ $reservation->agent_ministere->nom }}
-                                            {{ $reservation->agent_ministere->prenom }}
-                                            <br>
-                                            {{-- <small>{{ $reservation->agent_ministere?->ministere->nom }} --}}
-                                        </td>
+                                        <td>{{ $reservation->agent_ministere->nom }}
+                                            {{ $reservation->agent_ministere->prenom }}</td>
                                     @endif
                                     <td>
-                                        <i class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_depart }} <br>
+                                        <i class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_depart }}
                                         <i class="fas fa-plane-arrival mr-2"></i>{{ $reservation->ville_destination }}
-                                        <span class="badge badge-info">
-                                            @if ($reservation->classe == 'economique')
-                                                Eco
-                                            @else
-                                                {{ strtoupper($reservation->classe) }}
-                                            @endif
-                                        </span>
+                                        <span
+                                            class="badge badge-info">{{ strtoupper($reservation->classe) == 'ECONOMIQUE' ? 'Eco' : strtoupper($reservation->classe) }}</span>
                                     </td>
                                     <td>{{ date('d/m/Y', strtotime($reservation->date_depart)) }}</td>
                                     <td>{{ date('d/m/Y', strtotime($reservation->date_retour)) }}</td>
@@ -85,7 +111,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- /.card-body -->
                 <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-right">
                         <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
@@ -96,7 +121,6 @@
                     </ul>
                 </div>
             </div>
-            <!-- /.card -->
-        </div>
+        </section>
     </div>
 @endsection
