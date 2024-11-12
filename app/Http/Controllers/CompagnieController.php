@@ -18,7 +18,14 @@ class CompagnieController extends Controller
 
     public function show(Compagnie $compagnie)
     {
-        return view("pages.compagnie.compagnie-show", compact("compagnie"));
+        $compagnie->load('reservations');
+
+        $reservations = $compagnie
+            ->reservations()
+            ->whereIn('status', ['terminé', 'refusé', 'annulé'])
+            ->get();
+
+        return view("pages.compagnie.compagnie-show", compact("compagnie", "reservations"));
     }
 
     /**
