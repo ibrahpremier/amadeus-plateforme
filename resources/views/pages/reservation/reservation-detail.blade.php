@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titre')
-    @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
+    @if ((getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur') && isset($ministere))
     {{ $ministere->nom }} | Solde: {{ $ministere->currentBudget()->solde }} 
     @endif
 @endsection
@@ -36,11 +36,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group row">
                                 <label for="pays" class="col-sm-4 col-form-label">Classe</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" value="{{ $reservation->classe }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group row">
+                                <label for="visa" class="col-sm-4 col-form-label">Visa</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="{{ $reservation->visa?'Oui':'Non' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +176,7 @@
                         <i class="far fa-clock bg-gray"></i>
                         <div class="timeline-item">
                             <h3 class="timeline-header">
-                                <u>{{ $reservation->demande_titre }}</u>: {{ $reservation->demande_message }}
+                                <strong>Demande de reservation</strong>
                             </h3>
                             <div class="timeline-body ">
                                 <div class="row">
@@ -204,7 +212,7 @@
                             <i class="far fa-clock bg-gray"></i>
                             <div class="timeline-item">
                                 <h3 class="timeline-header">
-                                    <strong>Réponse à la demande </strong>{{ $ticket->reponse_message }}
+                                    <strong>{{ $ticket->reponse_message }} </strong>
                                 </h3>
                                 {{-- @dump($ticket->status) --}}
                                 @if ($ticket->status === 'nouveau' && getLoggedUser()->role != 'chef_cellule')

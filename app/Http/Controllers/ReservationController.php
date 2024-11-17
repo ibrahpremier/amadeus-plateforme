@@ -8,6 +8,8 @@ use App\Models\Ministere;
 use App\Models\Reservation;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Notifications\NewTicketNotification;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -40,6 +42,7 @@ class ReservationController extends Controller
     //     $reservations[] = $reservation;
     // }
 
+
     /**
      * Display a listing of the resource.
      */
@@ -64,7 +67,7 @@ class ReservationController extends Controller
             $query->where("status", "terminé");
         }
 
-        $reservations = $query->get();
+        $reservations = $query->orderBy("created_at","desc")->get();
 
         return view('pages.reservation.reservation', compact('reservations'));
     }
@@ -94,10 +97,18 @@ class ReservationController extends Controller
             'ville_destination' => 'required|string',
             'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
             'classe' => 'nullable',
+            'visa' => 'required',
             'commentaire' => 'nullable'
         ]);
+
         // Vérifier si le rôle de l'utilisateur est 'chef_cellule' et récupérer l'ID
-        $IdChef = auth()->user()->role == 'chef_cellule' ? auth()->user()->id : null;
+        // $IdChef = auth()->user()->role == 'chef_cellule' ? auth()->user()->id : null;
+
+        if(getLoggedUser()->role == 'chef_cellule'){
+            $chef_cellule = getLoggedUser();
+        } else if(getLoggedUser()->role == 'coordinateur'){
+            $chef_cellule = User::where("role","chef_cellule")->first();
+        }
 
         $reservation = new Reservation();
         $reservation->nom = $request->nom;
@@ -110,7 +121,7 @@ class ReservationController extends Controller
         $reservation->classe = $request->classe;
         $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
-        $reservation->chef_cellule_id = $IdChef;
+        $reservation->chef_cellule_id = $chef_cellule->id;
 
 
         if ($request->hasFile('file_passport')) {
@@ -131,9 +142,9 @@ class ReservationController extends Controller
 
         // $ticket = rand(1000, 9999);
 
-        Ticket::create([
-            'reponse_titre' => "Nouvelle requête",
-            'reponse_message' => "Demande de billet d'avion",
+        $ticket = Ticket::create([
+            'reponse_titre' => "Nouvelle demande",
+            'reponse_message' => "Traitement",
             'reponse_ville_depart' => $reservation->ville_depart,
             'reponse_date_depart' => $reservation->date_depart,
             'reponse_ville_destination' => $reservation->ville_destination,
@@ -142,6 +153,7 @@ class ReservationController extends Controller
             'parent_ticket_id' => null,
         ]);
 
+        $chef_cellule->notify(new NewTicketNotification($ticket));
 
         return redirect()->route('reservation.index', ['new'])->with('success', 'Réservation créée avec succès.');
     }
@@ -156,14 +168,20 @@ class ReservationController extends Controller
         $agences = Agence::latest()->get();
         $compagnies = Compagnie::latest()->get();
         
-        $ministere = Ministere::where('id', $reservation->ministere->id)->first();
+        if($reservation->ministere){
+            $ministere = Ministere::where('id', $reservation->ministere->id)->first();
+            return view(
+                'pages.reservation.reservation-detail',
+                compact('reservation', 'agents_cellule', 'agences', 'compagnies', 'ministere')
+            );
+        }
+        return view(
+            'pages.reservation.reservation-detail',
+            compact('reservation', 'agents_cellule', 'agences', 'compagnies')
+        );
 
         // dd($ministere);
 
-        return view(
-            'pages.reservation.reservation-detail',
-            compact('reservation', 'agents_cellule', 'agences', 'compagnies', 'ministere')
-        );
     }
 
     /**

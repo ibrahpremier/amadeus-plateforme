@@ -30,6 +30,7 @@ return new class extends Migration
             $table->foreignId('chef_cellule_id')->nullable();
             $table->string('status')->default("nouveau");
             $table->string('montant_reservation')->nullable();
+            $table->boolean('visa')->default(false);
             $table->foreignId('agence_id')->nullable();
             $table->foreignId('compagnie_id')->nullable();
             $table->timestamps();

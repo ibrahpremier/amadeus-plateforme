@@ -66,42 +66,45 @@
             </div>
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                       <label for="ville_depart">Depart</label>
-                      {{-- <div class="col-sm-8"> --}}
                         <select class="form-control select2" style="width: 100%;" id="ville_depart" name="ville_depart" required>
                           <option value=""> -- Choisir --  </option>
                           @foreach (getCapitalNames() as $ville)
-                          <option @if (old('ville_depart') == $ville) selected @endif> {{ $ville }} </option>
+                          <option @if(old('ville_depart') && old('ville_depart') == $ville) selected @elseif($ville=='Ouagadougou') selected  @endif> {{ $ville }} </option>
                           @endforeach
                         </select>
-                      {{-- </div> --}}
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                       <label for="ville_destination">Destination</label>
-                      {{-- <div class="col-sm-8"> --}}
                         <select class="form-control select2" style="width: 100%" id="ville_destination" name="ville_destination" required>
                             <option value=""> -- Choisir --  </option>
                             @foreach (getCapitalNames() as $ville)
                             <option @if (old('ville_destination') == $ville) selected @endif> {{ $ville }} </option>
                             @endforeach
                         </select>
-                      {{-- </div> --}}
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group row">
                       <label for="classe">Classe</label>
-                      {{-- <div class="col-sm-8"> --}}
                         <select class="form-control" style="width: 100%" id="classe" name="classe" required>
                             <option @if (old('classe') == 'economique') selected @endif value="economique">Economique </option>
                             <option @if (old('classe') == 'business') selected @endif value="business">Business </option>
                             <option @if (old('classe') == 'first') selected @endif value="first">First </option>
                         </select>
-                      {{-- </div> --}}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="visa">Visa</label>
+                        <select class="form-control" style="width: 100%" id="visa" name="visa" required>
+                            <option @if (old('visa')) selected @endif value="false">Non</option>
+                            <option @if (old('visa')) selected @endif value="true">Oui</option>
+                        </select>
                     </div>
                 </div>
             </div>

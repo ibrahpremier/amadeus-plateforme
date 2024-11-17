@@ -126,7 +126,7 @@ class TicketController extends Controller
         // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Notification à l'agent associé à la réservation
-        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+        // $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Redirection avec succès et les changements
         return redirect()->route('reservation.show', $ticket->reservation_id)
@@ -245,7 +245,7 @@ class TicketController extends Controller
         // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Notification à l'agent associé à la réservation
-        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+        // $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }

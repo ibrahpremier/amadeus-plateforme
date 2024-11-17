@@ -147,7 +147,6 @@
                 <a href="{{ asset('storage/' . $ticket->reponse_file) }}" class="btn">Télécharger le document</a>
             @endif
 
-            <p>Si vous avez des questions ou besoin d'informations complémentaires, n'hésitez pas à nous contacter. Nous sommes là pour vous assister tout au long de votre processus de réservation.</p>
         </div>
         <div class="footer">
             <p>Cordialement,<br>L'équipe RAF Agence</p>

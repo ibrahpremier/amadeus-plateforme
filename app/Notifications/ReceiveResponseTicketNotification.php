@@ -38,8 +38,8 @@ class ReceiveResponseTicketNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->subject('Mise à jour de votre ticket de réservation')
-        ->view('emails.reponseTIcket', ['ticket' => $this->ticket,
+        ->subject('Mise à jour de votre demande de réservation')
+        ->view('emails.reponse-ticket', ['ticket' => $this->ticket,
                 'changes' => $this->changes]);
 
     }

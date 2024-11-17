@@ -24,21 +24,21 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         User::create([
-            'nom' => 'SO',
+            'nom' => 'Bamouni',
             'prenom' => 'Jonas Kevin',
             'role' => 'coordinateur',
             'poste' => 'Coordinateur',
-            'email' => 'sojonas@gmail.com',
+            'email' => 'lenyborja1er@gmail.com',
             'telephone' => "56785580",
             'password' => Hash::make('password'),
         ]);
 
         User::create([
             'nom' => 'Coulibaly',
-            'prenom' => 'melissa',
+            'prenom' => 'Ibrahim',
             'role' => 'chef_cellule',
             'poste' => 'Chef de cellule',
-            'email' => 'melissa@example.com',
+            'email' => 'ibrahpremier@gmail.com',
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
@@ -48,14 +48,14 @@ class UsersTableSeeder extends Seeder
             'prenom' => 'Elie',
             'role' => 'agent_cellule',
             'poste' => 'Agent de cellule',
-            'email' => 'elie@example.com',
+            'email' => 'ibrahim@icloud.com',
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
 
         User::create([
             'nom' => 'Zongo',
-            'prenom' => 'Aziz PDG',
+            'prenom' => 'Abdoul Aziz',
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
             'email' => 'bifag20846@operades.com',

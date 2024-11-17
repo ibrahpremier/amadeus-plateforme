@@ -37,10 +37,9 @@
                     <th>Dossier N°</th>
                     @if(getLoggedUser()->role=='chef_cellule')<th>Demandeur</th>@endif
                     <th>Trajet</th>
-                    <th>Date depart</th>
-                    <th>Date retour</th>
-                    <th>Nom</th>
                     <th>Status</th>
+                    <th>Nom</th>
+                    <th>Création</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -58,16 +57,15 @@
                     </td>
                     @endif
                     <td>
-                      <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_depart}} <br>
-                      <i class="fas fa-plane-arrival mr-2"></i>{{$reservation->ville_destination}}
+                      <i class="fas fa-plane-departure mr-2"></i>{{date('d/m/Y',strtotime($reservation->date_depart))}} {{$reservation->ville_depart}} <br>
+                      <i class="fas fa-plane-arrival mr-2"></i>{{date('d/m/Y',strtotime($reservation->date_retour))}} {{$reservation->ville_destination}}
                       <span class="badge badge-info">
                         @if ($reservation->classe=="economique") Eco @else {{ strtoupper($reservation->classe) }} @endif
                       </span>
                     </td>
-                    <td>{{date('d/m/Y',strtotime($reservation->date_depart))}}</td>
-                    <td>{{date('d/m/Y',strtotime($reservation->date_retour))}}</td>
-                    <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
                     <td><span class="badge {{statusBg($reservation->status)}} p-2">{{$reservation->status}}</span></td>
+                    <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
+                    <td><small>{{date('d/m/Y H:i',strtotime($reservation->created_at))}}</small></td>
                   </tr>
                     @endforeach
                 </tbody>
