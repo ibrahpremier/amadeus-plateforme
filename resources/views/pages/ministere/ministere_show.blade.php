@@ -1,16 +1,47 @@
 @extends('layout')
 
-@section('titre')
-    detail de {{ $compagnie->nom }}
-@endsection
-
 @section('content')
-    <div class="container-fluid">
-        @if (session('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
+    <div class="container">
+        <section id="ministeDetail">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ $ministere->nom }}</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Description :</strong> {{ $ministere->description ?? 'Aucune description' }}</p>
+                </div>
             </div>
-        @endif
+        </section>
+
+        <section id="budgets">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Budgets</h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Année Budgétaire</th>
+                                <th>Dotation</th>
+                                <th>Solde</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ministere->budgets as $index => $budget)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $budget->annee_budgetaire }}</td>
+                                    <td>{{ number_format($budget->dotation, 0, ',', ' ') }} FCFA</td>
+                                    <td>{{ number_format($budget->solde, 0, ',', ' ') }} FCFA</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
         <section id="reservations" class="mt-4">
             <div class="card">
@@ -49,7 +80,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($reservations as $reservation)
+                            @foreach ($reservations as $reservation)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>
@@ -76,16 +107,7 @@
                                             class="badge {{ statusBg($reservation->status) }} p-2">{{ $reservation->status }}</span>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="{{ Auth::user()->isCellChief() ? 8 : 7 }}">
-                                        <p class="w-100 lead text-center">
-                                            <i class="fas fa-exclamation-circle mr-2"></i>
-                                            Aucune réservation trouvée
-                                        </p>
-                                    </td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -100,6 +122,5 @@
                 </div>
             </div>
         </section>
-
     </div>
 @endsection

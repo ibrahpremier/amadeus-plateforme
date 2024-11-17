@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titre')
-    Liste des demandes {{isset($_GET['encours'])?'en cours':'   '}}
+    Liste des demandes {{ isset($_GET['encours']) ? 'en cours' : '   ' }}
 @endsection
 
 @section('content')

@@ -70,7 +70,14 @@ class AgenceController extends Controller
      */
     public function show(Agence $agence)
     {
-        return view("pages.agence.agence-show", compact("agence"));
+        $agence->load('reservations');
+        $reservations = $agence
+            ->reservations()
+            ->whereIn('status', ['terminé', 'refusé', 'annulé'])
+            ->latest()
+            ->get();
+
+        return view("pages.agence.agence-show", compact("agence", 'reservations'));
     }
 
     /**

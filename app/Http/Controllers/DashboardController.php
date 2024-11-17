@@ -18,21 +18,21 @@ class DashboardController extends Controller
         $ministeres = Ministere::all();
         $annee = date("Y");
         foreach ($ministeres as $ministere) {
-            $budget = Budget::where("ministere_id",$ministere->id)->where("annee_budgetaire",$annee)->first();
-            $ministere->budget = $budget->dotation;
-            $ministere->solde = $budget->solde;
-            $ministere->reservations_traites = Reservation::where("status","terminé")
-            ->whereHas('agent_ministere' , function($query) use ($ministere){
-                $query->where('ministere_id', $ministere->id);
-            })
-            ->count();
-            $ministere->reservations_news = Reservation::where("status","nouveau")
-            ->whereHas('agent_ministere' , function($query) use ($ministere){
-                $query->where('ministere_id', $ministere->id);
-            })
-            ->count();
+            $budget = Budget::where("ministere_id", $ministere->id)->where("annee_budgetaire", $annee)->first();
+            $ministere->budget = $budget?->dotation ?? 0;
+            $ministere->solde = $budget?->solde ?? 0;
+            $ministere->reservations_traites = Reservation::where("status", "terminé")
+                ->whereHas('agent_ministere', function ($query) use ($ministere) {
+                    $query->where('ministere_id', $ministere->id);
+                })
+                ->count();
+            $ministere->reservations_news = Reservation::where("status", "nouveau")
+                ->whereHas('agent_ministere', function ($query) use ($ministere) {
+                    $query->where('ministere_id', $ministere->id);
+                })
+                ->count();
         }
-        return view("pages.dashboard",compact("ministeres"));
+        return view("pages.dashboard", compact("ministeres"));
     }
 
     /**

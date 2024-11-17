@@ -44,104 +44,92 @@
         </div>
     </div>
 
-    <div class="card py-3 mb-4">
-        <div class="card-header">
-            <h5 class="card-title">Liste des tickets</h5>
-        </div>
-        <div class="card-body">
-            @forelse ($agence->tickets as $ticket)
-                <div class="col-md-10 offset-md-1">
-                    <div class="tab-pane" id="timeline">
-                        <div class="timeline timeline-inverse">
-
-                            {{-- TICKET DEMANDE --}}
-                            <div class="time-label">
-                                <span class="bg-danger">
-                                    {{ date('d/m/Y à H:i', strtotime($ticket->created_at)) }}
-                                </span>
-                            </div>
-                            <div>
-                                <i class="far fa-clock bg-gray"></i>
-                                <div class="timeline-item">
-                                    {{-- <span class="time"><em>par {{ $ticket->agent_ministere->nom }}</em></span> --}}
-                                    <h3 class="timeline-header"><u>{{ $ticket->demande_titre }}</u>:
-                                        {{ $ticket->demande_message }}</h3>
-                                    <div class="timeline-body ">
-                                        <div class="row">
-                                            <div class="col-md-6 bg-warning p-3">
-                                                <u>Départ: </u> le
-                                                {{ date('d/m/Y', strtotime($ticket->demande_date_depart)) }}<br>
-                                                <i
-                                                    class="fas fa-plane-departure mr-2"></i>{{ $ticket->demande_ville_depart }}
-                                                <br>
-                                                <i
-                                                    class="fas fa-plane-arrival mr-2"></i>{{ $ticket->demande_ville_destination }}
-                                                <br>
-
-                                            </div>
-                                            <div class="col-md-6 bg-success p-3">
-                                                <u>Retour:</u> le
-                                                {{ date('d/m/Y', strtotime($ticket->demande_date_retour)) }}<br>
-                                                <i
-                                                    class="fas fa-plane-departure mr-2"></i>{{ $ticket->demande_ville_destination }}
-                                                <br>
-                                                <i
-                                                    class="fas fa-plane-arrival mr-2"></i>{{ $ticket->demande_ville_depart }}
-                                                <br>
-
-                                            </div>
-                                        </div>
-                                    </div>
+    <section id="reservations" class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Réservations</h3>
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <form action="simple-results.html">
+                            <div class="input-group">
+                                <input type="search" class="form-control form-control-lg"
+                                    placeholder="Faire une recherche">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-lg btn-default">
+                                        <i class="fa fa-search"></i> Recherche
+                                    </button>
                                 </div>
                             </div>
-
-                            {{-- TICKET REPONSE --}}
-                            @if ($ticket->status === 'approuvé')
-                                {{-- <div class="time-label">
-                                <span class="bg-danger">
-                                    {{ date('d/m/Y à H:i', strtotime($ticket->updated_at)) }}
-                                </span>
-                            </div> --}}
-                                <div>
-                                    <i class="far fa-clock bg-gray"></i>
-                                    <div class="timeline-item">
-                                        <span class="time"><em>par
-                                                {{ $ticket->agent_cellule->nom . ' ' . $ticket->agent_cellule->prenom }}</em></span>
-                                        <h3 class="timeline-header">
-                                            <u>{{ $ticket->reponse_titre }}</u>:{{ $ticket->reponse_message }}
-                                        </h3>
-                                        <div class="timeline-body">
-                                            <div class="row">
-                                                @if ($ticket->reponse_commentaire)
-                                                    <div class="col-md-12 text-justify">
-                                                        <p> {{ $ticket->reponse_commentaire }}</p>
-                                                    </div>
-                                                @endif
-                                                @if ($ticket->reponse_file)
-                                                    <div class="col-md-6 offset-md-3">
-                                                        <a href="{{ route('download.reponse_file', $ticket) }}"
-                                                            target="blank" class="btn btn-warning btn-block">
-                                                            Télecharger le fichier
-                                                        </a>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            {{-- FIN TICKET REPONSE --}}
-                            <div>
-                                <i class="fa fa-check-circle bg-success" aria-hidden="true"></i>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            @empty
-                <p class="lead text-center">
-                    Aucun tikets pour l'instant
-                </p>
-            @endforelse
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Dossier N°</th>
+                            @if (getLoggedUser()->role == 'chef_cellule')
+                                <th>Demandeur</th>
+                            @endif
+                            <th>Trajet</th>
+                            <th>Date départ</th>
+                            <th>Date retour</th>
+                            <th>Nom</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($reservations as $reservation)
+                            <tr>
+                                <td>{{ $loop->index + 1 }}</td>
+                                <td>
+                                    <a
+                                        href="{{ route('reservation.show', $reservation->id) }}">{{ $reservation->numero_dossier }}</a>
+                                    <br>
+                                    <a href="{{ route('reservation.show', $reservation->id) }}"
+                                        class="btn btn-primary btn-sm">voir details</a>
+                                </td>
+                                @if (getLoggedUser()->role == 'chef_cellule')
+                                    <td>{{ $reservation->agent_ministere->nom }}
+                                        {{ $reservation->agent_ministere->prenom }}</td>
+                                @endif
+                                <td>
+                                    <i class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_depart }}
+                                    <i class="fas fa-plane-arrival mr-2"></i>{{ $reservation->ville_destination }}
+                                    <span
+                                        class="badge badge-info">{{ strtoupper($reservation->classe) == 'ECONOMIQUE' ? 'Eco' : strtoupper($reservation->classe) }}</span>
+                                </td>
+                                <td>{{ date('d/m/Y', strtotime($reservation->date_depart)) }}</td>
+                                <td>{{ date('d/m/Y', strtotime($reservation->date_retour)) }}</td>
+                                <td>{{ $reservation->nom }} {{ $reservation->prenom }}</td>
+                                <td><span
+                                        class="badge {{ statusBg($reservation->status) }} p-2">{{ $reservation->status }}</span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="{{ Auth::user()->isCellChief() ? 8 : 7 }}">
+                                    <p class="w-100 lead text-center">
+                                        <i class="fas fa-exclamation-circle mr-2"></i>
+                                        Aucune réservation trouvée
+                                    </p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </section>
 @endsection
