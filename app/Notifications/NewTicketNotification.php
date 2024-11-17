@@ -13,12 +13,14 @@ class NewTicketNotification extends Notification
     use Queueable;
 
     protected $ticket;
+    protected $affectation;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(Ticket $ticket, $affectation)
     {
         $this->ticket = $ticket;
+        $this->affectation = $affectation;
     }
 
     /**
@@ -38,7 +40,7 @@ class NewTicketNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Nouvelle demande de réservation')
-            ->view('emails.new-ticket-email', ['ticket' => $this->ticket]);
+            ->view('emails.new-ticket-email', ['ticket' => $this->ticket, 'affectation' => $this->affectation]);
 
     }
 

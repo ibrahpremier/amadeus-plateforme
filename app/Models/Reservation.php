@@ -29,6 +29,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get the chef_cellule qui traite la reservation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function chef_cellule(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'chef_cellule_id');
+    }
+
+    /**
      * Get the agent_cellule qui traite la reservation
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

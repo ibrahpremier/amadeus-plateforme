@@ -121,7 +121,7 @@ class ReservationController extends Controller
         $reservation->classe = $request->classe;
         $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
-        $reservation->chef_cellule_id = $chef_cellule->id;
+        $reservation->chef_cellule_id = $chef_cellule->id ?? 0;
 
 
         if ($request->hasFile('file_passport')) {
@@ -153,8 +153,14 @@ class ReservationController extends Controller
             'parent_ticket_id' => null,
         ]);
 
-        $chef_cellule->notify(new NewTicketNotification($ticket));
-
+    if(getLoggedUser()->role == 'agent_ministere'){
+        $coordo = User::where("role","coordinateur")->first();
+        $coordo->notify(new NewTicketNotification($ticket,false));
+    } 
+    else if(getLoggedUser()->role == 'coordinateur') {
+        $chef_cellule->notify(new NewTicketNotification($ticket,false));
+    }
+    
         return redirect()->route('reservation.index', ['new'])->with('success', 'Réservation créée avec succès.');
     }
 
@@ -216,6 +222,10 @@ class ReservationController extends Controller
                 $ticket->status = 'affecté';
                 $ticket->save();
             }
+        }
+
+        if(!$request->approve_for_agence){
+            $reservation->agent_cellule->notify(new NewTicketNotification($ticket,false));
         }
 
         return redirect()->route('reservation.show', $reservation->id)->with('success', 'Réservation affecté avec succès.');

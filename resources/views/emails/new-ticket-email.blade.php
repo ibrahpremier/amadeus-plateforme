@@ -104,54 +104,54 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">RAF Agence</div>
-            <h1>Mise à jour de votre ticket de réservation</h1>
+            <div class="logo">CVE Agence</div>
+            <h1>Nouvelle demande de réservation</h1>
         </div>
         <div class="content">
-            <h2>Bonjour {{ $ticket->reservation->agent_ministere->nom }},</h2>
-            <p>Nous vous informons que votre ticket de réservation a été traité.Voici les détails mis à jour :</p>
+            <h2>Bonjour,</h2>
+
+            @if(!$affectation)
+            <p>Une nouvelle demande à été soumise 
+                @if ($ticket->reservation->ministere())
+                    par le {{ $ticket->reservation->ministere->nom }}.
+                @endif
+            </p>
+            @else
+            <p>
+                Une nouvelle demande soumise 
+                @if ($ticket->reservation->ministere())
+                    par le {{ $ticket->reservation->ministere->nom }}
+                @endif
+                &nbsp;vous à été affecté;
+            </p>
+            @endif
 
             <div class="details">
-                <p><span>Statut :</span> {{ $ticket->status }}</p>
-                <p><span>Ville de départ :</span> {{ $ticket->reponse_ville_depart }}</p>
-                <p><span>Ville de destination :</span> {{ $ticket->reponse_ville_destination }}</p>
-                <p><span>Date de départ :</span> {{ \Carbon\Carbon::parse($ticket->reponse_date_depart)->format('d/m/Y') }}</p>
-                <p><span>Date de retour :</span> {{ \Carbon\Carbon::parse($ticket->reponse_date_retour)->format('d/m/Y') }}</p>
-                <p><span>Prix :</span> {{ $ticket->prix ?? 'Non précisé' }}</p>
-                <p><span>Agence :</span> {{ $ticket->agence->nom ?? 'Non précisé' }}</p>
-                <p><span>Companie :</span> {{ $ticket->compagnie->nom ?? 'Non précisé' }}</p>
-
-
-
-                @if(!empty($ticket->response_commentaire))
-                    <p><span>Commentaire de l'agent :</span> {{ $ticket->response_commentaire }}</p>
-                @endif
+                <p>
+                    <strong><u>Trajet </u></strong><br><br>
+                   <i class="fas fa-plane-departure mr-2"></i>{{$ticket->reponse_ville_depart}} --> <i class="fas fa-plane-arrival mr-2"></i> {{$ticket->reponse_ville_destination}} ({{date('d/m/Y',strtotime($ticket->reponse_date_depart))}})<br>
+                   <i class="fas fa-plane-departure mr-2"></i>{{$ticket->reponse_ville_destination}} --> <i class="fas fa-plane-arrival mr-2"></i> {{$ticket->reponse_ville_depart}} ({{date('d/m/Y',strtotime($ticket->reponse_date_retour))}})<br>
+                </p>
             </div>
 
-            @if(!empty($changes))
-                <div class="changes">
-                    <h4>Modifications apportées :</h4>
-                    <ul>
-                        @foreach($changes as $key => $change)
-                        <li>
-                            {{-- <strong>{{ ucfirst(str_replace('_', ' ', $key)) }} :</strong> --}}
-                            de <span style="color: red;">"{{ $change['old'] }}"</span> à <span style="color: green;">"{{ $change['new'] }}"</span>
-                        </li>
-                    @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            @if(!empty($ticket->reponse_file))
-                <p>Un document important concernant votre réservation est disponible. Veuillez le télécharger en cliquant sur le bouton ci-dessous :</p>
-                <a href="{{ asset('storage/' . $ticket->reponse_file) }}" class="btn">Télécharger le document</a>
-            @endif
+            <div class="my-4 my-2 d-flex justify-content-center align-items-center">
+                <a href="{{route('reservation.show',$ticket->reservation->id)}}" class="btn btn-primary">Consulter la demande</a>
+            </div>
+            
+        <div class="card">
+            <div class="card-body">
+                <p>
+                    Si le bouton ne s'affiche pas correctement, ouvrez ce lien directement :
+                    <a href="{{route('reservation.show',$ticket->reservation->id)}}">{{route('reservation.show',$ticket->reservation->id)}}</a>
+                </p>
+            </div>
+        </div>
 
         </div>
         <div class="footer">
-            <p>Cordialement,<br>L'équipe RAF Agence</p>
+            <p>Cordialement,<br>L'équipe CVE</p>
             <p>Tél : +XX XX XX XX XX | Email : contact@rafagence.com</p>
-            <p>&copy; 2023 RAF Agence. Tous droits réservés.</p>
+            <p>&copy; CVE 2024 . Tous droits réservés.</p>
         </div>
     </div>
 </body>
