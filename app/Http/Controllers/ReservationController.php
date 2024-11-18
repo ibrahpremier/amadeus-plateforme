@@ -224,8 +224,10 @@ class ReservationController extends Controller
             }
         }
 
-        if(!$request->approve_for_agence){
-            $reservation->agent_cellule->notify(new NewTicketNotification($ticket,false));
+        if($request->approve_for_agence){
+            $reservation->chef_cellule->notify(new NewTicketNotification($ticket,false));
+        } else{
+            $reservation->agent_cellule->notify(new NewTicketNotification($ticket,true));
         }
 
         return redirect()->route('reservation.show', $reservation->id)->with('success', 'Réservation affecté avec succès.');

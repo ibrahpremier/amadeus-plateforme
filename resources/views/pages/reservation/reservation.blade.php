@@ -66,7 +66,13 @@
                          <span class="badge badge-primary">Visa</span>
                       @endif
                     </td>
-                    <td><span class="badge {{statusBg($reservation->status)}} p-2">{{$reservation->status}}</span></td>
+                    <td>
+                      @if(getLoggedUser()->role=="agent_ministere" && $reservation->status=='nouveau')
+                        <span class="badge {{statusBg('traitement')}} p-2">traitement</span>
+                      @else
+                        <span class="badge {{statusBg($reservation->status)}} p-2">{{$reservation->status}}</span>
+                      @endif
+                    </td>
                     <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
                     <td><small>{{date('d/m/Y H:i',strtotime($reservation->created_at))}}</small></td>
                   </tr>

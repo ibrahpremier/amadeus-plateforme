@@ -243,8 +243,7 @@
                                                                     id="reponse_date_depart" name="reponse_date_depart"
                                                                     value="{{ old('reponse_date_depart', $ticket->reponse_date_depart) }}"
                                                                     @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                                in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule']))) required>
+                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))) required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -258,8 +257,7 @@
                                                                     id="reponse_date_retour" name="reponse_date_retour"
                                                                     value="{{ old('reponse_date_retour', $ticket->reponse_date_retour) }}"
                                                                     @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                                in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule']))) required>
+                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))) required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -274,8 +272,7 @@
                                                                 <select class="form-control select2" style="width: 100%;"
                                                                     id="reponse_ville_depart" name="reponse_ville_depart"
                                                                     required @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                                in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule'])))>
+                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
                                                                     <option value=""> -- Choisir --
                                                                     </option>
                                                                     @foreach (getCapitalNames() as $ville)
@@ -296,8 +293,7 @@
                                                                     id="reponse_ville_destination"
                                                                     name="reponse_ville_destination" required
                                                                     @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                                in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule'])))>
+                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
                                                                     <option value=""> -- Choisir --
                                                                     </option>
                                                                     @foreach (getCapitalNames() as $ville)
@@ -330,8 +326,7 @@
                                                                 <input type="file" class="form-control"
                                                                     id="reponse_file" name="reponse_file"
                                                                     @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                                in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule'])))>
+                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -342,8 +337,7 @@
                                                             placeholder="Entrer le montant"
                                                             value="{{ old('prix', $ticket->prix) }}" required
                                                             @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                    (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                        in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule'])))>
+                                                                    (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
                                                     </div>
                                                 </div>
 
