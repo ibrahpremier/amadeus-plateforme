@@ -30,7 +30,7 @@
                                     <option value=""> -- Choisir -- </option>
                                     <option value="agent_cellule" class="text-capitalize" @if (old('poste') == 'agent_cellule') selected @endif>Agent Cellule</option>
                                     <option value="agent_ministere" class="text-capitalize" @if (old('poste') == 'agent_ministere') selected @endif>Chargé de mission</option>
-                                    <option value="comptable_ministere" class="text-capitalize" @if (old('poste') == 'comptable_ministere') selected @endif>Comptable ministère</option>
+                                    <option value="comptable" class="text-capitalize" @if (old('poste') == 'comptable') selected @endif>Comptable</option>
                                 </select>
                                 @error('poste')
                                     <p class="text-danger text-center">{{ $message }}</p>
