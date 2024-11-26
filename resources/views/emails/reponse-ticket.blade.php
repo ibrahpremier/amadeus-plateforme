@@ -135,7 +135,7 @@
                         @foreach($changes as $key => $change)
                         <li>
                             {{-- <strong>{{ ucfirst(str_replace('_', ' ', $key)) }} :</strong> --}}
-                            de <span style="color: red;">"{{ $change['old'] }}"</span> à <span style="color: green;">"{{ $change['new'] }}"</span>
+                            <span style="color: red;">"{{ $change['old'] }}"</span> => <span style="color: green;">"{{ $change['new'] }}"</span>
                         </li>
                     @endforeach
                     </ul>
@@ -143,8 +143,7 @@
             @endif
 
             @if(!empty($ticket->reponse_file))
-                <p>Un document important concernant votre réservation est disponible. Veuillez le télécharger en cliquant sur le bouton ci-dessous :</p>
-                <a href="{{ asset('storage/' . $ticket->reponse_file) }}" class="btn">Télécharger le document</a>
+                <a href="{{ asset('storage/' . $ticket->reponse_file) }}" class="btn">Télécharger le billet / reservation</a>
             @endif
 
         </div>

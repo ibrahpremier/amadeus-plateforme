@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Notifications\NewTicketNotification;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReservationController extends Controller
 {
@@ -239,5 +240,12 @@ class ReservationController extends Controller
     public function destroy(reservation $reservation)
     {
         //
+    }
+
+    public function genererBonCommande($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $pdf = Pdf::loadView('pdf.bon-commande', compact('reservation'));
+        return $pdf->stream('bon_commande_billet_' . $reservation->id . '.pdf');
     }
 }

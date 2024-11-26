@@ -476,6 +476,9 @@
                                                     <p><strong>Réservaion terminé :</strong> Billet soumis.</p>
                                                 </div> --}}
                                             @else
+                                            <div class="p-5 text-center">
+                                                <a href="{{ route('pdf.bon-commande',$reservation->id) }}" class="btn btn-warning" target="blank"> Voir le bon de commande</a> <br>
+                                            </div>
                                                 {{-- Afficher le formulaire pour joindre un fichier même si le ticket est approuvé --}}
                                                 <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
                                                     enctype="multipart/form-data">
@@ -483,8 +486,7 @@
                                                     @method('PUT')
                                                     <input type="hidden" name="status" value="terminé">
                                                     <div class="form-group">
-                                                        <label for="reponse_billet">Joindre le Billet
-                                                            (image/pdf)</label>
+                                                        <label for="reponse_billet">Joindre le Billet (image/pdf)</label>
                                                         <input type="file" class="form-control" id="reponse_billet"
                                                             name="reponse_billet" required>
                                                     </div>
