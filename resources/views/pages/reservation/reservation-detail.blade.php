@@ -348,8 +348,7 @@
                                                             <textarea cols="30" rows="3" class="form-control"
                                                                 placeholder="{{ $ticket->status === 'affecté' ? 'Saisissez votre commentaire si vous en avez un' : '' }}"
                                                                 id="commentaire" name="commentaire" @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                        (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
-                                                                            in_array(Auth::user()->role, ['chef_cellule', 'agent_cellule'])))>{{ $ticket->response_commentaire }}</textarea>
+                                                                        (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>{{ $ticket->response_commentaire }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -385,8 +384,7 @@
                                                                     <input type="hidden" name="status"
                                                                         value="approuvé">
                                                                     <button type="submit"
-                                                                        class="btn btn-primary btn-block"
-                                                                        onclick="return comfrim('Ete vous surs de vouloir approuve cette demande')">Approuver</button>
+                                                                        class="btn btn-primary btn-block">Approuver</button>
                                                                 </form>
                                                             </div>
                                                             <div class="col-md-6">
@@ -396,8 +394,7 @@
                                                                     @method('put')
                                                                     <input type="hidden" name="status" value="annulé">
                                                                     <button type="submit"
-                                                                        class="btn btn-danger btn-block"
-                                                                        onclick="return comfrim('Ete vous surs de vouloir annuler cette demande')">Annuler</button>
+                                                                        class="btn btn-danger btn-block">Annuler</button>
                                                                 </form>
                                                             </div>
                                                         </div>
