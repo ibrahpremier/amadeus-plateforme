@@ -88,22 +88,20 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'numero_passport' => 'required|string',
-            'date_depart' => 'required|date',
-            'date_retour' => 'required|date',
             'ville_depart' => 'required|string',
             'ville_destination' => 'required|string',
+            'date_depart' => 'required|date',
+            'date_retour' => 'required_if:type_voyage,aller_retour|nullable|date|after:date_depart',
+            'classe' => 'required|in:economique,business,first',
+            'visa' => 'required|boolean',
+            'motif' => 'required|string',
+            'type_voyage' => 'required|in:aller_simple,aller_retour',
             'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
-            'classe' => 'nullable',
-            'visa' => 'required',
-            'commentaire' => 'nullable'
         ]);
-
-        // Vérifier si le rôle de l'utilisateur est 'chef_cellule' et récupérer l'ID
-        // $IdChef = auth()->user()->role == 'chef_cellule' ? auth()->user()->id : null;
 
         if(getLoggedUser()->role == 'chef_cellule'){
             $chef_cellule = getLoggedUser();
@@ -123,6 +121,7 @@ class ReservationController extends Controller
         $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
         $reservation->chef_cellule_id = $chef_cellule->id ?? 0;
+        $reservation->motif = $validated['motif'];
 
 
         if ($request->hasFile('file_passport')) {

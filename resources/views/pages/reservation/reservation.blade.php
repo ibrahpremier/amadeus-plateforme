@@ -58,9 +58,14 @@
                     @endif
                     <td>
                       <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_depart}} --> <i class="fas fa-plane-arrival mr-2"></i> {{$reservation->ville_destination}} ({{date('d/m/Y',strtotime($reservation->date_depart))}})<br>
+                      @if($reservation->date_retour)
                       <i class="fas fa-plane-departure mr-2"></i>{{$reservation->ville_destination}} --> <i class="fas fa-plane-arrival mr-2"></i> {{$reservation->ville_depart}} ({{date('d/m/Y',strtotime($reservation->date_retour))}})<br>
+                      @endif
                       <span class="badge badge-info">
                         @if ($reservation->classe=="economique") Eco @else {{ strtoupper($reservation->classe) }} @endif
+                      </span>
+                      <span class="badge badge-secondary">
+                        {{ $reservation->date_retour ? 'Aller retour' : 'Aller simple' }}
                       </span>
                       @if ($reservation->visa)
                          <span class="badge badge-primary">Visa</span>
