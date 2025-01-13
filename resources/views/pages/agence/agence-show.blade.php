@@ -1,44 +1,93 @@
 @extends('layout')
 
 @section('titre')
-    Détails de l'Agence
+    <i class="fas fa-building"></i> Détails de l'Agence: {{ $agence->nom }}
 @endsection
 
 @section('content')
-    <div class="page-header">
-        <h3 class="page-title">
-            <span class="page-title-icon bg-primary text-white me-2">
-                <i class="fas fa-building"></i>
-            </span> Détails de l'Agence: {{ $agence->nom }}
-        </h3>
-    </div>
 
-    <div class="card py-3">
+    <div class="card">
         <div class="card-body">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
-                        <h5>Informations de l'Agence</h5>
-                        <ul class="list-group mb-4">
-                            <li class="list-group-item"><strong>Nom:</strong> {{ $agence->nom }}</li>
-                            <li class="list-group-item"><strong>Téléphone:</strong> {{ $agence->telephone }}</li>
-                            <li class="list-group-item"><strong>Email:</strong> <a
-                                    href="mailto:{{ $agence->email }}">{{ $agence->email }}</a></li>
-                            <li class="list-group-item"><strong>Description:</strong> {{ $agence->description }}</li>
-                        </ul>
-
-                        <h5>Marges</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><strong>Marge Éco:</strong> {{ $agence->marge_eco }} %</li>
-                            <li class="list-group-item"><strong>Marge Business:</strong> {{ $agence->marge_business }} %
-                            </li>
-                            <li class="list-group-item"><strong>Marge First:</strong> {{ $agence->marge_first }} %</li>
-                            <li class="list-group-item"><strong>Marge Jet:</strong> {{ $agence->marge_jet }} %</li>
-                        </ul>
-
-                        <a href="{{ route('agence.index') }}" class="btn btn-secondary mt-4">Retour à la liste des
-                            agences</a>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations de l'Agence</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="text-muted">Nom</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                        <input type="text" class="form-control" value="{{ $agence->nom }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-muted">Téléphone</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input type="text" class="form-control" value="{{ $agence->telephone }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-muted">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="text" class="form-control" value="{{ $agence->email }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-muted">Description</label>
+                                    <textarea class="form-control" rows="3" readonly>{{ $agence->description }}</textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Marges</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="text-muted">Marge sur Économique</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control text-right" value="{{ $agence->marge_eco }}" readonly>
+                                        <span class="input-group-text">FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-muted">Marge sur Business</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control text-right" value="{{ $agence->marge_business }}" readonly>
+                                        <span class="input-group-text">FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-muted">Marge sur First</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control text-right" value="{{ $agence->marge_first }}" readonly>
+                                        <span class="input-group-text">FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-muted">Marge sur Jet</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control text-right" value="{{ $agence->marge_jet }}" readonly>
+                                        <span class="input-group-text">FCFA</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ route('agence.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour à la liste des agences
+                    </a>
                 </div>
             </div>
         </div>

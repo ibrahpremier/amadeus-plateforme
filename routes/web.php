@@ -4,6 +4,7 @@ use App\Http\Controllers\AgenceController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CompagnieController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FactureController;
 use App\Http\Controllers\MinistereController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
@@ -22,6 +23,7 @@ Route::resources(
         'agence' => AgenceController::class,
         'ministere' => MinistereController::class,
         'reservation' => ReservationController::class,
+        'facture' => FactureController::class,
         'ticket' => TicketController::class,
         'user' => UserController::class,
         'dashboard' => DashboardController::class,

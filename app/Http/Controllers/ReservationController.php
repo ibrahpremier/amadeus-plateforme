@@ -68,7 +68,7 @@ class ReservationController extends Controller
             $query->where("status", "terminé");
         }
 
-        $reservations = $query->orderBy("created_at","desc")->get();
+        $reservations = $query->orderBy("updated_at","desc")->get();
 
         return view('pages.reservation.reservation', compact('reservations'));
     }
@@ -207,13 +207,14 @@ class ReservationController extends Controller
             // 'agent_cellule' => 'required',
             'status' => 'required'
         ]);
+        $chef_cellule = User::where("role","chef_cellule")->first();
         if($request->approve_for_agence){
-            $reservation->chef_cellule_id = 3;
+            $reservation->chef_cellule_id = $chef_cellule->id;
         } else {
-            $reservation->status = $request->status;
             $reservation->agent_cellule_id = $request->agent_cellule;
-            $reservation->commentaire = $request->commentaire;
         }
+        $reservation->status = $request->status;
+        $reservation->commentaire = $request->commentaire;
         $reservation->save();
 
         if ($request->status === 'affecté') {

@@ -37,23 +37,49 @@ class TicketController extends Controller
         // Validation des champs
         $request->validate([
             'reponse_date_depart' => 'required|date',
-            'reponse_date_retour' => 'required|date',
+            'reponse_date_retour' => $request->has('retour') ? 'required|date' : 'nullable|date',
             'reponse_ville_depart' => 'required|string',
-            'reponse_ville_destination' => 'required|string',
-            'reponse_file' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
+            'reponse_ville_destination' => 'required|string', 
+            'reponse_file' => 'required|file|mimes:jpeg,png,pdf|max:5120',
             'commentaire' => 'nullable|string',
-            'prix' => 'nullable|string',
+            'prix' => 'required|string',
             'status' => 'required|string|in:nouveau,affecté,traité,en cours,non disponible,approuvé,refusé,annulé,terminé',
             'reservation_id' => 'required|exists:reservations,id',
             'charge_de_mission_id' => 'required',
             'parent_ticket_id' => 'nullable|exists:tickets,id',
-            // Assurez-vous d'inclure la validation pour 'oldTicket' si nécessaire
+            'agence_id' => 'required|exists:agences,id',
+            'compagnie_id' => 'required|exists:compagnies,id',
+            'classe' => 'required|string|in:economique,business,first,jet',
+        ], [
+            'reponse_date_depart.required' => 'La date de départ est obligatoire',
+            'reponse_date_depart.date' => 'La date de départ doit être une date valide',
+            'reponse_date_retour.required' => 'La date de retour est obligatoire',
+            'reponse_date_retour.date' => 'La date de retour doit être une date valide',
+            'reponse_ville_depart.required' => 'La ville de départ est obligatoire',
+            'reponse_ville_destination.required' => 'La ville de destination est obligatoire',
+            'reponse_file.required' => 'Le fichier de reservation est obligatoire',
+            'reponse_file.file' => 'Le fichier de reservation doit être un fichier valide',
+            'reponse_file.mimes' => 'Le fichier de reservation doit être au format jpeg, png ou pdf',
+            'reponse_file.max' => 'Le fichier de reservation ne doit pas dépasser 5Mo',
+            'prix.required' => 'Le prix est obligatoire',
+            'status.required' => 'Le statut est obligatoire',
+            'status.in' => 'Le statut doit être valide',
+            'reservation_id.required' => 'L\'identifiant de la réservation est obligatoire',
+            'reservation_id.exists' => 'La réservation n\'existe pas',
+            'charge_de_mission_id.required' => 'L\'identifiant du chargé de mission est obligatoire',
+            'parent_ticket_id.exists' => 'Le ticket parent n\'existe pas',
+            'agence_id.required' => 'L\'agence est obligatoire',
+            'agence_id.exists' => 'L\'agence n\'existe pas',
+            'compagnie_id.required' => 'La compagnie est obligatoire', 
+            'compagnie_id.exists' => 'La compagnie n\'existe pas',
+            'classe.required' => 'La classe est obligatoire',
+            'classe.in' => 'La classe doit être valide',
         ]);
 
         // Formater les dates en français avec Carbon
         Carbon::setLocale('fr');
-        $formattedDateDepart = Carbon::parse($request->reponse_date_depart)->isoFormat('D MMMM YYYY');
-        $formattedDateRetour = Carbon::parse($request->reponse_date_retour)->isoFormat('D MMMM YYYY');
+        // $formattedDateDepart = Carbon::parse($request->reponse_date_depart)->isoFormat('D MMMM YYYY');
+        // $formattedDateRetour = Carbon::parse($request->reponse_date_retour)->isoFormat('D MMMM YYYY');
 
         // Création du nouveau ticket
         $ticket = new Ticket();
@@ -66,9 +92,14 @@ class TicketController extends Controller
         $ticket->status = $request->status;
         $ticket->reservation_id = $request->reservation_id;
         $ticket->parent_ticket_id = $request->parent_ticket_id;
-        $ticket->agence_id = $request->charge_de_mission_id;
+        $ticket->agence_id = $request->agence_id;
+        $ticket->compagnie_id = $request->compagnie_id;
         $ticket->agent_cellule_id = getLoggedUser()->id; // Assurez-vous que cette fonction existe
 
+        if($request->filled('prix')){
+            $ticket->reservation->montant_reservation = $request->prix;
+            $ticket->reservation->save();
+        }
         // Gestion du fichier s'il est présent
         if ($request->hasFile('reponse_file')) {
             $reponse_file = $request->file('reponse_file');
@@ -122,16 +153,15 @@ class TicketController extends Controller
 
         // Enregistrement du nouveau ticket
         $ticket->save();
-        // $user = auth()->user(); // Obtenir l'utilisateur connecté
-        // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
+        $user = auth()->user(); // Obtenir l'utilisateur connecté
+        $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Notification à l'agent associé à la réservation
-        // $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
+        $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Redirection avec succès et les changements
         return redirect()->route('reservation.show', $ticket->reservation_id)
-            ->with('success', 'Nouveau ticket créé')
-            ->with('changes', $change); // Passer les changements si nécessaire
+            ->with('success', 'Nouveau ticket créé'); // Passer les changements si nécessaire
     }
 
 
@@ -193,14 +223,14 @@ class TicketController extends Controller
             $ticket->status = $request->status;
             // $ticket->status = $request->status == 'approuvé' ? 'approuvé' : $request->status;
             // Logique de mise à jour du statut de la réservation
-            if ($request->status == 'traitement') {
-                $ticket->reservation->status = $ticket->reservation->status; // Conserver le statut actuel
-            } elseif ($request->status == 'approuvé') {
-                $ticket->reservation->status = 'terminé';
-            } else {
+            // if ($request->status == 'traitement') {
+            //     $ticket->reservation->status = $ticket->reservation->status; // Conserver le statut actuel
+            // } elseif ($request->status == 'approuvé') {
+            //     $ticket->reservation->status = 'terminé';
+            // } else {
                 // Autres cas de statut
                 $ticket->reservation->status = $request->status;
-            }
+            // }
         }
         $ticket->reservation->save();
         // Vérification des changements sur les dates et villes
@@ -226,6 +256,14 @@ class TicketController extends Controller
                 'new' => $request->reponse_ville_depart,
             ];
             $ticket->reponse_ville_depart = $request->reponse_ville_depart;
+        }
+
+        if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
+            $change['reponse_ville_destination'] = [
+                'old' => $ticket->reponse_ville_destination,
+                'new' => $request->reponse_ville_destination,
+            ];
+            $ticket->reponse_ville_destination = $request->reponse_ville_destination;
         }
 
         if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {

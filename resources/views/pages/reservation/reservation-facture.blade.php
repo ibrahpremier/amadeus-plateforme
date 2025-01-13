@@ -9,24 +9,21 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-              {{-- <h3 class="card-title">Bordered Table</h3> --}}
-
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <form action="simple-results.html">
-                        <div class="input-group">
-                            <input type="search" class="form-control form-control-lg" placeholder="Faire une recherche">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-lg btn-default">
-                                    <i class="fa fa-search"></i>
-                                    Recherche
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+              <div class="row">
+                  <div class="col-md-8 offset-md-2">
+                      <form action="simple-results.html">
+                          <div class="input-group">
+                              <input type="search" class="form-control form-control-lg" placeholder="Faire une recherche">
+                              <div class="input-group-append">
+                                  <button type="submit" class="btn btn-lg btn-default">
+                                      <i class="fa fa-search"></i>
+                                      Recherche
+                                  </button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
@@ -38,7 +35,7 @@
                     @if(getLoggedUser()->role=='chef_cellule')<th>Demandeur</th>@endif
                     <th>Trajet</th>
                     <th>Status</th>
-                    <th>Nom</th>
+                    <th>Montant</th>
                     <th>Mise à jour</th>
                   </tr>
                 </thead>
@@ -78,7 +75,7 @@
                         <span class="badge {{statusBg($reservation->status)}} p-2">{{$reservation->status}}</span>
                       @endif
                     </td>
-                    <td>{{$reservation->nom}} {{$reservation->prenom}}</td>
+                    <td>{{number_format($reservation->montant_reservation, 0, ',', ' ') }} FCFA</td>
                     <td><small>{{date('d/m/Y H:i',strtotime($reservation->updated_at))}}</small></td>
                   </tr>
                     @endforeach

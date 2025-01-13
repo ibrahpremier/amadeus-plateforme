@@ -1,14 +1,11 @@
 @extends('layout')
 
 @section('content')
-    <div class="container">
+    {{-- <div class="container"> --}}
         <section id="ministeDetail">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">{{ $ministere->nom }}</h3>
-                </div>
-                <div class="card-body">
-                    <p><strong>Description :</strong> {{ $ministere->description ?? 'Aucune description' }}</p>
+                <div class="card-header text-center">
+                    <h2>{{ $ministere->nom }}</h2>
                 </div>
             </div>
         </section>
@@ -122,5 +119,5 @@
                 </div>
             </div>
         </section>
-    </div>
+    {{-- </div> --}}
 @endsection

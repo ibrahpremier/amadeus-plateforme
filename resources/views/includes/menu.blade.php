@@ -1,4 +1,4 @@
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+{{-- <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -48,18 +48,8 @@
                 <a href="#" class="dropdown-item dropdown-footer">Voir tout</a>
             </div>
         </li>
-        {{-- <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li> --}}
-        {{-- <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
-      </li> --}}
     </ul>
-</nav>
+</nav> --}}
 <!-- /.navbar -->
 
 <!-- Main Sidebar Container -->
@@ -104,6 +94,7 @@
                     </a>
                 </li>
                 <div class="dropdown-divider"></div>
+
 
 
                 @if (getLoggedUser()->role == 'agent_ministere' || getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
@@ -167,9 +158,20 @@
                         </li>
                     </ul>
                 </li>
-
                 <div class="dropdown-divider"></div>
 
+                @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
+                    <li class="nav-item">
+                        <a href="{{ route('facture.index') }}"
+                            class="nav-link {{ request()->routeIs('facture.index') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-plus-circle"></i>
+                            <i class="fas fa-angle-right right"></i>
+                            <p>Factures</p>
+                        </a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                @endif
+                
                 @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
                     <li
                         class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
@@ -264,35 +266,15 @@
                     </li>
 
                     <li
-                        class="nav-item {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'menu-is-opening menu-open' : '' }}">
-                        <a href="#"
+                        class="nav-item">
+                        <a href="{{ route('ministere.index') }}"
                             class="nav-link {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Ministères
-                                <i class="fas fa-angle-left right"></i>
+                                <i class="fas fa-angle-right right"></i>
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('ministere.create') }}"
-                                    class="nav-link {{ request()->routeIs('ministere.create') ? 'active' : '' }}">
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-plus-circle right"></i>
-                                    <p> Créer un ministère</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('ministere.index') }}"
-                                    class="nav-link {{ request()->routeIs('ministere.index') ? 'active' : '' }}">
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-list right"></i>
-                                    <p> Liste des ministères</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                 @endif
                 <div class="dropdown-divider"></div>

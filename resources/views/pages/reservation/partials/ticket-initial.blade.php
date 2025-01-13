@@ -16,11 +16,13 @@
                     <i class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_depart }}<br>
                     <i class="fas fa-plane-arrival mr-2"></i>{{ $reservation->ville_destination }}<br>
                 </div>
+                @if ($reservation->date_retour)
                 <div class="col-md-6 bg-success p-3">
                     <u>Retour:</u> le {{ date('d/m/Y', strtotime($reservation->date_retour)) }}<br>
                     <i class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_destination }}<br>
                     <i class="fas fa-plane-arrival mr-2"></i>{{ $reservation->ville_depart }}<br>
                 </div>
+                @endif
             </div>
         </div>
     </div>

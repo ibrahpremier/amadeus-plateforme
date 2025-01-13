@@ -12,6 +12,20 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+
+    <style>
+        /* Assure que les notifications Toastr apparaissent au-dessus de la navbar */
+        #toast-container {
+            z-index: 1999 !important;
+            position: fixed;
+        }
+        
+        /* Optionnel : ajuster la position en haut */
+        .toast-top-right {
+            top: 80px;
+            right: 12px;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

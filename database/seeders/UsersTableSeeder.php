@@ -48,7 +48,7 @@ class UsersTableSeeder extends Seeder
             'prenom' => 'Elie',
             'role' => 'agent_cellule',
             'poste' => 'Agent de cellule',
-            'email' => 'ibrahim@icloud.com',
+            'email' => 'ibrahiim1er@icloud.com',
             'telephone' => "80000000",
             'password' => Hash::make('password'),
         ]);
@@ -58,7 +58,7 @@ class UsersTableSeeder extends Seeder
             'prenom' => 'Abdoul Aziz',
             'role' => 'agent_ministere',
             'poste' => 'Agent de ministère',
-            'email' => 'bifag20846@operades.com',
+            'email' => 'ibrahim.ouedraogo@outlook.com',
             'telephone' => "80000000",
             'ministere_id' => 1,
             'password' => Hash::make('password'),

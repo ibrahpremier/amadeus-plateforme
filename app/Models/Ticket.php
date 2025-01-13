@@ -59,4 +59,30 @@ class Ticket extends Model
     {
         return $this->belongsTo(Compagnie::class, 'compagnie_id');
     }
+
+    public function calculateTotalCost()
+    {
+        $basePrice = $this->prix;
+        $commission = 0;
+        if($this->classe) {
+        switch($this->classe) {
+            case 'economique':
+                $commission = $this->agence->marge_eco;
+                break;
+            case 'business':
+                $commission = $this->agence->marge_affaire;
+                break;
+            case 'first':
+                $commission = $this->agence->marge_first;
+                break;
+            case 'jet':
+                $commission = $this->agence->marge_jet;
+                break;
+            }
+        } else {
+            $commission = 0;
+        }
+        // dd($basePrice, $commission);
+        return $basePrice + $commission;
+    }
 }

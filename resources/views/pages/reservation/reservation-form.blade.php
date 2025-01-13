@@ -5,12 +5,6 @@
 @section('content')
 
 <div class="row">
-    @if($errors->any())
-        <div class="col-md-10 offset-md-1 mb-3">
-            <pre>{{ print_r($errors->all(), true) }}</pre>
-        </div>
-    @endif
-    
     <div class="col-md-10 offset-md-1">
       <div class="card card-primary">
         <div class="card-header">

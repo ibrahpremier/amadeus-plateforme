@@ -30,10 +30,10 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Nom</th>
-                                <th>Marge Éco (%)</th>
-                                <th>Marge Business (%)</th>
-                                <th>Marge First (%)</th>
-                                <th>Marge Jet (%)</th>
+                                <th>Marge Éco</th>
+                                <th>Marge Business</th>
+                                <th>Marge First</th>
+                                <th>Marge Jet</th>
                                 <th>Contact</th>
                                 <th>Description</th>
                                 <th>Actions</th> <!-- Colonne pour les boutons d'actions -->
@@ -44,10 +44,10 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $agence->nom }}</td>
-                                    <td>{{ $agence->marge_eco }} %</td>
-                                    <td>{{ $agence->marge_business }} %</td>
-                                    <td>{{ $agence->marge_first }} %</td>
-                                    <td>{{ $agence->marge_jet }} %</td>
+                                    <td>{{ $agence->marge_eco }}</td>
+                                    <td>{{ $agence->marge_business }}</td>
+                                    <td>{{ $agence->marge_first }}</td>
+                                    <td>{{ $agence->marge_jet }}</td>
                                     <td>
                                         {{ $agence->telephone }} <br>
                                         <a href="mailto:{{ $agence->email }}">{{ $agence->email }}</a>

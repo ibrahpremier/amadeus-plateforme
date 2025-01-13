@@ -112,14 +112,14 @@
 
             @if(!$affectation)
             <p>Une nouvelle demande à été soumise 
-                @if ($ticket->reservation->ministere())
+                @if ($ticket->reservation->ministere)
                     par le {{ $ticket->reservation->ministere->nom }}.
                 @endif
             </p>
             @else
             <p>
                 Une nouvelle demande soumise 
-                @if ($ticket->reservation->ministere())
+                @if ($ticket->reservation->ministere)
                     par le {{ $ticket->reservation->ministere->nom }}
                 @endif
                 &nbsp;vous à été affecté;

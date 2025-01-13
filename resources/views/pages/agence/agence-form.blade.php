@@ -82,10 +82,11 @@
                                     <div class="form-group mb-3">
                                         <label for="marge_eco">Marge économique</label>
                                         <div class="input-group">
-                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
                                             <input type="number"
                                                 class="form-control @error('marge_eco') is-invalid @enderror" id="marge_eco"
-                                                name="marge_eco" value="{{ old('marge_eco') }}" placeholder="%" required>
+                                                name="marge_eco" value="{{ old('marge_eco') }}" placeholder="Montant"
+                                                required>
+                                            <span class="input-group-text">FCFA</span>
                                         </div>
                                         @error('marge_eco')
                                             <div class="text-danger">{{ $message }}</div>
@@ -97,11 +98,11 @@
                                     <div class="form-group mb-3">
                                         <label for="marge_business">Marge business</label>
                                         <div class="input-group">
-                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
                                             <input type="number"
                                                 class="form-control @error('marge_business') is-invalid @enderror"
                                                 id="marge_business" name="marge_business"
-                                                value="{{ old('marge_business') }}" placeholder="%" required>
+                                                value="{{ old('marge_business') }}" placeholder="Montant" required>
+                                            <span class="input-group-text">FCFA</span>
                                         </div>
                                         @error('marge_business')
                                             <div class="text-danger">{{ $message }}</div>
@@ -113,11 +114,11 @@
                                     <div class="form-group mb-3">
                                         <label for="marge_first">Marge first</label>
                                         <div class="input-group">
-                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
                                             <input type="number"
                                                 class="form-control @error('marge_first') is-invalid @enderror"
                                                 id="marge_first" name="marge_first" value="{{ old('marge_first') }}"
-                                                placeholder="%" required>
+                                                placeholder="Montant" required>
+                                            <span class="input-group-text">FCFA</span>
                                         </div>
                                         @error('marge_first')
                                             <div class="text-danger">{{ $message }}</div>
@@ -129,11 +130,11 @@
                                     <div class="form-group mb-3">
                                         <label for="marge_jet">Marge jet</label>
                                         <div class="input-group">
-                                            <span class="input-group-text"><i class="fas fa-percent"></i></span>
                                             <input type="number"
                                                 class="form-control @error('marge_jet') is-invalid @enderror"
                                                 id="marge_jet" name="marge_jet" value="{{ old('marge_jet') }}"
-                                                placeholder="%" required>
+                                                placeholder="Montant" required>
+                                            <span class="input-group-text">FCFA</span>
                                         </div>
                                         @error('marge_jet')
                                             <div class="text-danger">{{ $message }}</div>

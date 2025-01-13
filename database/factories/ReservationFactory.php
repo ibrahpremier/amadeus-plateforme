@@ -29,6 +29,7 @@ class ReservationFactory extends Factory
             'date_retour' => $this->faker->dateTimeBetween('now', '+'.$depart+rand(2,30).' day')->format('Y-m-d'),
             'charge_de_mission_id' => 4,
             'agent_cellule_id' => null,
+            'motif' => $this->faker->sentence,
             'status' => $this->faker->randomElement(['traitement', 'approuvé', 'mission en cours','terminé']),
         ];
     }

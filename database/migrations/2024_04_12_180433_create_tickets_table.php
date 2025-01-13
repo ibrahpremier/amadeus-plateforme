@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('reponse_file')->nullable();
             $table->string('reponse_billet')->nullable();
             $table->string('response_commentaire')->nullable();
+            $table->enum('classe', ['economique', 'business', 'first', 'jet'])->nullable();
             // $table->integer('reponse_cout')->nullable();
             $table->foreignId('agence_id')->nullable();
             $table->foreignId('compagnie_id')->nullable();
