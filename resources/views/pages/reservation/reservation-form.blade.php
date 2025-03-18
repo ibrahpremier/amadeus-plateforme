@@ -10,7 +10,15 @@
         <div class="card-header">
           <h3 class="card-title">Formulaire de demande</h3>
         </div>
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <form method="POST" action="{{ route('reservation.store') }}" enctype="multipart/form-data">
           @csrf
 

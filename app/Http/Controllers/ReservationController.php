@@ -80,6 +80,18 @@ class ReservationController extends Controller
      */
     public function create()
     {
+        $currentYear = (int) date('Y');
+        if(getLoggedUser()->role == 'agent_ministere'){
+            
+            $currentBudget = getLoggedUser()->ministere->budgets->where('annee_budgetaire', $currentYear)->first();
+            if(!$currentBudget){
+                return redirect()->route('reservation.index')->with('error', 'Le budget de votre ministère pour l\'année en cours n\'est pas encore disponible. Contactez votre coordinateur.');
+            }
+            if($currentBudget->solde <= 0){
+                return redirect()->route('reservation.index')->with('error', 'Le budget de votre ministère pour l\'année en cours est épuisé. Contactez votre coordinateur.');
+            }
+        }
+
         return view('pages.reservation.reservation-form');
     }
 
@@ -217,8 +229,9 @@ class ReservationController extends Controller
         $reservation->commentaire = $request->commentaire;
         $reservation->save();
 
+        $ticket = Ticket::where("reservation_id", $reservation->id)->latest()->first();
+        dd($ticket);
         if ($request->status === 'affecté') {
-            $ticket = Ticket::where("reservation_id", $reservation->id)->latest()->first();
             if ($ticket->status === 'nouveau') {
                 $ticket->status = 'affecté';
                 $ticket->save();

@@ -25,7 +25,7 @@ class DotationAnnulle
 
         // dd($user);
 
-        if ($user->isMinistereAgent() && !Route::currentRouteNamed('budget.store')) {
+        if ($user->isMinistereAgent() && Route::currentRouteNamed('reservation.create')) {
 
             $lastYear = (int) $user->getMinistereCurrentBudget()?->annee_budgetaire;
             $currentYear = (int) date('Y');

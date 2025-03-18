@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\DotationAnnulle;
+// use App\Http\Middleware\DotationAnnulle;
 
 // Route::middleware(['auth', DotationAnnulle::class])->group(function () {
 
@@ -29,8 +29,7 @@ Route::resources(
         'dashboard' => DashboardController::class,
         'compagnie' => CompagnieController::class,
         'budget' => BudgetController::class
-    ],
-    ['middleware' => ['auth', 'dotationAnnulle']]
+    ]
 );
 
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');

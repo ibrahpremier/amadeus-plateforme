@@ -120,13 +120,20 @@ class MinistereController extends Controller
         // Validation des données d'entrée
         $validatedData = $request->validate([
             'nom' => ['required'],
-            'dotation' => ['required', 'numeric'],
+            // 'dotation' => ['required', 'numeric'],
             'description' => ['nullable'],
         ]);
 
         // Gestion des exceptions lors de la mise à jour
         try {
-            $ministere->update($validatedData);
+            if ($ministere->nom !== $validatedData['nom']) {
+                $ministere->nom = $validatedData['nom'];
+            }
+            if ($ministere->description !== $validatedData['description']) {
+                $ministere->description = $validatedData['description'];
+            }
+            $ministere->save();
+            // $ministere->nom($validatedData);
         } catch (\Throwable $th) {
             throw $th;
         }

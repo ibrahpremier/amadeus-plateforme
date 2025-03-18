@@ -36,15 +36,15 @@
                                     <p class="text-danger text-center">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group mb-2 col-md-4">
-                                <label for="dotation">Plafond budgétaire <small>(facultatif)</small></label>
+                            {{-- <div class="form-group mb-2 col-md-4">
+                                <label for="dotation">Budget <small>(facultatif)</small></label>
                                 <input type="number" class="form-control @error('dotation') is-invalid @enderror"
                                     value="{{ old('dotation', $ministere->dotation) }}" id="dotation" name="dotation"
                                     placeholder="Montant en F CFA">
                                 @error('dotation')
                                     <p class="text-danger text-center">{{ $message }}</p>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="row">
