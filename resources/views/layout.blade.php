@@ -128,10 +128,10 @@
 
     {{-- <script src="{{asset('dist/js/demo.js')}}"></script> --}}
 
-    <script>
+    {{-- <script>
         if (@json(@session('BudjetAnuelle') == true))
             $('#dotationAnulleModal').modal('show');
-    </script>
+    </script> --}}
     @yield('custom_js')
 
 </body>

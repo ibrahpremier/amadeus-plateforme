@@ -13,4 +13,14 @@ class Budget extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function ministere()
+    {
+        return $this->belongsTo(Ministere::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

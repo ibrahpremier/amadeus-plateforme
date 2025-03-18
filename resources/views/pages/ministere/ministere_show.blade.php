@@ -10,28 +10,39 @@
             </div>
         </section>
 
+        <div class="row">
+            <div class="col-md-6">
+
         <section id="budgets">
             <div class="card mt-4">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Budgets</h3>
+                    @if ($noCurrentBudget)
+                        <a href="{{ route('budget.create', $ministere->id) }}" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#createBudgetModal">
+                            <i class="fas fa-plus"></i> Créer le Budget {{ $currentYear }}
+                        </a>
+                    @endif
                 </div>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Année Budgétaire</th>
                                 <th>Dotation</th>
                                 <th>Solde</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($ministere->budgets as $index => $budget)
+                            @foreach ($ministere->budgets->sortByDesc('annee_budgetaire')->take(5) as $index => $budget)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $budget->annee_budgetaire }}</td>
                                     <td>{{ number_format($budget->dotation, 0, ',', ' ') }} FCFA</td>
                                     <td>{{ number_format($budget->solde, 0, ',', ' ') }} FCFA</td>
+                                    <td>
+                                        <a href="{{ route('budget.show', $budget->id) }}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Voir Détails
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -39,6 +50,8 @@
                 </div>
             </div>
         </section>
+            </div>
+        </div>
 
         <section id="reservations" class="mt-4">
             <div class="card">
@@ -120,4 +133,36 @@
             </div>
         </section>
     {{-- </div> --}}
+
+    {{-- Modal pour créer un budget --}}
+    <div class="modal fade" id="createBudgetModal" tabindex="-1" role="dialog" aria-labelledby="createBudgetModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createBudgetModalLabel">Créer le budget {{ $currentYear }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('budget.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="annee_budgetaire">Année Budgétaire</label>
+                            <input type="number" name="annee_budgetaire" id="annee_budgetaire" value="{{ $currentYear }}" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="dotation">Dotation</label>
+                            <input type="number" name="dotation" id="dotation" class="form-control" placeholder="Ex: 1000000" required>
+                        </div>
+                        <input type="hidden" name="ministere_id" value="{{ $ministere->id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Créer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

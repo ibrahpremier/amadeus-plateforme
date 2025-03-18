@@ -53,11 +53,17 @@ class MinistereController extends Controller
             ->latest()
             ->get();
 
+            $noCurrentBudget = false;
+            $currentYear = (int) date('Y');
+            $currentBudget = $ministere->budgets->where('annee_budgetaire', $currentYear)->first();
+            if(!$currentBudget){
+                $noCurrentBudget = true;
+            }
         // dd($reservations);
 
         $ministere->load('budgets');
 
-        return view('pages.ministere.ministere_show', compact('ministere', 'reservations'));
+        return view('pages.ministere.ministere_show', compact('ministere', 'reservations','noCurrentBudget','currentYear'));
     }
 
     /**
