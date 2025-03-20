@@ -230,7 +230,7 @@ class ReservationController extends Controller
         $reservation->save();
 
         $ticket = Ticket::where("reservation_id", $reservation->id)->latest()->first();
-        dd($ticket);
+        // dd($ticket);
         if ($request->status === 'affecté') {
             if ($ticket->status === 'nouveau') {
                 $ticket->status = 'affecté';

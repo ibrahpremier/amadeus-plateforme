@@ -46,7 +46,7 @@ class BudgetController extends Controller
             return redirect()->back()->withErrors(['error' => 'Un budget pour cette année existe déjà pour ce ministère.']);
         }
 
-        Budget::create([
+        $budget = Budget::create([
             'annee_budgetaire' => $request->annee_budgetaire,
             'dotation' => $request->dotation,
             'solde' => $request->dotation, // Initial solde equals dotation
@@ -57,7 +57,7 @@ class BudgetController extends Controller
             'montant' => $request->dotation,
             'type' => 'in',
             'description' => 'Dotation initiale 2025',
-            'budget_id' => $request->ministere_id,
+            'budget_id' => $budget->id,
         ]);
 
         $ministere = Ministere::find($request->ministere_id);

@@ -88,10 +88,10 @@ class User extends Authenticatable
         return $this->role == 'coordinateur';
     }
 
-    public function isAdmin()
-    {
-        return $this->role == 'Administrateur';
-    }
+    // public function isAdmin()
+    // {
+    //     return $this->role == 'Administrateur';
+    // }
 
     public function getMinistereCurrentBudget()
     {

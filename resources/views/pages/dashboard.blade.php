@@ -65,7 +65,7 @@
         <!-- ./col -->
     </div>
     <!-- /.row -->
-    @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
+    @if (getLoggedUser() && (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur'))
       <div class="row">
         <div class="col-lg-6">
           <div class="card">

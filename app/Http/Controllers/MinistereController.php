@@ -15,6 +15,10 @@ class MinistereController extends Controller
      */
     public function index()
     {
+
+        if (auth()->user()->role != 'coordinateur' && auth()->user()->role!= 'super') {
+            return redirect()->route('dashboard.index')->withErrors(['error' => 'Accès non autorisé']);
+        }
         $ministeres = Ministere::all();
         $annee = date("Y");
         foreach ($ministeres as $ministere) {
@@ -45,6 +49,9 @@ class MinistereController extends Controller
 
     public function show(Ministere $ministere)
     {
+        if (auth()->user()->role != 'coordinateur' && auth()->user()->role!= 'super') {
+            return redirect()->route('dashboard.index')->withErrors(['error' => 'Accès non autorisé']);
+        }
         $reservations = Reservation::whereHas(
             'agent_ministere',
             fn($query) => $query->where('ministere_id', $ministere->id)

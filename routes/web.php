@@ -12,7 +12,6 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 // use App\Http\Middleware\DotationAnnulle;
 
-// Route::middleware(['auth', DotationAnnulle::class])->group(function () {
 
 Route::get('/', function () {
     return redirect('dashboard');
@@ -29,7 +28,8 @@ Route::resources(
         'dashboard' => DashboardController::class,
         'compagnie' => CompagnieController::class,
         'budget' => BudgetController::class
-    ]
+    ],
+    ['middleware' => ['auth']]
 );
 
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');

@@ -91,12 +91,19 @@
                   <div class="form-group row">
                     <label for="ville_depart" class="col-sm4 col-form-label">Depart</label>
                     <div class="col-sm-8">
-                      <select class="form-control select2" style="width: 100%;" id="ville_depart" name="ville_depart" required>
-                        <option value=""> -- Choisir --  </option>
+                      <input type="text" 
+                             class="form-control" 
+                             id="ville_depart" 
+                             name="ville_depart" 
+                             list="villes-list"
+                             autocomplete="off"
+                             required
+                             value="{{ old('ville_depart') ?: 'Ouagadougou' }}">
+                      <datalist id="villes-list">
                         @foreach (getCapitalNames() as $ville)
-                        <option @if(old('ville_depart') && old('ville_depart') == $ville) selected @elseif($ville=='Ouagadougou') selected  @endif> {{ $ville }} </option>
+                        <option value="{{ $ville }}">
                         @endforeach
-                      </select>
+                      </datalist>
                     </div>
                   </div>
               </div>
@@ -104,12 +111,19 @@
                   <div class="form-group row">
                     <label for="ville_destination" class="col-sm-4 col-form-label">Destination</label>
                     <div class="col-sm-8">
-                      <select class="form-control select2" style="width: 100%" id="ville_destination" name="ville_destination" required>
-                          <option value=""> -- Choisir --  </option>
-                          @foreach (getCapitalNames() as $ville)
-                          <option @if (old('ville_destination') == $ville) selected @endif> {{ $ville }} </option>
-                          @endforeach
-                      </select>
+                      <input type="text" 
+                             class="form-control" 
+                             id="ville_destination" 
+                             name="ville_destination" 
+                             list="villes-list-dest"
+                             autocomplete="off"
+                             required
+                             value="{{ old('ville_destination') }}">
+                      <datalist id="villes-list-dest">
+                        @foreach (getCapitalNames() as $ville)
+                        <option value="{{ $ville }}">
+                        @endforeach
+                      </datalist>
                     </div>
                   </div>
               </div>
