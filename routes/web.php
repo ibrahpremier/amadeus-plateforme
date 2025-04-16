@@ -36,6 +36,7 @@ Route::get('/login', [UserController::class, 'loginForm'])->name('login');
 Route::get('/r1', [UserController::class, 'resetPasswordEmailForm'])->name('password.email-ask');
 Route::get('/r2/{code?}', [UserController::class, 'resetPasswordForm'])->name('password.newpass-ask');
 Route::get('/download/{ticket_id}', [TicketController::class, 'download'])->name('download.reponse_file');
+Route::get('/download-billet/{ticket_id}', [TicketController::class, 'downloadBillet'])->name('download.reponse_billet');
 Route::get('/commande/{id}', [ReservationController::class, 'genererBonCommande'])->name('pdf.bon-commande');
 
 

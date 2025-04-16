@@ -303,13 +303,31 @@ class TicketController extends Controller
     }
 
 
-    public function download(Ticket $ticket)
+    public function download(int $id)
     {
+        $ticket = Ticket::findOrFail($id);
         if (!$ticket->reponse_file) {
             return redirect()->back()->with('error', 'Aucun fichier n\'est associé à ce ticket.');
         }
 
         $filePath = storage_path('app/public/' . $ticket->reponse_file);
+
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'Le fichier n\'existe pas.');
+        }
+
+        return response()->download($filePath);
+    }
+
+
+    public function downloadBillet(int $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        if (!$ticket->reponse_billet) {
+            return redirect()->back()->with('error', 'Aucun fichier n\'est associé à ce ticket.');
+        }
+
+        $filePath = storage_path('app/public/' . $ticket->reponse_billet);
 
         if (!file_exists($filePath)) {
             return redirect()->back()->with('error', 'Le fichier n\'existe pas.');

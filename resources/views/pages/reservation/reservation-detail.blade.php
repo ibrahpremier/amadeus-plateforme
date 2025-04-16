@@ -582,13 +582,6 @@
                                                     </p>
                                                 </div>
                                             @endif
-                                            {{-- Si un billet est présent, afficher le message à l'agent cellule --}}
-                                            {{-- @if ((!$ticket->reponse_billet && getLoggedUser()->role === 'chef_cellule') || getLoggedUser()->role === 'agent_cellule')
-                                                <div class="col-md-12 text-justify">
-                                                    <p><strong>Ticket approuvé :</strong>Attente de traitement par le
-                                                        Ministère.</p>
-                                                </div>
-                                            @endif --}}
                                         </div>
 
                                         {{-- Afficher un récapitulatif si le billet est présent pour l'agent ministère avec les champs désactivés --}}
@@ -600,10 +593,17 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <a href="#" class="btn btn-outline-primary btn-sm"
-                                                            target="_blank">
-                                                            Télécharger le billet
+                                                        <a href="{{ route('download.reponse_billet', $ticket) }}"
+                                                            target="_blank" class="btn btn-primary">Télécharger le billet
                                                         </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-center">
+                                                        <a href="{{ route('pdf.bon-commande', $reservation->id) }}"
+                                                            class="btn btn-outline-primary" target="blank"> Consulter le
+                                                            bon de
+                                                            commande</a> <br>
                                                     </div>
                                                 </div>
                                                 <div class="col">
@@ -640,36 +640,6 @@
                                                         <input type="file" class="form-control" id="reponse_billet"
                                                             name="reponse_billet" required>
                                                     </div>
-                                                    {{-- <div class="form-group">
-                                                        <label for="agence">Agence</label>
-                                                        <select name="agence_id" id="agence" class="form-control"
-                                                            required>
-                                                            <option value="" @disabled(true)
-                                                                @selected(true)>
-                                                                Selectionner
-                                                                une agence</option>
-                                                            @foreach ($agences as $agence)
-                                                                <option value="{{ $agence->id }}">
-                                                                    {{ $agence->nom }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div> --}}
-
-                                                    {{-- <div class="form-group">
-                                                        <label for="compagnie">Compagnie</label>
-                                                        <select name="compagnie_id" id="compagnie" class="form-control"
-                                                            required>
-                                                            <option value="" @disabled(true)
-                                                                @selected(true)>
-                                                                Selectionner
-                                                                une compagnie</option>
-                                                            @foreach ($compagnies as $compagnie)
-                                                                <option value="{{ $compagnie->id }}">
-                                                                    {{ $compagnie->nom }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div> --}}
                                                     <div class="row">
                                                         <div class="col-md-6 offset-md-3">
                                                             <button type="submit"
