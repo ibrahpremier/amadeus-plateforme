@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Notifications\ReceiveResponseTicketNotification;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -164,8 +165,8 @@ class TicketController extends Controller
 
         // Enregistrement du nouveau ticket
         $ticket->save();
-        $user = auth()->user(); // Obtenir l'utilisateur connecté
-        $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
+        // $user = Auth::user(); // Obtenir l'utilisateur connecté
+        // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         // Notification à l'agent associé à la réservation
         $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
@@ -234,57 +235,7 @@ class TicketController extends Controller
         }
         $ticket->reservation->save();
 
-        // // Vérification des changements sur les dates et villes
-        // if ($request->filled('reponse_date_depart') && $ticket->reponse_date_depart != $request->reponse_date_depart) {
-        //     $change['reponse_date_depart'] = [
-        //         'old' => $ticket->reponse_date_depart,
-        //         'new' => $request->reponse_date_depart,
-        //     ];
-        //     $ticket->reponse_date_depart = $request->reponse_date_depart;
-        // }
-
-        // if ($request->filled('reponse_date_retour') && $ticket->reponse_date_retour != $request->reponse_date_retour) {
-        //     $change['reponse_date_retour'] = [
-        //         'old' => $ticket->reponse_date_retour,
-        //         'new' => $request->reponse_date_retour,
-        //     ];
-        //     $ticket->reponse_date_retour = $request->reponse_date_retour;
-        // }
-
-        // if ($request->filled('reponse_ville_depart') && $ticket->reponse_ville_depart != $request->reponse_ville_depart) {
-        //     $change['reponse_ville_depart'] = [
-        //         'old' => $ticket->reponse_ville_depart,
-        //         'new' => $request->reponse_ville_depart,
-        //     ];
-        //     $ticket->reponse_ville_depart = $request->reponse_ville_depart;
-        // }
-
-        // if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
-        //     $change['reponse_ville_destination'] = [
-        //         'old' => $ticket->reponse_ville_destination,
-        //         'new' => $request->reponse_ville_destination,
-        //     ];
-        //     $ticket->reponse_ville_destination = $request->reponse_ville_destination;
-        // }
-
-        // if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
-        //     $change['reponse_ville_destination'] = [
-        //         'old' => $ticket->reponse_ville_destination,
-        //         'new' => $request->reponse_ville_destination,
-        //     ];
-        //     $ticket->reponse_ville_destination = $request->reponse_ville_destination;
-        // }
-
-        // Enregistrer les modifications du ticket
-        // dd($change);
         $ticket->save();
-
-        // Notification à l'utilisateur connecté
-        // $user = auth()->user();
-        // $user->notify(new ReceiveResponseTicketNotification($ticket, $change));
-
-        // Notification à l'agent associé à la réservation
-        // $ticket->reservation->agent_ministere->notify(new ReceiveResponseTicketNotification($ticket, $change));
 
         return redirect()->route('reservation.show', $ticket->reservation->id)->with('success', 'Ticket mis à jour');
     }
