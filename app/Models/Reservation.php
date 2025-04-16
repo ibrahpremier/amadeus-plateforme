@@ -22,7 +22,8 @@ class Reservation extends Model
         return $this->belongsTo(User::class, 'charge_de_mission_id');
     }
 
-    public function ministere () :Attribute{
+    public function ministere(): Attribute
+    {
         return Attribute::make(
             get: fn() => $this->agent_ministere?->ministere
         );
@@ -46,6 +47,26 @@ class Reservation extends Model
     public function agent_cellule(): BelongsTo
     {
         return $this->belongsTo(User::class, 'agent_cellule_id');
+    }
+
+    /**
+     * Get the agence qui traite la reservation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function agence(): BelongsTo
+    {
+        return $this->belongsTo(Agence::class, 'agence_id');
+    }
+
+    /**
+     * Get the compagnie qui traite la reservation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function compagnie(): BelongsTo
+    {
+        return $this->belongsTo(Compagnie::class, 'compagnie_id');
     }
 
     /**

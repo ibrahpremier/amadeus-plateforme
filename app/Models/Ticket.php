@@ -64,6 +64,8 @@ class Ticket extends Model
     {
         $basePrice = $this->prix;
         $commission = 0;
+
+        // dd($this);
         if($this->classe) {
         switch($this->classe) {
             case 'economique':
@@ -82,7 +84,7 @@ class Ticket extends Model
         } else {
             $commission = 0;
         }
-        // dd($basePrice, $commission);
+        // dd($this, $basePrice, $commission);
         return $basePrice + $commission;
     }
 }

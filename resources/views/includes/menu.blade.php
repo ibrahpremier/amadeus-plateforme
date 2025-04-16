@@ -97,7 +97,9 @@
 
 
 
-                @if (getLoggedUser()->role == 'agent_ministere' || getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
+                @if (getLoggedUser()->role == 'agent_ministere' ||
+                        getLoggedUser()->role == 'chef_cellule' ||
+                        getLoggedUser()->role == 'coordinateur')
                     <li class="nav-item">
                         <a href="{{ route('reservation.create') }}"
                             class="nav-link {{ request()->routeIs('reservation.create') ? 'active' : '' }}">
@@ -124,17 +126,9 @@
                             <a href="{{ route('reservation.index', 'new') }}"
                                 class="nav-link {{ request()->has('new') ? 'active' : '' }}">
                                 <i class="fas fa-angle-right left"></i>
-                                <p>
-                                    Nouvelles
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('reservation.index', 'ended') }}"
-                                class="nav-link {{ request()->has('ended') ? 'active' : '' }}">
                                 <i class="fas fa-angle-right left"></i>
                                 <p>
-                                    Terminées
+                                    Nouvelles
                                 </p>
                             </a>
                         </li>
@@ -142,14 +136,26 @@
                             <a href="{{ route('reservation.index', 'encours') }}"
                                 class="nav-link {{ request()->has('encours') ? 'active' : '' }}">
                                 <i class="fas fa-angle-right left"></i>
+                                <i class="fas fa-angle-right left"></i>
                                 <p>
                                     En cours
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('reservation.index', 'ended') }}"
+                                class="nav-link {{ request()->has('ended') ? 'active' : '' }}">
+                                <i class="fas fa-angle-right left"></i>
+                                <i class="fas fa-angle-right left"></i>
+                                <p>
+                                    Terminées
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('reservation.index') }}"
                                 class="nav-link {{ request()->routeIs('reservation.index') && !request()->has('encours') && !request()->has('ended') && !request()->has('new') ? 'active' : '' }}">
+                                <i class="fas fa-angle-right left"></i>
                                 <i class="fas fa-angle-right left"></i>
                                 <p>
                                     Toutes
@@ -171,19 +177,19 @@
                     </li>
                     <div class="dropdown-divider"></div>
                 @endif
-                
+
                 @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
-                    <li
-                        class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'menu-is-opening menu-open' : '' }}">
-                        <a href="#"
+                    <li class="nav-item">
+                        <a href="{{ route('user.index') }}"
                             class="nav-link {{ request()->routeIs('user.index') || request()->routeIs('user.create') ? 'active' : '' }}">
+
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Utilisateurs
-                                <i class="fas fa-angle-left right"></i>
+                                <i class="fas fa-angle-right right"></i>
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
+                        {{-- <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="{{ route('user.create') }}"
                                     class="nav-link {{ request()->routeIs('user.create') ? 'active' : '' }}">
@@ -202,50 +208,28 @@
                                     <p> Liste des utilisateurs</p>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </li>
-                    <li
-                        class="nav-item {{ request()->routeIs('agence.index') || request()->routeIs('agence.create') ? 'menu-is-opening menu-open' : '' }}">
-                        <a href="#"
+                    <li class="nav-item">
+                        <a href="{{ route('agence.index') }}"
                             class="nav-link {{ request()->routeIs('agence.index') || request()->routeIs('agence.create') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Agences
-                                <i class="fas fa-angle-left right"></i>
+                                <i class="fas fa-angle-right right"></i>
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('agence.create') }}"
-                                    class="nav-link {{ request()->routeIs('agence.create') ? 'active' : '' }}">
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-plus-circle right"></i>
-                                    <p> Créer une agence</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('agence.index') }}"
-                                    class="nav-link {{ request()->routeIs('agence.index') ? 'active' : '' }}">
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-angle-right left"></i>
-                                    <i class="fas fa-list right"></i>
-                                    <p> Liste des agences </p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                    <li
-                        class="nav-item {{ request()->routeIs('compagnie.index') || request()->routeIs('compagnie.create') ? 'menu-is-opening menu-open' : '' }}">
-                        <a href="#"
+                    <li class="nav-item">
+                        <a href="{{ route('compagnie.index') }}"
                             class="nav-link {{ request()->routeIs('compagnie.index') || request()->routeIs('compagnie.create') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-building"></i>
                             <p>
                                 Compagnies
-                                <i class="fas fa-angle-left right"></i>
+                                <i class="fas fa-angle-right right"></i>
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
+                        {{-- <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="{{ route('compagnie.create') }}"
                                     class="nav-link {{ request()->routeIs('compagnie.create') ? 'active' : '' }}">
@@ -262,11 +246,10 @@
                                     <p>Liste des compagnies</p>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </li>
 
-                    <li
-                        class="nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('ministere.index') }}"
                             class="nav-link {{ request()->routeIs('ministere.index') || request()->routeIs('ministere.create') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>

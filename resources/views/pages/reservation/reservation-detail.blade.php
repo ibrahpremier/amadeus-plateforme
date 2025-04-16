@@ -1,20 +1,20 @@
 @extends('layout')
 
 @section('titre')
-    @if ((getLoggedUser()->role == 'coordinateur') && isset($ministere))
-    {{ $ministere->nom }} | Solde: {{ $ministere->currentBudget()->solde }} 
+    @if (getLoggedUser()->role == 'coordinateur' && isset($ministere))
+        {{ $ministere->nom }} | Solde: {{ $ministere->currentBudget()->solde }}
     @endif
 @endsection
 
 @section('content')
     {{-- @dump($errors->all()) --}}
 
-    {{-- @if($errors->any())
+    {{-- @if ($errors->any())
         <div class="col-md-10 offset-md-1 mb-3">
             <pre>{{ print_r($errors->all(), true) }}</pre>
         </div>
     @endif --}}
-    
+
     <div class="row">
         <div class="col-md-10 offset-md-1">
 
@@ -102,8 +102,13 @@
                             <div class="form-group row">
                                 <label for="pays" class="col-sm-4 col-form-label">Depart</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" value="{{ $reservation->ville_depart }}"
-                                        readonly>
+                                    <input type="text" class="form-control" list="villes-list"
+                                        value="{{ $reservation->ville_depart }}" readonly>
+                                    <datalist id="villes-list">
+                                        @foreach (getCapitalNames() as $ville)
+                                            <option value="{{ $ville }}">
+                                        @endforeach
+                                    </datalist>
                                 </div>
                             </div>
                         </div>
@@ -111,8 +116,13 @@
                             <div class="form-group row">
                                 <label for="pays" class="col-sm-4 col-form-label">Destination</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" list="villes-list-dest"
                                         value="{{ $reservation->ville_destination }}" readonly>
+                                    <datalist id="villes-list-dest">
+                                        @foreach (getCapitalNames() as $ville)
+                                            <option value="{{ $ville }}">
+                                        @endforeach
+                                    </datalist>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +131,7 @@
                     {{-- Informations voyage (motif et type) --}}
                     <div class="row">
                         <div class="col-md-12">
-                            @if(getLoggedUser()->role == 'coordinateur')
+                            @if (getLoggedUser()->role == 'coordinateur')
                                 <div class="form-group row">
                                     <label for="motif" class="col-sm-2 col-form-label">Motif du voyage</label>
                                     <div class="col-sm-10">
@@ -133,55 +143,54 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                        @if(getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <u>Chargé de mission</u>:
-                                    <b>{{ $reservation->agent_ministere?->nom . ' ' . $reservation->agent_ministere?->prenom }}</b>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                        @if ($reservation->agent_cellule)
-                                        <u>Traité par</u>:
-                                        <b>{{ $reservation->agent_cellule->nom . ' ' . $reservation->agent_cellule->prenom }}</b>
-                                    @elseif(!$reservation->chef_cellule_id && getLoggedUser()->role == 'coordinateur')
-                                        <form action="{{ route('reservation.update', $reservation->id) }}" method="post">
-                                            @csrf
-                                            @method('put')
-                                            <input type="hidden" name="approve_for_agence" value="true">
-                                            <input type="hidden" name="status" value="approuvé">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <img src="{{ asset('dist/img/spinner/blinking.gif') }}" alt="blinking Gif"
-                                                    height="30px"> Approuver pour traitement
-                                            </button>
-                                        </form>
-                                        @elseif(getLoggedUser()->role == 'chef_cellule')
-                                        <form action="{{ route('reservation.update', $reservation->id) }}" method="post">
-                                            @csrf
-                                            @method('put')
-                                            <div class="form-group row mb-0">
-                                                <label for="agent_cellule" class="col-sm-4 col-form-label">Agent
-                                                    Traitant:</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control select2" style="width: 100%;" id="agent_cellule"
-                                                        name="agent_cellule" required>
-                                                        <option value=""> -- Choisir -- </option>
-                                                        @foreach ($agents_cellule as $agent)
-                                                            <option @if (old('agent_cellule') == $agent->id) selected @endif
-                                                                value="{{ $agent->id }}">
-                                                                {{ $agent->nom . ' ' . $agent->prenom }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <input type="hidden" name="status" value="affecté">
-                                                </div>
+                    @if (getLoggedUser()->role == 'chef_cellule' || getLoggedUser()->role == 'coordinateur')
+                        <div class="row">
+                            <div class="col-md-6">
+                                <u>Chargé de mission</u>:
+                                <b>{{ $reservation->agent_ministere?->nom . ' ' . $reservation->agent_ministere?->prenom }}</b>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                @if ($reservation->agent_cellule)
+                                    <u>Traité par</u>:
+                                    <b>{{ $reservation->agent_cellule->nom . ' ' . $reservation->agent_cellule->prenom }}</b>
+                                @elseif(!$reservation->chef_cellule_id && getLoggedUser()->role == 'coordinateur')
+                                    <form action="{{ route('reservation.update', $reservation->id) }}" method="post">
+                                        @csrf
+                                        @method('put')
+                                        <input type="hidden" name="approve_for_agence" value="true">
+                                        <input type="hidden" name="status" value="approuvé">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <img src="{{ asset('dist/img/spinner/blinking.gif') }}" alt="blinking Gif"
+                                                height="30px"> Approuver pour traitement
+                                        </button>
+                                    </form>
+                                @elseif(getLoggedUser()->role == 'chef_cellule')
+                                    <form action="{{ route('reservation.update', $reservation->id) }}" method="post">
+                                        @csrf
+                                        @method('put')
+                                        <div class="form-group row mb-0">
+                                            <label for="agent_cellule" class="col-sm-4 col-form-label">Agent
+                                                Traitant:</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control select2" style="width: 100%;"
+                                                    id="agent_cellule" name="agent_cellule" required>
+                                                    <option value=""> -- Choisir -- </option>
+                                                    @foreach ($agents_cellule as $agent)
+                                                        <option @if (old('agent_cellule') == $agent->id) selected @endif
+                                                            value="{{ $agent->id }}">
+                                                            {{ $agent->nom . ' ' . $agent->prenom }} </option>
+                                                    @endforeach
+                                                </select>
+                                                <input type="hidden" name="status" value="affecté">
                                             </div>
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <img src="{{ asset('dist/img/spinner/blinking.gif') }}" alt="blinking Gif"
-                                                    height="30px"> Affecter un agent
-                                            </button>
-                                        </form>
-
-                                    @endif
-                                </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <img src="{{ asset('dist/img/spinner/blinking.gif') }}" alt="blinking Gif"
+                                                height="30px"> Affecter un agent
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -213,11 +222,11 @@
                                         <i class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_depart }}<br>
                                         <i class="fas fa-plane-arrival mr-2"></i>{{ $reservation->ville_destination }}<br>
                                     </div>
-                                    @if($reservation->date_retour)
+                                    @if ($reservation->date_retour)
                                         <div class="col-md-6 bg-success p-3">
                                             <u>Retour:</u> le {{ date('d/m/Y', strtotime($reservation->date_retour)) }}<br>
                                             <i
-                                            class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_destination }}<br>
+                                                class="fas fa-plane-departure mr-2"></i>{{ $reservation->ville_destination }}<br>
                                             <i class="fas fa-plane-arrival mr-2"></i>{{ $reservation->ville_depart }}<br>
                                         </div>
                                     @endif
@@ -227,7 +236,7 @@
                     </div>
                     {{-- FIN TICKET DEMANDE --}}
 
-                    @foreach ($reservation->tickets as $ticket )
+                    @foreach ($reservation->tickets as $ticket)
                         @if ($loop->first && $ticket->status === 'traité')
                             @continue
                         @endif
@@ -281,28 +290,27 @@
                                                                 <input type="date" class="form-control"
                                                                     id="reponse_date_depart" name="reponse_date_depart"
                                                                     value="{{ old('reponse_date_depart', $ticket->reponse_date_depart) }}"
-                                                                    @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))) required>
+                                                                    @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])) required>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                @if($reservation->date_retour)
-                                                    <div class="col-md-6">
-                                                        <div class="form-group row">
-                                                            <label for="reponse_date_retour"
-                                                                class="col-sm-4 col-form-label">Date de
-                                                                retour</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="date" class="form-control"
-                                                                    id="reponse_date_retour" name="reponse_date_retour"
-                                                                    value="{{ old('reponse_date_retour', $ticket->reponse_date_retour) }}"
-                                                                    @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))) required>
+                                                    @if ($reservation->date_retour)
+                                                        <div class="col-md-6">
+                                                            <div class="form-group row">
+                                                                <label for="reponse_date_retour"
+                                                                    class="col-sm-4 col-form-label">Date de
+                                                                    retour</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="date" class="form-control"
+                                                                        id="reponse_date_retour"
+                                                                        name="reponse_date_retour"
+                                                                        value="{{ old('reponse_date_retour', $ticket->reponse_date_retour) }}"
+                                                                        @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])) required>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                @endif
+                                                    @endif
                                                 </div>
 
                                                 <div class="row">
@@ -311,18 +319,16 @@
                                                             <label for="reponse_ville_depart"
                                                                 class="col-sm-4 col-form-label">Départ</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control select2" style="width: 100%;"
-                                                                    id="reponse_ville_depart" name="reponse_ville_depart"
-                                                                    required @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
-                                                                    <option value=""> -- Choisir --
-                                                                    </option>
+                                                                <input type="text" class="form-control"
+                                                                    list="villes-depart-list" id="reponse_ville_depart"
+                                                                    name="reponse_ville_depart"
+                                                                    value="{{ $ticket->reponse_ville_depart }}" required
+                                                                    @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
+                                                                <datalist id="villes-depart-list">
                                                                     @foreach (getCapitalNames() as $ville)
-                                                                        <option value="{{ $ville }}"
-                                                                            @if ($ticket->reponse_ville_depart == $ville) selected @endif>
-                                                                            {{ $ville }}</option>
+                                                                        <option value="{{ $ville }}">
                                                                     @endforeach
-                                                                </select>
+                                                                </datalist>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -331,19 +337,17 @@
                                                             <label for="reponse_ville_destination"
                                                                 class="col-sm-4 col-form-label">Destination</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control select2"
+                                                                <input type="text" class="form-control"
+                                                                    list="villes-destination-list"
                                                                     id="reponse_ville_destination"
-                                                                    name="reponse_ville_destination" required
-                                                                    @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
-                                                                    <option value=""> -- Choisir --
-                                                                    </option>
+                                                                    name="reponse_ville_destination"
+                                                                    value="{{ $ticket->reponse_ville_destination }}"
+                                                                    required @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
+                                                                <datalist id="villes-destination-list">
                                                                     @foreach (getCapitalNames() as $ville)
-                                                                        <option value="{{ $ville }}"
-                                                                            @if ($ticket->reponse_ville_destination == $ville) selected @endif>
-                                                                            {{ $ville }}</option>
+                                                                        <option value="{{ $ville }}">
                                                                     @endforeach
-                                                                </select>
+                                                                </datalist>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -352,15 +356,23 @@
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-group row">
-                                                            <label for="classe" class="col-sm-4 col-form-label">Classe</label>
+                                                            <label for="classe"
+                                                                class="col-sm-4 col-form-label">Classe</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control" id="classe" name="classe" required
-                                                                    @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
-                                                                    <option value="economique" @if(old('classe', $ticket->classe) == 'economique') selected @endif>Economique</option>
-                                                                    <option value="business" @if(old('classe', $ticket->classe) == 'business') selected @endif>Business</option>
-                                                                    <option value="first" @if(old('classe', $ticket->classe) == 'first') selected @endif>First</option>
-                                                                    <option value="jet" @if(old('classe', $ticket->classe) == 'jet') selected @endif>Jet</option>
+                                                                <select class="form-control" id="classe"
+                                                                    name="classe" required @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
+                                                                    <option value="economique"
+                                                                        @if (old('classe', $ticket->classe) == 'economique') selected @endif>
+                                                                        Economique</option>
+                                                                    <option value="business"
+                                                                        @if (old('classe', $ticket->classe) == 'business') selected @endif>
+                                                                        Business</option>
+                                                                    <option value="first"
+                                                                        @if (old('classe', $ticket->classe) == 'first') selected @endif>
+                                                                        First</option>
+                                                                    <option value="jet"
+                                                                        @if (old('classe', $ticket->classe) == 'jet') selected @endif>
+                                                                        Jet</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -370,18 +382,23 @@
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-group row">
-                                                            <label for="reponse_file" class="col-sm-4 col-form-label">Fichier (image/pdf)</label>
+                                                            <label for="reponse_file"
+                                                                class="col-sm-4 col-form-label">Fichier (image/pdf)</label>
                                                             <div class="col-sm-8">
                                                                 @if ($ticket->reponse_file)
                                                                     <a href="{{ route('download.reponse_file', $ticket) }}"
-                                                                        target="_blank" class="btn btn-outline-primary btn-sm">Télécharger la reservation
+                                                                        target="_blank"
+                                                                        class="btn btn-outline-primary btn-sm">Télécharger
+                                                                        la reservation
                                                                     </a>
                                                                 @else
                                                                     <div class="form-group">
-                                                                        <label for="reponse_file">Joindre un fichier (image/pdf)</label>
+                                                                        <label for="reponse_file">Joindre un fichier
+                                                                            (image/pdf)
+                                                                        </label>
                                                                         <input type="file" class="form-control"
-                                                                        id="reponse_file" name="reponse_file"
-                                                                        @disabled(Auth::user()->role === 'agent_ministere' || (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
+                                                                            id="reponse_file" name="reponse_file"
+                                                                            @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
                                                                     </div>
                                                                 @endif
                                                             </div>
@@ -389,14 +406,15 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group row">
-                                                            <label for="prix" class="col-sm-4 col-form-label">Prix de la réservation:</label>
+                                                            <label for="prix" class="col-sm-4 col-form-label">Prix de
+                                                                la réservation:</label>
                                                             <div class="col-sm-8">
                                                                 <div class="input-group">
-                                                                    <input type="number" name="prix" class="form-control text-right"
-                                                                    placeholder="Entrer le montant"
-                                                                    value="{{ old('prix', $ticket->prix) }}" required
-                                                            @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                    (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
+                                                                    <input type="number" name="prix"
+                                                                        class="form-control text-right"
+                                                                        placeholder="Entrer le montant"
+                                                                        value="{{ old('prix', $ticket->prix) }}" required
+                                                                        @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
                                                                     <span class="input-group-text">FCFA</span>
                                                                 </div>
                                                             </div>
@@ -407,13 +425,14 @@
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-group row">
-                                                            <label for="agence_id" class="col-sm-4 col-form-label">Agence</label>
+                                                            <label for="agence_id"
+                                                                class="col-sm-4 col-form-label">Agence</label>
                                                             <div class="col-sm-8">
                                                                 <select class="form-control" style="width: 100%;"
-                                                                    id="agence_id" name="agence_id"
-                                                                    required @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
-                                                                    <option value=""> -- Agence d'emission --</option>
+                                                                    id="agence_id" name="agence_id" required
+                                                                    @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
+                                                                    <option value=""> -- Agence d'emission --
+                                                                    </option>
                                                                     @foreach ($agences as $agence)
                                                                         <option value="{{ $agence->id }}"
                                                                             @if (old('agence_id', $ticket->agence_id) == $agence->id) selected @endif>
@@ -425,13 +444,14 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group row">
-                                                            <label for="compagnie_id" class="col-sm-4 col-form-label">Compagnie</label>
+                                                            <label for="compagnie_id"
+                                                                class="col-sm-4 col-form-label">Compagnie</label>
                                                             <div class="col-sm-8">
                                                                 <select class="form-control" style="width: 100%;"
-                                                                    id="compagnie_id" name="compagnie_id"
-                                                                    required @disabled(Auth::user()->role === 'agent_ministere' ||
-                                                                            (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité'])))>
-                                                                    <option value=""> -- Compagnie operante --</option>
+                                                                    id="compagnie_id" name="compagnie_id" required
+                                                                    @disabled(Auth::user()->role === 'agent_ministere' || in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))>
+                                                                    <option value=""> -- Compagnie operante --
+                                                                    </option>
                                                                     @foreach ($compagnies as $compagnie)
                                                                         <option value="{{ $compagnie->id }}"
                                                                             @if (old('compagnie_id', $ticket->compagnie_id) == $compagnie->id) selected @endif>
@@ -442,23 +462,27 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group row">
-                                                            <label class="col-sm-4 col-form-label">Coût total du billet</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="input-group">
-                                                                    <input type="text" 
-                                                                           class="form-control text-right" 
-                                                                           value="{{ number_format($ticket->calculateTotalCost(), 0, ',', ' ') }}"
-                                                                           readonly>
-                                                                    <span class="input-group-text">FCFA</span>
+                                                @if ($ticket->prix)
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Coût total du
+                                                                    billet</label>
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        <input type="text"
+                                                                            class="form-control text-right"
+                                                                            value="{{ number_format($ticket->calculateTotalCost(), 0, ',', ' ') }}"
+                                                                            readonly>
+                                                                        <span class="input-group-text">FCFA</span>
+                                                                    </div>
+                                                                    <small class="text-muted">Prix billet + Commission
+                                                                        agence</small>
                                                                 </div>
-                                                                <small class="text-muted">Prix billet + Commission agence</small>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @endif
 
 
                                                 <div class="row mb-3">
@@ -467,8 +491,9 @@
                                                             <label for="commentaire">Commentaire:</label>
                                                             <textarea cols="30" rows="3" class="form-control"
                                                                 placeholder="{{ $ticket->status === 'affecté' ? 'Saisissez votre commentaire si vous en avez un' : '' }}"
-                                                                id="commentaire" name="commentaire" @disabled((Auth::user()->role === 'agent_ministere' ||
-                                                                        (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']))&&Auth::user()->role !== 'coordinateur'))>{{ $ticket->response_commentaire }}</textarea>
+                                                                id="commentaire" name="commentaire" @disabled(Auth::user()->role === 'agent_ministere' ||
+                                                                        (in_array($ticket->status, ['approuvé', 'annulé', 'terminé', 'traité']) &&
+                                                                            Auth::user()->role !== 'coordinateur'))>{{ $ticket->response_commentaire }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -482,7 +507,10 @@
                                                 <input type="hidden" name="status"
                                                     value="{{ Auth::user()->role === 'agent_ministere' ? 'en cours' : 'traité' }}">
 
-                                                @if ($ticket->status === 'affecté' || $ticket->status === 'nouveau' && (Auth::user()->role === 'chef_cellule' || Auth::user()->role === 'agent_cellule'))
+                                                @if (
+                                                    $ticket->status === 'affecté' ||
+                                                        ($ticket->status === 'nouveau' &&
+                                                            (Auth::user()->role === 'chef_cellule' || Auth::user()->role === 'agent_cellule')))
                                                     <div class="row">
                                                         <div class="col-md-6 offset-md-3">
                                                             <button type="submit"
@@ -596,9 +624,11 @@
                                                     <p><strong>Réservaion terminé :</strong> Billet soumis.</p>
                                                 </div> --}}
                                             @else
-                                            <div class="p-5 text-center">
-                                                <a href="{{ route('pdf.bon-commande',$reservation->id) }}" class="btn btn-warning" target="blank"> Voir le bon de commande</a> <br>
-                                            </div>
+                                                <div class="p-5 text-center">
+                                                    <a href="{{ route('pdf.bon-commande', $reservation->id) }}"
+                                                        class="btn btn-warning" target="blank"> Consulter le bon de
+                                                        commande</a> <br>
+                                                </div>
                                                 {{-- Afficher le formulaire pour joindre un fichier même si le ticket est approuvé --}}
                                                 <form method="POST" action="{{ route('ticket.update', $ticket->id) }}"
                                                     enctype="multipart/form-data">
@@ -610,7 +640,7 @@
                                                         <input type="file" class="form-control" id="reponse_billet"
                                                             name="reponse_billet" required>
                                                     </div>
-                                                    <div class="form-group">
+                                                    {{-- <div class="form-group">
                                                         <label for="agence">Agence</label>
                                                         <select name="agence_id" id="agence" class="form-control"
                                                             required>
@@ -624,9 +654,9 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
-                                                    </div>
+                                                    </div> --}}
 
-                                                    <div class="form-group">
+                                                    {{-- <div class="form-group">
                                                         <label for="compagnie">Compagnie</label>
                                                         <select name="compagnie_id" id="compagnie" class="form-control"
                                                             required>
@@ -639,7 +669,7 @@
                                                                     {{ $compagnie->nom }}</option>
                                                             @endforeach
                                                         </select>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="row">
                                                         <div class="col-md-6 offset-md-3">
                                                             <button type="submit"
@@ -673,7 +703,6 @@
                                 </div>
                             </div>
                         @endif
-
                     @endforeach
 
 

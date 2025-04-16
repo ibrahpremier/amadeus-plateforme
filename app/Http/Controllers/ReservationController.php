@@ -63,12 +63,12 @@ class ReservationController extends Controller
         if ($request->has('new')) {
             $query->whereIn("status", ["nouveau", "affecté"]);
         } elseif ($request->has('encours')) {
-            $query->where("status", "mission en cours");
+            $query->whereIn("status", ["mission en cours", "approuvé", "traitement"]);
         } elseif ($request->has('ended')) {
             $query->where("status", "terminé");
         }
 
-        $reservations = $query->orderBy("updated_at","desc")->get();
+        $reservations = $query->orderBy("updated_at", "desc")->get();
 
         return view('pages.reservation.reservation', compact('reservations'));
     }
@@ -81,13 +81,13 @@ class ReservationController extends Controller
     public function create()
     {
         $currentYear = (int) date('Y');
-        if(getLoggedUser()->role == 'agent_ministere'){
-            
+        if (getLoggedUser()->role == 'agent_ministere') {
+
             $currentBudget = getLoggedUser()->ministere->budgets->where('annee_budgetaire', $currentYear)->first();
-            if(!$currentBudget){
+            if (!$currentBudget) {
                 return redirect()->route('reservation.index')->with('error', 'Le budget de votre ministère pour l\'année en cours n\'est pas encore disponible. Contactez votre coordinateur.');
             }
-            if($currentBudget->solde <= 0){
+            if ($currentBudget->solde <= 0) {
                 return redirect()->route('reservation.index')->with('error', 'Le budget de votre ministère pour l\'année en cours est épuisé. Contactez votre coordinateur.');
             }
         }
@@ -115,10 +115,10 @@ class ReservationController extends Controller
             'file_passport' => 'nullable|file|mimes:jpeg,png,pdf|max:5120',
         ]);
 
-        if(getLoggedUser()->role == 'chef_cellule'){
+        if (getLoggedUser()->role == 'chef_cellule') {
             $chef_cellule = getLoggedUser();
-        } else if(getLoggedUser()->role == 'coordinateur'){
-            $chef_cellule = User::where("role","chef_cellule")->first();
+        } else if (getLoggedUser()->role == 'coordinateur') {
+            $chef_cellule = User::where("role", "chef_cellule")->first();
         }
 
         $reservation = new Reservation();
@@ -165,14 +165,13 @@ class ReservationController extends Controller
             'parent_ticket_id' => null,
         ]);
 
-    if(getLoggedUser()->role == 'agent_ministere'){
-        $coordo = User::where("role","coordinateur")->first();
-        $coordo->notify(new NewTicketNotification($ticket,false));
-    } 
-    else if(getLoggedUser()->role == 'coordinateur') {
-        $chef_cellule->notify(new NewTicketNotification($ticket,false));
-    }
-    
+        if (getLoggedUser()->role == 'agent_ministere') {
+            $coordo = User::where("role", "coordinateur")->first();
+            $coordo->notify(new NewTicketNotification($ticket, false));
+        } else if (getLoggedUser()->role == 'coordinateur') {
+            $chef_cellule->notify(new NewTicketNotification($ticket, false));
+        }
+
         return redirect()->route('reservation.index', ['new'])->with('success', 'Réservation créée avec succès.');
     }
 
@@ -185,8 +184,8 @@ class ReservationController extends Controller
         $agents_cellule = User::where("role", "agent_cellule")->get();
         $agences = Agence::latest()->get();
         $compagnies = Compagnie::latest()->get();
-        
-        if($reservation->ministere){
+
+        if ($reservation->ministere) {
             $ministere = Ministere::where('id', $reservation->ministere->id)->first();
             return view(
                 'pages.reservation.reservation-detail',
@@ -219,8 +218,8 @@ class ReservationController extends Controller
             // 'agent_cellule' => 'required',
             'status' => 'required'
         ]);
-        $chef_cellule = User::where("role","chef_cellule")->first();
-        if($request->approve_for_agence){
+        $chef_cellule = User::where("role", "chef_cellule")->first();
+        if ($request->approve_for_agence) {
             $reservation->chef_cellule_id = $chef_cellule->id;
         } else {
             $reservation->agent_cellule_id = $request->agent_cellule;
@@ -238,10 +237,10 @@ class ReservationController extends Controller
             }
         }
 
-        if($request->approve_for_agence){
-            $reservation->chef_cellule->notify(new NewTicketNotification($ticket,false));
-        } else{
-            $reservation->agent_cellule->notify(new NewTicketNotification($ticket,true));
+        if ($request->approve_for_agence) {
+            $reservation->chef_cellule->notify(new NewTicketNotification($ticket, false));
+        } else {
+            $reservation->agent_cellule->notify(new NewTicketNotification($ticket, true));
         }
 
         return redirect()->route('reservation.show', $reservation->id)->with('success', 'Réservation affecté avec succès.');

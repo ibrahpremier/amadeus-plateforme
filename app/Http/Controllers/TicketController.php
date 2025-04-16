@@ -39,7 +39,7 @@ class TicketController extends Controller
             'reponse_date_depart' => 'required|date',
             'reponse_date_retour' => $request->has('retour') ? 'required|date' : 'nullable|date',
             'reponse_ville_depart' => 'required|string',
-            'reponse_ville_destination' => 'required|string', 
+            'reponse_ville_destination' => 'required|string',
             'reponse_file' => 'required|file|mimes:jpeg,png,pdf|max:5120',
             'commentaire' => 'nullable|string',
             'prix' => 'required|string',
@@ -70,12 +70,13 @@ class TicketController extends Controller
             'parent_ticket_id.exists' => 'Le ticket parent n\'existe pas',
             'agence_id.required' => 'L\'agence est obligatoire',
             'agence_id.exists' => 'L\'agence n\'existe pas',
-            'compagnie_id.required' => 'La compagnie est obligatoire', 
+            'compagnie_id.required' => 'La compagnie est obligatoire',
             'compagnie_id.exists' => 'La compagnie n\'existe pas',
             'classe.required' => 'La classe est obligatoire',
             'classe.in' => 'La classe doit être valide',
         ]);
 
+        // dd($request->all());
         // Formater les dates en français avec Carbon
         Carbon::setLocale('fr');
         // $formattedDateDepart = Carbon::parse($request->reponse_date_depart)->isoFormat('D MMMM YYYY');
@@ -88,6 +89,7 @@ class TicketController extends Controller
         $ticket->reponse_ville_depart = $request->reponse_ville_depart;
         $ticket->reponse_ville_destination = $request->reponse_ville_destination;
         $ticket->response_commentaire = $request->commentaire;
+        $ticket->classe = $request->classe;
         $ticket->prix = $request->prix;
         $ticket->status = $request->status;
         $ticket->reservation_id = $request->reservation_id;
@@ -96,8 +98,17 @@ class TicketController extends Controller
         $ticket->compagnie_id = $request->compagnie_id;
         $ticket->agent_cellule_id = getLoggedUser()->id; // Assurez-vous que cette fonction existe
 
-        if($request->filled('prix')){
+        if ($request->filled('prix')) {
             $ticket->reservation->montant_reservation = $request->prix;
+            $ticket->reservation->agence_id = $request->agence_id;
+            $ticket->reservation->compagnie_id = $request->compagnie_id;
+            $ticket->reservation->classe = $request->classe;
+            $ticket->reservation->ville_depart = $request->reponse_ville_depart;
+            $ticket->reservation->ville_destination = $request->reponse_ville_destination;
+            $ticket->reservation->date_depart = $request->reponse_date_depart;
+            $ticket->reservation->date_retour = $request->reponse_date_retour;
+
+            $ticket->reservation->status = 'traité';
             $ticket->reservation->save();
         }
         // Gestion du fichier s'il est présent
@@ -194,10 +205,10 @@ class TicketController extends Controller
 
         // Validation du fichier si nécessaire
         $request->validate([
-            'reponse_billet' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'status' => 'sometimes|required|string|in:nouveau,affecté,traité,en cours,non disponible,approuvé,refusé,annulé,terminé',
-            'agence_id' => 'sometimes|required|exists:agences,id',
-            'compagnie_id' => 'sometimes|required|exists:compagnies,id',
+            // 'reponse_billet' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'status' => 'required|string|in:nouveau,affecté,traité,en cours,non disponible,approuvé,refusé,annulé,terminé',
+            // 'agence_id' => 'sometimes|required|exists:agences,id',
+            // 'compagnie_id' => 'sometimes|required|exists:compagnies,id',
         ]);
 
         // Gestion du fichier s'il est présent
@@ -213,66 +224,56 @@ class TicketController extends Controller
         }
 
 
-        $ticket->agence_id = $request->agence_id;
-
-
-        $ticket->compagnie_id = $request->compagnie_id;
+        // $ticket->agence_id = $request->agence_id;
+        // $ticket->compagnie_id = $request->compagnie_id;
 
         // Vérifier si le statut doit être mis à jour
         if ($request->has('status')) {
             $ticket->status = $request->status;
-            // $ticket->status = $request->status == 'approuvé' ? 'approuvé' : $request->status;
-            // Logique de mise à jour du statut de la réservation
-            // if ($request->status == 'traitement') {
-            //     $ticket->reservation->status = $ticket->reservation->status; // Conserver le statut actuel
-            // } elseif ($request->status == 'approuvé') {
-            //     $ticket->reservation->status = 'terminé';
-            // } else {
-                // Autres cas de statut
-                $ticket->reservation->status = $request->status;
-            // }
+            $ticket->reservation->status = $request->status;
         }
         $ticket->reservation->save();
-        // Vérification des changements sur les dates et villes
-        if ($request->filled('reponse_date_depart') && $ticket->reponse_date_depart != $request->reponse_date_depart) {
-            $change['reponse_date_depart'] = [
-                'old' => $ticket->reponse_date_depart,
-                'new' => $request->reponse_date_depart,
-            ];
-            $ticket->reponse_date_depart = $request->reponse_date_depart;
-        }
 
-        if ($request->filled('reponse_date_retour') && $ticket->reponse_date_retour != $request->reponse_date_retour) {
-            $change['reponse_date_retour'] = [
-                'old' => $ticket->reponse_date_retour,
-                'new' => $request->reponse_date_retour,
-            ];
-            $ticket->reponse_date_retour = $request->reponse_date_retour;
-        }
+        // // Vérification des changements sur les dates et villes
+        // if ($request->filled('reponse_date_depart') && $ticket->reponse_date_depart != $request->reponse_date_depart) {
+        //     $change['reponse_date_depart'] = [
+        //         'old' => $ticket->reponse_date_depart,
+        //         'new' => $request->reponse_date_depart,
+        //     ];
+        //     $ticket->reponse_date_depart = $request->reponse_date_depart;
+        // }
 
-        if ($request->filled('reponse_ville_depart') && $ticket->reponse_ville_depart != $request->reponse_ville_depart) {
-            $change['reponse_ville_depart'] = [
-                'old' => $ticket->reponse_ville_depart,
-                'new' => $request->reponse_ville_depart,
-            ];
-            $ticket->reponse_ville_depart = $request->reponse_ville_depart;
-        }
+        // if ($request->filled('reponse_date_retour') && $ticket->reponse_date_retour != $request->reponse_date_retour) {
+        //     $change['reponse_date_retour'] = [
+        //         'old' => $ticket->reponse_date_retour,
+        //         'new' => $request->reponse_date_retour,
+        //     ];
+        //     $ticket->reponse_date_retour = $request->reponse_date_retour;
+        // }
 
-        if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
-            $change['reponse_ville_destination'] = [
-                'old' => $ticket->reponse_ville_destination,
-                'new' => $request->reponse_ville_destination,
-            ];
-            $ticket->reponse_ville_destination = $request->reponse_ville_destination;
-        }
+        // if ($request->filled('reponse_ville_depart') && $ticket->reponse_ville_depart != $request->reponse_ville_depart) {
+        //     $change['reponse_ville_depart'] = [
+        //         'old' => $ticket->reponse_ville_depart,
+        //         'new' => $request->reponse_ville_depart,
+        //     ];
+        //     $ticket->reponse_ville_depart = $request->reponse_ville_depart;
+        // }
 
-        if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
-            $change['reponse_ville_destination'] = [
-                'old' => $ticket->reponse_ville_destination,
-                'new' => $request->reponse_ville_destination,
-            ];
-            $ticket->reponse_ville_destination = $request->reponse_ville_destination;
-        }
+        // if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
+        //     $change['reponse_ville_destination'] = [
+        //         'old' => $ticket->reponse_ville_destination,
+        //         'new' => $request->reponse_ville_destination,
+        //     ];
+        //     $ticket->reponse_ville_destination = $request->reponse_ville_destination;
+        // }
+
+        // if ($request->filled('reponse_ville_destination') && $ticket->reponse_ville_destination != $request->reponse_ville_destination) {
+        //     $change['reponse_ville_destination'] = [
+        //         'old' => $ticket->reponse_ville_destination,
+        //         'new' => $request->reponse_ville_destination,
+        //     ];
+        //     $ticket->reponse_ville_destination = $request->reponse_ville_destination;
+        // }
 
         // Enregistrer les modifications du ticket
         // dd($change);
@@ -304,14 +305,16 @@ class TicketController extends Controller
 
     public function download(Ticket $ticket)
     {
+        if (!$ticket->reponse_file) {
+            return redirect()->back()->with('error', 'Aucun fichier n\'est associé à ce ticket.');
+        }
 
-        // Vérifiez si l'utilisateur est autorisé à télécharger le fichier
-        // $this->authorize('download-file', $file);
+        $filePath = storage_path('app/public/' . $ticket->reponse_file);
 
-        // Chemin vers le fichier
-        $filePath = storage_path('app/public/documents/' . $ticket->reponse_file);
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'Le fichier n\'existe pas.');
+        }
 
-
-        return response()->file($filePath);
+        return response()->download($filePath);
     }
 }
