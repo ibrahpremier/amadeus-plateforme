@@ -70,7 +70,7 @@
                                 <label for="type_voyage" class="col-sm-4 col-form-label">Type de voyage</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="type_voyage"
-                                        value="{{ $reservation->type_voyage }}" readonly>
+                                        value=" {{ $reservation->date_retour ? 'Aller retour' : 'Aller simple' }}" readonly>
                                 </div>
                             </div>
                         </div>

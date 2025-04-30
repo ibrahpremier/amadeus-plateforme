@@ -223,7 +223,7 @@
 
         <div style="border: 1px solid #000; padding: 10px; margin-top: 20px;">
             <strong>Modalité du règlement :</strong><br>
-            (x) Virement au compte<br>
+            ( ) Virement au compte<br>
             ( ) Chèque de banque
         </div>
     </div>

@@ -61,9 +61,9 @@ class ReservationController extends Controller
 
 
         if ($request->has('new')) {
-            $query->whereIn("status", ["nouveau", "affecté"]);
+            $query->whereIn("status", ["nouveau", "affecté", "approuvé"]);
         } elseif ($request->has('encours')) {
-            $query->whereIn("status", ["mission en cours", "approuvé", "traitement"]);
+            $query->whereIn("status", ["mission en cours", "traitement"]);
         } elseif ($request->has('ended')) {
             $query->where("status", "terminé");
         }
@@ -130,6 +130,8 @@ class ReservationController extends Controller
         $reservation->date_depart = $request->date_depart;
         $reservation->date_retour = $request->date_retour;
         $reservation->classe = $request->classe;
+        $reservation->visa = $request->visa;
+        $reservation->type_voyage = $request->type_voyage;
         $reservation->commentaire = $request->commentaire;
         $reservation->charge_de_mission_id = getLoggedUser()->id;
         $reservation->chef_cellule_id = $chef_cellule->id ?? 0;
@@ -161,6 +163,7 @@ class ReservationController extends Controller
             'reponse_date_depart' => $reservation->date_depart,
             'reponse_ville_destination' => $reservation->ville_destination,
             'reponse_date_retour' => $reservation->date_retour,
+            'classe' => $reservation->classe,
             'reservation_id' => $reservation->id,
             'parent_ticket_id' => null,
         ]);

@@ -173,7 +173,7 @@ class TicketController extends Controller
 
         // Redirection avec succès et les changements
         return redirect()->route('reservation.show', $ticket->reservation_id)
-            ->with('success', 'Nouveau ticket créé'); // Passer les changements si nécessaire
+            ->with('success', 'Demande mise à jour'); // Passer les changements si nécessaire
     }
 
 

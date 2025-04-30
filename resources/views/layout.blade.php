@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Plateforme RAF</title>
+    <title>PRABA</title>
 
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
@@ -19,7 +19,7 @@
             z-index: 1999 !important;
             position: fixed;
         }
-        
+
         /* Optionnel : ajuster la position en haut */
         .toast-top-right {
             top: 80px;
